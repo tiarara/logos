@@ -5,6 +5,12 @@
 
 ---
 
+## 0. Scope boundary
+
+Rosie is **household only** — Ruby, Ron, this house. Client work (Kahana Baler is a Northswell client, not Tiara's business) never enters this system: separate budget, separate tools, separate approval. Client work already surfaces in the morning brief through Slack, Gmail and the delivery board; Rosie adds house items to those same two lists and nothing more.
+
+---
+
 ## 1. The core problem, corrected
 
 An earlier version of this scope said the laminated checklist was the operating system and the digital layer was optional reporting. **That was wrong, and the reason it was wrong is the whole design.**
