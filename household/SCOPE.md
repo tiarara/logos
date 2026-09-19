@@ -120,6 +120,18 @@ Photos, never video: video is data-heavy on rural signal and the compressed Mess
 
 **When you need her on something else:** you message the bot, not Ruby. `OVERRIDE Linisin ang garahe` → tomorrow's block stays put and today's message carries your instruction instead. The queue is untouched.
 
+**When you want to add something:** message the Page from your own profile; the bot knows your PSID as admin.
+
+| Command | Effect |
+|---|---|
+| `ADD …` | Appended to Ruby's list today; her block stays. Delivered now if she's on shift, otherwise held and folded into tomorrow's morning message. |
+| `OVERRIDE …` | Replaces today; the block is deferred to her next working day. |
+| `RON …` | Creates a `Retainer` REPAIR row (due +7 days) and sends it to Ron with a `TAPOS` option. |
+| `AWAY` / `BALIK` | Toggles photo mode. |
+| anything else | Relayed to Ruby as a plain message. |
+
+An `ADD` sent after ~10:30 doesn't fit the shift; the bot sends it anyway and tells you so, since it becomes OT or tomorrow's work. Extras log to the sheet as `ADD` rows and surface in the brief like any other item.
+
 **When the queue falls behind:** if Block C is more than 5 weeks overdue, the morning message promotes it ahead of the queue and says so.
 
 ### 5.2 What you get
@@ -291,7 +303,7 @@ Sheet tabs:
 
 | Tab | Columns | Written by |
 |---|---|---|
-| `Log` | date · person · event (`EVERYDAY` / `FOCUS` / `WALA` / `OT` / `PHOTO`) · block · detail · hours · reason · photo_url | ManyChat |
+| `Log` | date · person · event (`EVERYDAY` / `FOCUS` / `WALA` / `OT` / `PHOTO` / `ADD`) · block · detail · done · hours · reason · photo_url | ManyChat · Tiara (ADD rows) |
 | `Issues` | id · reported · person · type · description · urgency · status · note · photo_url | ManyChat (new rows) · Tiara (status, note) |
 | `Retainer` | date · person · kind (`DAY` / `PICKUP` / `REPAIR`) · source_or_description · due · completed · parts_cost · photo_url | ManyChat · Tiara |
 | `Payouts` | date · person · type · amount · method · ref · confirmed · period | Tiara · ManyChat (confirmed) |
@@ -328,6 +340,7 @@ Sheet "Bahay Cemento" on `personal` — find it once with GOOGLESHEETS_LIST_SPRE
 Yesterday = the previous working day (Mon–Fri) in Asia/Manila.
 - Queue.next_block → one act sentence names Ruby's block today in plain words (A kitchen · B bathrooms · C monthly, with its week · D bedrooms + deck · E living room + porch). Queue.override_today set → say that instead. Block C weeks 3 and 4 → note she's there all day.
 - Log: no row for Ruby yesterday on a working day and no WALA → Needs you ("Ruby didn't check in yesterday"). WALA with a reason → Sorted, quote the reason. FOCUS logged → Sorted one line. If Queue.tiara_away is set: photo_url present → say "photos in"; absent → say "no photos" in the same line, not a separate Needs you. OT: reason empty → Needs you; reason present → Sorted, quote it, say the hours.
+- Log ADD rows: done empty and date < today → Needs you ("garage from Tuesday still not done"); done set yesterday → Sorted.
 - Issues: status not Done and urgency Now → Needs you, quote the description. Urgency "This week" open 5+ days → Needs you. Status Done in the last 2 days → Sorted.
 - Retainer, this calendar month: count DAY rows (X of 4), PICKUP rows. REPAIR with due < today and completed empty → Needs you ("gate hinge is 3 days past due"). Days at 4/4 before the 20th, or 0/4 after the 20th → Needs you, one line. PICKUP yesterday → Sorted with the source.
 - Payouts: confirmed empty and date ≥ 3 days ago → Needs you ("₱3,500 to Ruby on the 15th isn't confirmed received"). Confirmed in the last 2 days → Sorted.
