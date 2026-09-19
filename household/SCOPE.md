@@ -393,3 +393,37 @@ You buy bulk supplies chosen for lower-chemical content; she bought retail soap 
 2. **Asawa** — who is he in this, what does he do, what's the rate? In the tally he appears folded into the 2 whole days (₱1,000), which is ambiguous: 2 whole days for Ruby with his help free, or one day each? That ambiguity is exactly what the generated tally removes going forward.
 3. **Supply advances** — should she front cash at all now the bodega rule is explicit, or only in emergencies?
 4. **Pay period** — the tally covers 7 working days, so not a clean week. Fixed fortnight, or whenever she asks?
+
+
+---
+
+## 15. Rosie — the learning layer (2026-09-19)
+
+The system has a name: **Rosie**.
+
+### 15.1 Can she learn? Yes — in a way you can read and correct
+
+Three tiers on every inbound message:
+
+| Tier | Cost | Handles |
+|---|---|---|
+| Rules | ₱0 | Numbers, `TAPOS`, `REPORT`, `OT 2`. Most messages. |
+| Phrasebook (sheet tab) | ₱0 | Anything she's already seen once. Grows. |
+| Claude (`claude-opus-5`) | ~₱0.40/call | Genuinely new phrasings — then teaches the phrasebook |
+
+The property that matters: **it gets cheaper over time.** Every message Claude resolves becomes a free phrasebook row. Expect ₱150–350/month at first, falling. Unset the API key and it runs at ₱0 with tier 3 off, forwarding what the rules miss.
+
+**Claude classifies; Rosie's own code acts.** Nothing — no task tick, no peso — is written on a guess: low confidence always routes to Tiara, and money intents require an explicit amount. Claude sees one message plus the phrasebook, never the calendar, email, or the rest of the sheet.
+
+**Training is a spreadsheet tab.** `Phrasebook` holds phrase → intent → note. Edit or delete a row to correct her. No black box.
+
+### 15.2 Rosie tracks the pay, not Ruby
+Rosie's log has always been the source of truth; Ruby's reply to the tally is a courtesy check, not an input. But one memory dependency survived: marking a day "whole" needed Tiara to remember `WHOLE`. Replaced with evidence — Rosie records the last activity each day, and if Ruby was still working past 1pm on a day logged as half, Rosie asks Tiara that evening with the peso difference stated.
+
+### 15.3 The husband was a one-off
+He helped Ron clean the solar panels. `ASAWA` is gone as a standing concept; `EXTRA 500 <what>` logs any one-off helper and carries into the tally as "Dagdag na tulong".
+
+**Worth deciding:** solar panel cleaning isn't in the task inventory anywhere. On a coastal lot with salt air and heavy dust, panels lose real output between cleans. If it should recur, it belongs as a scheduled Ron task rather than something remembered when output drops. Note the panels are distinct from the inverter wall, which stays dry-cloth-only.
+
+### 15.4 Bug found in my own Worker
+It awaited the Apps Script call before answering Meta. Meta wants a fast 200 and retries — then unsubscribes the webhook — when it doesn't get one. With Claude in the path the wait got long enough to matter. The Worker now returns 200 immediately and finishes in `ctx.waitUntil`, and tells the sender in Taglish if the script is unreachable.

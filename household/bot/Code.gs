@@ -1,5 +1,5 @@
 /**
- * Bahay Cemento — household bot logic.
+ * Rosie — household bot for the Cemento house.
  * Runs as a Google Apps Script bound to the "Bahay Cemento" sheet.
  * The Cloudflare Worker (worker.js) calls doPost() with each inbound message and
  * relays the returned messages. Time-driven triggers handle the morning list, the arrival
@@ -7,12 +7,15 @@
  *
  * Script Properties (File > Project properties > Script properties):
  *   PAGE_TOKEN       Messenger Page access token (from the Meta app)
+ *   ANTHROPIC_API_KEY  optional — enables the learning layer; without it Rosie just forwards what rules miss
  *   TIARA_EMAIL      where silence alerts go
  *   SHARED_SECRET    must match the header ManyChat sends
  *   MESSAGE_TAG      optional; leave blank unless Meta policy needs one
  */
 
+const BOT_NAME = 'Rosie';
 const TZ = 'Asia/Manila';
+const MODEL = 'claude-opus-5';
 const BLOCKS = {
   A: { name: 'Kusina', page: 3, floor: 'down' },
   B: { name: 'Mga Banyo', page: 4, floor: 'up' },
@@ -119,7 +122,7 @@ function listText(block, done) {
 }
 function morningText(ruby) {
   const b = blockForToday();
-  const head = 'Magandang umaga ' + ruby.name + '! ☀️\nNgayon: BLOCK ' + b + ' — ' + BLOCKS[b].name + ' (page ' + BLOCKS[b].page + ')'
+  const head = 'Magandang umaga ' + ruby.name + '! ☀️ Si ' + BOT_NAME + ' po ito.\nNgayon: BLOCK ' + b + ' — ' + BLOCKS[b].name + ' (page ' + BLOCKS[b].page + ')'
     + (b === 'C' ? ' — Week ' + cWeek() : '')
     + (wholeDay(b) ? '\n⚠️ BUONG ARAW po ngayon.' : '');
   const over = q('override_today');
@@ -174,6 +177,130 @@ function closeText(ruby) {
   const away = q('tiara_away') === 'yes';
   setQ('override_today', ''); setQ('pending_adds', '');
   return 'Tapos na lahat — salamat ' + ruby.name + '! ✅' + (away ? '\nPadala na po ng litrato ng banyo at kama. Kung wala, reply WALANG LITRATO.' : '');
+}
+
+// ---------- learning layer ----------
+// Three tiers: rules (free) -> Phrasebook (free) -> Claude (paid, and it teaches the Phrasebook).
+// Claude only ever CLASSIFIES. The deterministic handlers below still do the acting,
+// so no money or task row is ever written on a guess.
+
+function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+
+function phrasebookHit(text) {
+  const n = norm(text); if (!n) return null;
+  const r = rows('Phrasebook').find(x => norm(x.phrase) === n);
+  return r ? { intent: r.intent, numbers: [], amount: 0, detail: r.note || '', confidence: 'high', source: 'phrasebook' } : null;
+}
+function learnPhrase(text, intent, note) {
+  const n = norm(text);
+  if (!n || n.length > 120) return;                       // long one-offs aren't reusable
+  if (rows('Phrasebook').some(x => norm(x.phrase) === n)) return;
+  append('Phrasebook', { phrase: text, intent: intent, note: note || '', added: today(), source: 'rosie' });
+}
+
+const INTENTS = ['done_all', 'done_some', 'not_done', 'absent', 'overtime', 'issue', 'expense', 'laundry', 'confirm_tally', 'dispute_tally', 'question', 'other'];
+
+function askClaude(text, p) {
+  const key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
+  if (!key) return null;
+  const book = rows('Phrasebook').slice(-40).map(x => '- "' + x.phrase + '" = ' + x.intent).join('\n');
+  const sys = [
+    'You classify one Messenger message from a Filipino household worker to her employer.',
+    'She writes casual Taglish: heavy "po"/"opo", abbreviations (kc=kasi, cge=sige, di=hindi), run-on sentences, trailing commas.',
+    'Her role: ' + (p.role === 'ron' ? 'maintenance, closes repair tasks he was sent' : 'cleaner, works through a numbered task list each morning'),
+    'Today she is on: ' + (q('phase') === 'focus' ? 'the focus block, items 1-' + phaseMax() : 'the everyday list, rooms 1-8'),
+    '',
+    'Intents: done_all (everything finished) · done_some (specific numbered items done) · not_done (something was NOT finished) ·',
+    'absent (cannot come to work) · overtime (worked extra hours) · issue (something broken, or supplies low) ·',
+    'expense (she spent her own money on supplies) · laundry (laba charge) · confirm_tally (agrees with a pay summary) ·',
+    'dispute_tally (disagrees with a pay summary) · question (asking her employer something) · other (anything else).',
+    '',
+    'Set confidence "low" whenever you are unsure, when money is involved and the amount is not explicit,',
+    'or when acting on it wrongly would cost someone money or a day of work. Low confidence is forwarded to a human, which is always safe.',
+    book ? '\nPhrases already learned:\n' + book : '',
+  ].join('\n');
+
+  const body = {
+    model: MODEL,
+    max_tokens: 1024,
+    output_config: { effort: 'low' },
+    system: sys,
+    tools: [{
+      name: 'classify', description: 'Record the classification of this message.', strict: true,
+      input_schema: {
+        type: 'object', additionalProperties: false,
+        required: ['intent', 'numbers', 'amount', 'detail', 'confidence'],
+        properties: {
+          intent: { type: 'string', enum: INTENTS },
+          numbers: { type: 'array', items: { type: 'integer' }, description: 'Task numbers she says are done. Empty if none.' },
+          amount: { type: 'number', description: 'Pesos, if she names an amount. 0 if none.' },
+          detail: { type: 'string', description: 'The substance in her own words: the reason, the item, what is broken.' },
+          confidence: { type: 'string', enum: ['high', 'low'] },
+        },
+      },
+    }],
+    tool_choice: { type: 'tool', name: 'classify' },
+    messages: [{ role: 'user', content: text }],
+  };
+  try {
+    const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      payload: JSON.stringify(body),
+    });
+    if (res.getResponseCode() !== 200) { Logger.log('claude ' + res.getResponseCode() + ' ' + res.getContentText()); return null; }
+    const j = JSON.parse(res.getContentText());
+    if (j.stop_reason === 'refusal') return null;
+    const tu = (j.content || []).filter(c => c.type === 'tool_use')[0];
+    if (!tu) return null;
+    const out = tu.input; out.source = 'claude';
+    return out;
+  } catch (e) { Logger.log('claude error ' + e); return null; }
+}
+
+/** Last resort for Ruby: phrasebook, then Claude, then a human. */
+function interpret(p, text) {
+  const c = phrasebookHit(text) || askClaude(text, p);
+  if (!c || c.confidence !== 'high') {
+    tellTiara('Rosie could not read this from ' + p.name, text + (c ? '\n\n(best guess: ' + c.intent + ')' : ''));
+    return 'Naipasa ko po kay Tiara. 🙏';
+  }
+  if (c.source === 'claude') learnPhrase(text, c.intent, c.detail);
+
+  switch (c.intent) {
+    case 'done_all': return tickAll(p);
+    case 'done_some': {
+      const n = (c.numbers || []).filter(x => x >= 1 && x <= phaseMax());
+      if (n.length) return tick(p, n);
+      break;
+    }
+    case 'not_done':
+      append('Log', { date: today(), time: now(), person: p.name, event: 'NOTE', item: c.detail || text, done: 'no' });
+      tellTiara(p.name + " says something wasn't finished", text);
+      return 'Salamat sa pagsabi po, na-record ko at sinabi ko na kay Tiara. 🙏';
+    case 'absent':
+      append('Log', { date: today(), time: now(), person: p.name, event: 'WALA', item: c.detail || text });
+      setQ('wala', 'yes'); tellTiara(p.name + ' is out today', text);
+      return 'Sige po, ingat. Bukas na lang ang block. 🙏';
+    case 'overtime':
+      if (!c.detail) { setState(p, 'ot:hours'); return 'Ilang oras po ang OT?'; }
+      break;                                            // hours+reason both needed — fall through to a human
+    case 'issue':
+      append('Issues', { id: Utilities.getUuid().slice(0, 8), reported: now(), person: p.name, type: 'Mula sa chat', description: c.detail || text, urgency: 'This week', status: 'New' });
+      tellTiara('Issue from ' + p.name, c.detail || text);
+      return 'Na-record ko po at sinabi kay Tiara. Salamat! ✅';
+    case 'expense':
+      if (c.amount > 0) {
+        append('Log', { date: today(), time: now(), person: p.name, event: 'GASTOS', amount: c.amount, item: c.detail || '' });
+        return 'Na-record po: ' + money(c.amount) + (c.detail ? ' — ' + c.detail : '') + '. Idadagdag sa sahod. ✅';
+      }
+      break;
+    case 'laundry':
+      if (c.amount > 0) { append('Log', { date: today(), time: now(), person: p.name, event: 'LABA', amount: c.amount, item: c.detail || '' }); return 'Na-record ang laba: ' + money(c.amount) + '. ✅'; }
+      break;
+  }
+  tellTiara('From ' + p.name + ' (' + c.intent + ')', text);
+  return 'Naipasa ko po kay Tiara. 🙏';
 }
 
 // ---------- inbound ----------
@@ -251,8 +378,7 @@ function handleRuby(p, text) {
   }
   if (YES.test(text)) return tickAll(p);
 
-  tellTiara('Note from ' + p.name, text);
-  return 'Naipasa ko po kay Tiara. Para sa listahan, reply LISTA.';
+  return interpret(p, text);
 }
 
 function handleRon(p, text) {
@@ -267,8 +393,7 @@ function handleRon(p, text) {
     return 'Tapos na: ' + target.source_or_description + ' ✅ Salamat Ron!';
   }
   if (/^(LISTA|LIST)$/.test(u)) return open.length ? 'Mga naka-linya:\n' + open.map((r, i) => (i + 1) + ' ' + r.source_or_description + ' (hanggang ' + r.due + ')').join('\n') + '\nReply TAPOS 1, TAPOS 2...' : 'Wala pong naka-linya ngayon. 👍';
-  tellTiara('Note from ' + p.name, text);
-  return 'Naipasa ko kay Tiara. 🙏';
+  return interpret(p, text);
 }
 
 function handleAdmin(p, text) {
@@ -299,8 +424,8 @@ function handleAdmin(p, text) {
   }
   let m = text.match(/^LABA\s*([\d,.]+)\s*(.*)$/i);
   if (m) { append('Log', { date: today(), time: now(), person: ruby.name, event: 'LABA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return 'Laundry logged.'; }
-  m = text.match(/^ASAWA\s*([\d,.]+)\s*(.*)$/i);
-  if (m) { append('Log', { date: today(), time: now(), person: 'Asawa', event: 'ASAWA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return "Husband's work logged."; }
+  m = text.match(/^EXTRA\s*([\d,.]+)\s*(.*)$/i);   // one-off helper, e.g. an extra hand for Ron
+  if (m) { append('Log', { date: today(), time: now(), person: 'Extra', event: 'EXTRA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return 'One-off helper logged: ' + money(parseFloat(m[1].replace(/,/g, ''))) + (m[2] ? ' — ' + m[2] : '') + '.'; }
   if (/^SAHOD/i.test(text)) {                // SAHOD  or  SAHOD 2026-09-08  or  SAHOD SEND
     const send = /SEND/i.test(text); const from = (text.match(/\d{4}-\d{2}-\d{2}/) || [])[0] || '';
     const t = tallyText(ruby, from);
@@ -312,7 +437,7 @@ function handleAdmin(p, text) {
   if (u === 'STATUS') return statusText();
   if (/^RUBY /i.test(text)) { push(ruby.psid, text.slice(5)); return 'Relayed to Ruby.'; }
   if (ruby) push(ruby.psid, text);
-  return 'Relayed to Ruby. (ADD / OVERRIDE / RON / WHOLE / LABA / ASAWA / SAHOD / AWAY / BALIK / STATUS)';
+  return 'Relayed to Ruby. (ADD / OVERRIDE / RON / WHOLE / LABA / EXTRA / SAHOD / AWAY / BALIK / STATUS)';
 }
 
 /** Builds the pay tally in the shape Ruby already sends it herself. */
@@ -329,13 +454,13 @@ function tallyText(ruby, from) {
   const laba = L.filter(x => x.event === 'LABA').reduce((n, x) => n + Number(x.amount || 0), 0);
   const gastos = L.filter(x => x.event === 'GASTOS');
   const gTotal = gastos.reduce((n, x) => n + Number(x.amount || 0), 0);
-  const asawa = L.filter(x => x.event === 'ASAWA').reduce((n, x) => n + Number(x.amount || 0), 0);
+  const extra = L.filter(x => x.event === 'EXTRA').reduce((n, x) => n + Number(x.amount || 0), 0);
   const lines = []; let total = 0;
   if (half) { lines.push(half + ' half day — ' + money(half * RATE_HALF)); total += half * RATE_HALF; }
   if (whole) { lines.push(whole + ' whole day — ' + money(whole * RATE_WHOLE)); total += whole * RATE_WHOLE; }
   if (ot) { lines.push(ot + ' oras OT — ' + money(ot * OT_RATE)); total += ot * OT_RATE; }
   if (laba) { lines.push('Laba — ' + money(laba)); total += laba; }
-  if (asawa) { lines.push('Asawa — ' + money(asawa)); total += asawa; }
+  if (extra) { lines.push('Dagdag na tulong — ' + money(extra)); total += extra; }
   if (gTotal) { lines.push('Gamit na binili niyo — ' + money(gTotal) + (gastos.length ? ' (' + gastos.map(x => x.item).filter(Boolean).join(', ') + ')' : '')); total += gTotal; }
   if (!lines.length) return 'Wala pang record simula ' + from + '.';
   return 'Record ko po simula ' + from + ':\n' + lines.join('\n') + '\n————————\nTOTAL — ' + money(total);
@@ -405,4 +530,10 @@ function closeDay() {              // 18:00 Mon–Fri
   openItems('EVERYDAY', qSet('everyday_done')).forEach(t => append('Log', { date: today(), time: now(), person: ruby.name, event: 'ROOM', block: 'EVERYDAY', item_no: t.no, item: t.line.split(' — ')[0], done: 'not reported' }));
   if (q('focus_sent')) { openItems(key, qSet('focus_done')).forEach(t => append('Log', { date: today(), time: now(), person: ruby.name, event: 'TASK', block: b, item_no: t.no, item: t.line.slice(0, 60), done: 'not reported' })); advanceQueue(b); }
   setQ('phase', 'closed'); setQ('override_today', ''); setQ('pending_adds', '');
+  const startRow = rows('Log').filter(x => String(x.date) === today() && x.event === 'START').pop();
+  const acted = rows('Log').filter(x => String(x.date) === today() && x.person === ruby.name && x.time);
+  const lastHour = acted.length ? Math.max.apply(null, acted.map(x => Number(String(x.time).slice(11, 13)))) : 0;
+  if (startRow && startRow.item !== 'whole' && lastHour >= 13) {
+    tellTiara('Was today a whole day?', ruby.name + ' was still working at ' + lastHour + ':00. Logged as a half day (' + money(RATE_HALF) + '). Reply WHOLE to change it to ' + money(RATE_WHOLE) + '.');
+  }
 }
