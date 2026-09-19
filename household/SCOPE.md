@@ -1,45 +1,51 @@
 # Household Management System — Scope
 
-**Property:** Cemento, Baler, Aurora · **Owner:** Tiara · **Helper:** Ruby (Mon–Fri, 8:00–12:00)
-**Status:** Scope only. The printed checklist (`CHECKLIST.md`) is the first deliverable and can ship now.
+**Property:** Cemento, Baler, Aurora · **Owner:** Tiara · **Helper:** Ruby (Mon–Fri, 8:00–12:00) · **Maintenance:** Kuya, on retainer
+**Status:** Scope. The checklist (`CHECKLIST.md`) is drafted; the reminder layer is the part that has to be built.
 
 ---
 
-## 1. The core decision
+## 1. The core problem, corrected
 
-**The laminated checklist is the operating system. The digital layer is reporting only.**
+An earlier version of this scope said the laminated checklist was the operating system and the digital layer was optional reporting. **That was wrong, and the reason it was wrong is the whole design.**
 
-The earlier draft of this scope had a Messenger bot pushing a 30-item task list every morning. With the real task inventory in hand, that is clearly wrong: the everyday block alone is 25+ items, and no one reads that on a phone at 8 AM. Ruby already has a better interface for *what to do* — a laminated page on the wall she can tick with a marker.
+Ruby doesn't pick up the sheet unless she's reminded. So the sheet is not the system — *the reminder is the system*, and the sheet is what the reminder points at. A checklist that needs a human to activate it has simply moved the daily work from Tiara's hands to Tiara's memory, which is worse, because memory fails silently.
 
-So the split is:
+That inverts the build priority. The reminder layer isn't phase 2. It's the product.
 
-| Question | Answered by |
-|---|---|
-| What do I do today? | The laminated page (physical, offline, zero friction) |
-| Did it get done? | Messenger — 4 checkpoints, not 30 |
-| What does the house need? | Messenger — `REPORT` flow |
-| Was I paid? | Messenger — `RECEIVED` confirmation |
+### What the reminder actually has to do
 
-This collapses the build considerably and makes it far more likely to survive past week three.
+Not carry the tasks — a 25-item everyday block is unreadable on a phone. It has to do three things the paper cannot:
+
+1. **Arrive without Tiara.** Every working morning, unprompted.
+2. **Name today's block.** *"Block B — Banyo, page 4."* One line. The page holds the detail.
+3. **Require a reply.** This is the mechanism. Not the information — the reply.
+
+Point 3 is the one that matters. A reminder Ruby can ignore is the laminated sheet with extra steps. A reminder that expects `TAPOS` back turns silence into a visible signal: Tiara sees an unanswered morning at 10 AM without having to think about it, and one nudge goes out automatically at noon. Accountability, not information.
+
+**Honest limit:** if Ruby ignores Messenger the way she ignores the sheet, this fails too. The difference is that the failure becomes *visible on the day* instead of being discovered weeks later when the bathroom grout has gone. That visibility is the real deliverable. Nothing here makes anyone do anything.
 
 ---
 
-## 2. What ships first (no build required)
+## 2. Blocks, not weekdays
 
-`CHECKLIST.md` — the merged artifact. The August 2026 day structure and bilingual tick-box format, carrying the full approved task inventory. 8 pages:
+Second correction, from the same message: life happens. Ruby misses days. Some days you need her doing something else entirely.
 
-1. Rules + safety + product guide
-2. EVERY DAY block (identical all five days)
-3. Monday — Kitchen week
-4. Tuesday — Bathrooms week
-5. Wednesday — Monthly rotation block (Weeks 1–4)
-6. Thursday — Bedrooms + yoga deck
-7. Friday — Living room + porch
-8. Calendar page (wet-erase date boxes)
+The old structure hard-mapped focus work to weekdays — Monday kitchen, Tuesday bathrooms, and so on. Under that design a missed Tuesday means bathrooms **silently don't happen that week**. Miss two Tuesdays and the grout is a month behind with nothing anywhere recording it. That's the same class of failure as cleaning around the furniture: invisible until it's bad.
 
-Print once, laminate all eight, wet-erase marker. Nothing in it needs reprinting.
+So the focus work is now a **queue**, not a calendar:
 
-**Next step:** regenerate as `.docx` via the existing Node + `docx` script pattern, replacing the stale MWF header. Say the word and I'll write the script.
+```
+A · Kusina  →  B · Banyo  →  C · Buwanan  →  D · Kwarto  →  E · Sala+Porch  →  back to A
+```
+
+Whatever block is next on the tracker is what she does on the next day she works. A missed day **delays** the queue; it never deletes a block. An ad-hoc day — you need her doing something else — defers the block to tomorrow. Nothing is lost, and the tracker on page 8 shows at a glance how far behind the rotation is running.
+
+The floor-alternation logic survives: the queue order is still down / up / down / up / down, so equipment doesn't travel the stairs two days running. After a missed day the alternation shifts by one, which costs nothing.
+
+**The one exception is Block C, the monthly rotation.** That work is calendar-anchored — a fridge cleaned every 5 weeks instead of every 4 is fine, every 8 is not. So Block C keeps a month column on the tracker, and the rule on its page reads: *if the queue is running late, do Block C next.* It jumps the queue rather than drifting with it.
+
+**This changes the printed artifact**, which now has 9 pages: the day pages are relabelled Block A–E, the calendar becomes a queue tracker with a separate monthly grid, and there's a new page 9 for what to do when she can't come.
 
 ---
 
@@ -51,18 +57,18 @@ Every task from the inventory is placed, but the arithmetic does not fit a 4-hou
 
 With ~15 min setup and pack-up, that leaves **roughly 75 minutes per day for focus work.**
 
-| Day | Focus block | Est. | Verdict |
+| Block | Focus | Est. | Verdict |
 |---|---|---|---|
-| Mon — Kitchen | 9 tasks | ~82 min | Tight but fine |
-| Tue — Bathrooms | 13 tasks | ~83 min | Tight but fine |
-| Thu — Bedrooms + deck | 10 tasks | ~82 min | Tight; bedding runs in the machine in background |
-| Fri — Living + porch | 8 tasks | ~73 min | Fine (~98 on screen weeks — Weeks 1 and 3) |
-| **Wed — Week 1** | Air + fans | ~60 min | Fine |
-| **Wed — Week 2** | Bathrooms deep | ~85 min | Tight but fine |
-| **Wed — Week 3** | Kitchen deep | **~120 min** | ❌ Does not fit |
-| **Wed — Week 4** | Move everything | **~225 min** | ❌ Does not fit, not even close |
+| A — Kitchen | 9 tasks | ~82 min | Tight but fine |
+| B — Bathrooms | 13 tasks | ~83 min | Tight but fine |
+| D — Bedrooms + deck | 10 tasks | ~82 min | Tight; bedding runs in the machine in background |
+| E — Living + porch | 8 tasks | ~73 min | Fine (~98 when screens are due, every second E) |
+| **C — Week 1** | Air + fans | ~60 min | Fine |
+| **C — Week 2** | Bathrooms deep | ~85 min | Tight but fine |
+| **C — Week 3** | Kitchen deep | **~120 min** | ❌ Does not fit |
+| **C — Week 4** | Move everything | **~225 min** | ❌ Does not fit, not even close |
 
-**Recommendation: Weeks 3 and 4 Wednesdays become whole days (8:00–4:00).** Your brief already anticipated this for Week 4; Week 3 needs it too, driven almost entirely by the fridge interior (~45 min) plus pulling the fridge and cart out (~20 min).
+**Recommendation: Block C in Weeks 3 and 4 becomes a whole day (8:00–4:00).** Your brief already anticipated this for Week 4; Week 3 needs it too, driven almost entirely by the fridge interior (~45 min) plus pulling the fridge and cart out (~20 min).
 
 If a whole day isn't possible in a given month, split rather than rush — a Week 4 done badly is worse than a Week 4 done over two half-days, because the failure mode you're defending against is exactly "cleaned around it, not under it."
 
@@ -74,35 +80,40 @@ Both weeks are marked ⚠️ **WHOLE DAY / BUONG ARAW** on the Wednesday page so
 
 Everything is placed, nothing reworded. Three allocation decisions worth knowing:
 
-1. **"Wipe walls room by room" split across four days instead of one weekly block.** Kitchen walls Monday, bathroom walls Tuesday, bedroom walls Thursday, living room + porch walls Friday — ~10 min each. The inventory says *room by room*; doing it as one 40-minute house-wide sweep would have broken Wednesday, which already carries the monthly block.
+1. **"Wipe walls room by room" split across four blocks instead of one weekly block.** Kitchen walls in A, bathroom walls in B, bedroom walls in D, living room + porch walls in E — ~10 min each. The inventory says *room by room*; doing it as one 40-minute house-wide sweep would have broken Block C, which already carries the monthly work.
 
-2. **Yoga deck weekly work split Tue/Thu.** Rattan furniture and railings went to Tuesday (upstairs day, and the bathroom block finished under budget); floor mop, gym gear, and mats stayed on Thursday. Keeps both upstairs days near 82 min instead of Thursday running to 100+.
+2. **Yoga deck weekly work split across B and D.** Rattan furniture and railings went to B (upstairs, and the bathroom block finished under budget); floor mop, gym gear, and mats stayed in D. Keeps both upstairs blocks near 82 min instead of D running to 100+.
 
-3. **Fortnightly screens pinned to Fridays of Weeks 1 and 3.** Deliberately away from Week 4, which is already the heaviest week of the month.
+3. **Fortnightly screens ride every second Block E**, tracked by a tick box on the queue tracker rather than by date — the only way a fortnightly task survives an irregular schedule.
 
 ---
 
 ## 5. The digital layer (phase 2 — after the checklist has run for a month)
 
-### 5.1 What Ruby sends
+### 5.1 The morning reminder — the thing that has to exist
 
-Four checkpoints a day, not thirty. The page holds the detail; Messenger holds the receipt.
+Four checkpoints a day, not thirty. The page holds the detail; Messenger holds the trigger and the receipt.
 
 ```
 7:55 AM — Magandang umaga Ruby! ☀️
-HUWEBES ngayon — Bedrooms + Yoga Deck (page 6).
+Ngayon: BLOCK B — Mga Banyo (page 4).
 
 Reply:
   EVERYDAY — pag tapos na ang everyday block
-  FOCUS — pag tapos na ang focus block
+  FOCUS — pag tapos na ang Block B
   REPORT — kung may sira o kulang na gamit
+  WALA AKO — kung hindi ka makakapasok
 ```
 
-Plus the two photos she already sends (finished bathroom, made bed) — those attach automatically to the day's log.
+The block name comes from the queue, not from the weekday. Tiara never has to send this, and never has to remember which block is next.
 
-Wednesday's message names the week: *"MIYERKULES — Week 3, Kitchen deep. BUONG ARAW po ngayon."*
+**Silence is the signal.** No `EVERYDAY` by 10:00 → automatic nudge to Ruby. Still nothing by 11:00 → Tiara is told. That escalation is the entire point of the build; everything else is bookkeeping.
 
-**Design rule: the bot never blocks her.** Unparsed text still lands in your inbox as a raw note. She is never stuck in a dead end, and the laminated page works with or without the bot — so a dead phone, a brownout, or no signal costs you the log, never the cleaning.
+**When Ruby can't come:** `WALA AKO` → *"Salamat sa pagsabi. Bakit po?"* → free text → the queue holds, Tiara is notified, and tomorrow's message serves the same block. No block is ever skipped, so nobody has to remember what was missed.
+
+**When you need her on something else:** you message the bot, not Ruby. `OVERRIDE Linisin ang garahe` → tomorrow's block stays put and today's message carries your instruction instead. The queue is untouched.
+
+**When the queue falls behind:** if Block C is more than 5 weeks overdue, the morning message promotes it ahead of the queue and says so.
 
 ### 5.2 What you get
 - **Daily log** — everyday done / focus done / photos / anything she flagged
@@ -261,8 +272,23 @@ He has fewer touchpoints than Ruby and no daily list at all — his flow is enti
 
 ---
 
-## 11. Recommended sequence
+## 11. Recommended sequence — revised
 
-1. **Now:** review `CHECKLIST.md`, settle the Week 3/4 whole-day question and the OT rate, generate the `.docx`, print, laminate.
-2. **Month 1:** run it on paper. Ruby ticks the page and sends the two photos. Track Kuya's retainer usage in a note on your phone — four days and eight pickups is small enough to count by hand, and you'll learn what the real pattern is before building anything to hold it.
-3. **Month 2:** build the Airtable base, if month 1 shows you still want it. The retainer tracker is the piece most likely to justify itself — it's the one thing neither of you can hold in your head.
+The earlier version said run it on paper for a month, then build if you still want it. That advice assumed the paper would get used. It doesn't, so:
+
+1. **Now (1 hour):** reprint `CHECKLIST.md` as 9 laminated pages — Block A–E, queue tracker, the can't-come page. Settle the OT rate and the Week 3/4 whole-day question first.
+2. **Now (1 hour, zero build):** put the queue tracker where Ruby starts her day, and agree the four reply words with her in person. Even with you sending the morning message by hand, the *queue* fixes the missed-day problem immediately — that half of this is free and doesn't wait on any build.
+3. **Next (~2 days):** build the reminder. Airtable holds the queue and the log; Make.com sends the morning message, runs the 10:00 and 11:00 escalation, and handles `WALA AKO` / `OVERRIDE`. This is the part that removes you from the loop, and it's the only part that does.
+4. **After (~1 day):** `REPORT` inbox, Kuya's retainer tracker, payouts and `RECEIVED`.
+
+Step 3 is now the whole justification for building anything. If it works, Ruby gets prompted every morning without you; if it doesn't, you'll know within a fortnight and you'll have lost two days, not a year of grout.
+
+### The Messenger constraint bites harder now
+A Page can't message someone unprompted outside 24 hours of their last message — and an unprompted 7:55 AM push is exactly what this design needs. The `GM`-on-arrival workaround no longer works, because *not arriving and not opening anything* is precisely the case we're building for.
+
+Real options, in order of preference:
+1. **Recurring Notifications API** — Ruby taps an opt-in button once, you get a standing daily send permission. This is the correct mechanism. Needs Meta app setup and periodic re-opt-in.
+2. **Plain SMS for the 7:55 message**, Messenger for everything else. Ruby's reply opens the 24-hour window for the rest of the day. Unglamorous, works everywhere, works on a dead data connection, and Baler's signal is not guaranteed. **Cheapest path to a working system.**
+3. **Viber** — easier template messaging in PH, widely used. Worth 10 minutes of checking whether she already has it.
+
+Decide this before step 3; it's the difference between two days of work and two weeks.

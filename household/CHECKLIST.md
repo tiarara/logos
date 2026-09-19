@@ -2,8 +2,12 @@
 ### Print once. Laminate. Wet-erase marker.
 Mon–Fri, 8:00 AM – 12:00 NN · Baler, Aurora
 
-Source content: approved task inventory, merged onto the August 2026 day structure.
-Every task from the inventory appears exactly once. Nothing reworded, nothing dropped.
+**The focus blocks are a QUEUE, not a weekday schedule.** Whatever block is next
+on the tracker (page 8) is the one you do on the next day you work. A missed day
+delays the queue — it never deletes a block.
+
+Source content: approved task inventory. Every task appears exactly once.
+Nothing reworded, nothing dropped.
 
 ---
 
@@ -122,8 +126,8 @@ Padala ng litrato sa Messenger: **ang natapos na banyo** at **ang naayos na kama
 
 ---
 
-# PAGE 3 — MONDAY / LUNES
-## Focus: DOWNSTAIRS — KITCHEN WEEK / Kusina
+# PAGE 3 — BLOCK A / KUSINA
+## DOWNSTAIRS — KITCHEN
 
 Everyday block first, then:
 
@@ -146,8 +150,8 @@ Everyday block first, then:
 
 ---
 
-# PAGE 4 — TUESDAY / MARTES
-## Focus: UPSTAIRS — BATHROOMS WEEK / Mga Banyo
+# PAGE 4 — BLOCK B / MGA BANYO
+## UPSTAIRS — BATHROOMS
 
 Everyday block first, then:
 
@@ -181,9 +185,11 @@ Everyday block first, then:
 
 ---
 
-# PAGE 5 — WEDNESDAY / MIYERKULES
-## Focus: MONTHLY ROTATION BLOCK — check the calendar for this week's number
-## *Tingnan sa kalendaryo kung anong Week ngayon*
+# PAGE 5 — BLOCK C / BUWANAN
+## MONTHLY ROTATION — check the tracker for this month's week number
+## *Tingnan sa tracker kung anong Week ngayon*
+### This block is the one that must happen ON TIME. If the queue is running late, do Block C next.
+### *Ito ang hindi pwedeng ma-late. Kung huli na ang queue, Block C ang sunod.*
 
 Everyday block first, then:
 
@@ -246,8 +252,8 @@ Then the block for this week only:
 
 ---
 
-# PAGE 6 — THURSDAY / HUWEBES
-## Focus: UPSTAIRS — BEDROOMS + YOGA DECK / Mga Kwarto at Deck
+# PAGE 6 — BLOCK D / MGA KWARTO
+## UPSTAIRS — BEDROOMS + YOGA DECK
 
 Everyday block first, then:
 
@@ -282,8 +288,8 @@ Everyday block first, then:
 
 ---
 
-# PAGE 7 — FRIDAY / BIYERNES
-## Focus: DOWNSTAIRS — LIVING ROOM + PORCH / Sala at Porch
+# PAGE 7 — BLOCK E / SALA AT PORCH
+## DOWNSTAIRS — LIVING ROOM + PORCH
 
 Everyday block first, then:
 
@@ -302,7 +308,8 @@ Everyday block first, then:
 **WALLS**
 - [ ] Wipe living room + porch walls, light switches, door handles; check high corners for mildew *(punasan ang dingding ng sala at porch, switch at hawakan)*
 
-**EVERY OTHER FRIDAY — WEEKS 1 AND 3 ONLY / TUWING WEEK 1 AT WEEK 3**
+**EVERY SECOND TIME YOU DO BLOCK E / TUWING IKALAWANG BLOCK E**
+*(tick the small box on the tracker so you know which time it is)*
 - [ ] Wash window + door screens — soft brush or damp cloth, BOTH sides *(hugasan ang screens ng bintana at pinto — MAGKABILANG panig)*
 - [ ] Brush out all door tracks *(brushin ang lahat ng riles ng pinto)*
 
@@ -310,29 +317,55 @@ Everyday block first, then:
 - [ ] Velvet sofa — did you keep it completely DRY? *(Tuyo ba ang velvet sofa — walang tubig?)*
 - [ ] Solar / electrical wall — untouched, or dry cloth only? *(Hindi ba nabasa ang solar wall?)*
 - [ ] Surfboards where you found them? *(Nasa lugar pa rin ba ang surfboards?)*
-- [ ] Weekend: any cushions or mats that need to come in? *(Weekend na — may kailangan bang ipasok?)*
+- [ ] Storm or weekend coming? Any cushions or mats to bring in? *(May bagyo o weekend na — may kailangan bang ipasok?)*
 - [ ] Photo of the bathroom + the bed sent to Tiara
 - [ ] Scrubber on charge
 
 ---
 
-# PAGE 8 — CALENDAR / KALENDARYO
-### Laminate. Write the date in the box with a wet-erase marker.
+# PAGE 8 — QUEUE TRACKER / SUNOD-SUNOD
+### Laminate. Wet-erase marker. Tick the block you finished and write the date.
 
-| Month | Week 1 — Air + fans | Week 2 — Bathrooms | Week 3 — Kitchen ⚠️ whole day | Week 4 — Move everything ⚠️ whole day |
+**How it works / Paano:** Do the blocks in order A → B → C → D → E, then start again at A.
+Kung hindi ka nakapasok, hindi nawawala ang block — sunod na araw mo na lang gagawin.
+*The block does not disappear. You just do it the next day you work.*
+
+| Round | A · Kusina | B · Banyo | C · Buwanan | D · Kwarto | E · Sala+Porch | E screens? |
+|---|---|---|---|---|---|---|
+| 1 | | | | | | ☐ |
+| 2 | | | | | | ☐ |
+| 3 | | | | | | ☐ |
+| 4 | | | | | | ☐ |
+| 5 | | | | | | ☐ |
+| 6 | | | | | | ☐ |
+| 7 | | | | | | ☐ |
+| 8 | | | | | | ☐ |
+
+### MONTHLY — Block C only / Buwanan lang
+The monthly work is calendar-anchored. It must happen once a month, in order.
+*Kailangan talagang mangyari isang beses bawat buwan, sunod-sunod.*
+
+| Month | Wk 1 Air+fans | Wk 2 Banyo | Wk 3 Kusina ⚠️ buong araw | Wk 4 Iusog lahat ⚠️ buong araw |
 |---|---|---|---|---|
-| January | | | | |
-| February | | | | |
-| March | | | | |
-| April | | | | |
-| May | | | | |
-| June | | | | |
-| July | | | | |
-| August | | | | |
-| September | | | | |
-| October | | | | |
-| November | | | | |
-| December | | | | |
+| | | | | |
+| | | | | |
+| | | | | |
+| | | | | |
+| | | | | |
+| | | | | |
 
-**Fortnightly screens:** Friday of Week 1 and Week 3.
 **Curtain rotation:** Week 3 = kitchen under-counter. Week 4 = shower curtains + one room, rotating: living room → master → Bedroom 1.
+
+---
+
+# PAGE 9 — KUNG HINDI KA MAKAKAPASOK / IF YOU CAN'T COME
+
+Life happens. Ang mahalaga ay **masabi mo agad.**
+*What matters is that you say so straight away.*
+
+- Text or Messenger si Tiara **kaagad** — hindi sa mismong oras ng pasok.
+- Sabihin kung **bakit** at **kailan ka babalik.**
+- Ang block na hindi natapos ay **hindi nawawala** — ito pa rin ang sunod sa tracker.
+- Kung may ibang ipapagawa si Tiara sa isang araw, **sabihin niya sa umaga.** Ang block ay sunod na araw na lang.
+
+*A block you miss is never lost. It stays next in the queue.*
