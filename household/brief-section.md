@@ -18,6 +18,7 @@ Yesterday = the previous working day (Mon–Fri) in Asia/Manila. Queue is key/va
 - If the most recent Payouts row for Ruby is 12+ days ago, or there is none and the Log starts 12+ days ago → Needs you "Ruby's pay tally is due — send SAHOD to the Page".
 - Payouts: `confirmed` empty and date 3+ days ago → Needs you ("₱{amount} to {person} on {date} isn't confirmed received"). Confirmed in the last 2 days → Sorted.
 - Log rows with event NOTE and done=no in the last 2 days → Sorted, quoting the item (something Ruby flagged as unfinished).
+- Laundry tab: a row charged in the last 2 days → Sorted with the amount, the weight, and ₱/kilo. If its per_kilo is more than 25% above the average of the previous 5 weighed loads → Needs you instead, stating both numbers. A charged row with no `kilo` → say "no weight recorded" on that line, so the gap is visible rather than silent.
 - Every house item links `[in the house sheet](spreadsheet url)`. Never more than 4 house items in Needs you — keep the costliest, drop the rest silently.
 
 ---

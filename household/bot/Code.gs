@@ -346,11 +346,7 @@ function handleRuby(p, text) {
     return 'Na-record po: ' + money(amt) + (m[2] ? ' — ' + m[2] : '') + '. Idadagdag sa sahod. ✅';
   }
   m = text.match(/^LABA\s*([\d,.]+)\s*(.*)$/i);
-  if (m) {
-    const amt = parseFloat(m[1].replace(/,/g, ''));
-    append('Log', { date: today(), time: now(), person: p.name, event: 'LABA', amount: amt, item: m[2] || '' });
-    return 'Na-record ang laba: ' + money(amt) + '. ✅';
-  }
+  if (m) return chargeLaundry(p, parseFloat(m[1].replace(/,/g, '')), m[2] || '');
 
   if (/^(REPORT|PROBLEMA|MAY PROBLEMA)$/.test(u)) { setState(p, 'issue:type'); return issueTypePrompt(); }
   if (/^(WALA|WALA AKO|WALA PO AKO)$/.test(u)) { setState(p, 'wala:reason'); return 'Salamat sa pagsabi. Bakit po?'; }
@@ -422,8 +418,10 @@ function handleAdmin(p, text) {
     if (r) { setCell('Log', r._row, 'item', 'whole'); return 'Today logged as a whole day (' + money(RATE_WHOLE) + ').'; }
     return 'No day started yet.';
   }
+  if (/^LABA SENT/i.test(text)) return sendLaundry(text.replace(/^LABA SENT\s*/i, ''));
   let m = text.match(/^LABA\s*([\d,.]+)\s*(.*)$/i);
-  if (m) { append('Log', { date: today(), time: now(), person: ruby.name, event: 'LABA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return 'Laundry logged.'; }
+  if (m) return chargeLaundry(ruby, parseFloat(m[1].replace(/,/g, '')), m[2] || '');
+  if (/^LAUNDRY$/i.test(text)) return laundryReport();
   m = text.match(/^EXTRA\s*([\d,.]+)\s*(.*)$/i);   // one-off helper, e.g. an extra hand for Ron
   if (m) { append('Log', { date: today(), time: now(), person: 'Extra', event: 'EXTRA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return 'One-off helper logged: ' + money(parseFloat(m[1].replace(/,/g, ''))) + (m[2] ? ' — ' + m[2] : '') + '.'; }
   if (/^SAHOD/i.test(text)) {                // SAHOD  or  SAHOD 2026-09-08  or  SAHOD SEND
@@ -437,7 +435,68 @@ function handleAdmin(p, text) {
   if (u === 'STATUS') return statusText();
   if (/^RUBY /i.test(text)) { push(ruby.psid, text.slice(5)); return 'Relayed to Ruby.'; }
   if (ruby) push(ruby.psid, text);
-  return 'Relayed to Ruby. (ADD / OVERRIDE / RON / WHOLE / LABA / EXTRA / SAHOD / AWAY / BALIK / STATUS)';
+  return 'Relayed to Ruby. (ADD / OVERRIDE / RON / WHOLE / LABA SENT / LABA / LAUNDRY / EXTRA / SAHOD / AWAY / BALIK / STATUS)';
+}
+
+// ---------- laundry ----------
+// Price alone can't be judged. Every charge is tied to what was actually sent,
+// so ₱/kilo is a real number and drift is visible rather than remembered.
+
+function kilosFrom(txt) {
+  const m = String(txt).match(/([\d.]+)\s*(kilo|kilos|kg|k)\b/i);
+  return m ? parseFloat(m[1]) : 0;
+}
+
+/** Tiara logs what went out. */
+function sendLaundry(desc) {
+  const kilo = kilosFrom(desc);
+  append('Laundry', { date: today(), sent_by: 'Tiara', items: desc, kilo: kilo || '', charged: '', per_kilo: '' });
+  return 'Laundry logged as sent' + (kilo ? ' (' + kilo + ' kilo)' : ' — no weight given, so ₱/kilo will be blank') + '.';
+}
+
+/** The charge attaches to the most recent uncharged load. */
+function chargeLaundry(p, amt, note) {
+  const open = rows('Laundry').filter(x => !x.charged).sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+  let kilo = 0, row;
+  if (open) {
+    kilo = Number(open.kilo || 0) || kilosFrom(note);
+    setCell('Laundry', open._row, 'charged', amt);
+    if (kilo) { setCell('Laundry', open._row, 'kilo', kilo); setCell('Laundry', open._row, 'per_kilo', Math.round(amt / kilo)); }
+    if (note) setCell('Laundry', open._row, 'note', note);
+    row = open;
+  } else {
+    kilo = kilosFrom(note);
+    append('Laundry', { date: today(), sent_by: p.name, items: note, kilo: kilo || '', charged: amt, per_kilo: kilo ? Math.round(amt / kilo) : '', note: note });
+  }
+  append('Log', { date: today(), time: now(), person: p.name, event: 'LABA', amount: amt, item: note || (kilo ? kilo + ' kilo' : '') });
+
+  // compare against the trailing average, and say so plainly
+  const priced = rows('Laundry').filter(x => x.charged && x.per_kilo).slice(-6, -1).map(x => Number(x.per_kilo));
+  let flag = '';
+  if (kilo && priced.length >= 2) {
+    const avg = priced.reduce((a, b) => a + b, 0) / priced.length;
+    const rate = amt / kilo;
+    if (rate > avg * 1.25) flag = ' ⚠️ ' + Math.round(rate) + '/kilo vs ' + Math.round(avg) + '/kilo average';
+  }
+  if (p.role !== 'admin') tellTiara('Laundry charge: ' + money(amt) + (kilo ? ' for ' + kilo + ' kilo' : ' (no weight recorded)'), (note || '') + flag);
+  return 'Na-record ang laba: ' + money(amt) + (kilo ? ' para sa ' + kilo + ' kilo' : '') + '. ✅';
+}
+
+function laundryReport() {
+  const L = rows('Laundry').filter(x => x.charged).slice(-10);
+  if (!L.length) return 'No laundry logged yet.';
+  const total = L.reduce((n, x) => n + Number(x.charged || 0), 0);
+  const weighed = L.filter(x => x.per_kilo);
+  const lines = L.map(x => x.date + ' — ' + money(x.charged) + (x.kilo ? ' / ' + x.kilo + 'kg = ' + money(x.per_kilo) + 'per kg' : ' (no weight)') + (x.items ? ' · ' + x.items : ''));
+  let out = 'Last ' + L.length + ' loads — ' + money(total) + ' total:\n' + lines.join('\n');
+  if (weighed.length >= 2) {
+    const rates = weighed.map(x => Number(x.per_kilo));
+    out += '\n\n₱/kilo: low ' + Math.min.apply(null, rates) + ' · high ' + Math.max.apply(null, rates)
+         + ' · avg ' + Math.round(rates.reduce((a, b) => a + b, 0) / rates.length);
+  }
+  const unweighed = L.length - weighed.length;
+  if (unweighed) out += '\n' + unweighed + ' load' + (unweighed === 1 ? '' : 's') + ' had no weight — send LABA SENT <n> kilo when you hand it over.';
+  return out;
 }
 
 /** Builds the pay tally in the shape Ruby already sends it herself. */

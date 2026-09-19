@@ -18,6 +18,7 @@ Create a Google Sheet named **Bahay Cemento** on the `personal` account (the bri
 | `Issues` | `id` · `reported` · `person` · `type` · `description` · `urgency` · `status` · `note` · `photo_url` |
 | `Retainer` | `date` · `person` · `kind` · `source_or_description` · `due` · `completed` · `parts_cost` · `photo_url` — Ron's tasks from you; add `DAY` rows by hand if you want to count his retainer days |
 | `Payouts` | `date` · `person` · `type` · `amount` · `method` · `ref` · `confirmed` · `period` |
+| `Laundry` | `date` · `sent_by` · `items` · `kilo` · `charged` · `per_kilo` · `note` |
 | `Phrasebook` | `phrase` · `intent` · `note` · `added` · `source` — starts empty; Rosie fills it as she learns. **Edit or delete rows to correct her.** |
 
 `Queue` seed:
@@ -108,7 +109,7 @@ Ruby's words: numbers · `TAPOS LAHAT` · `REPORT` · `WALA` · `OT 2` · `GASTO
 
 **Ron**: nothing on a schedule. When you send `RON …` he gets it with a due date; he replies `TAPOS` (or `TAPOS 2` if several are open) to close it, `LISTA` to see what's open. Anything else is forwarded to you.
 
-**You**: `ADD …` · `OVERRIDE …` · `RON …` · `WHOLE` (mark today ₱500) · `LABA 700` · `ASAWA 500` · `SAHOD` (see the tally) · `SAHOD SEND` (send it to Ruby to confirm) · `AWAY` · `BALIK` · `STATUS` · `RUBY …`. Plain text is relayed to Ruby.
+**You**: `ADD …` · `OVERRIDE …` · `RON …` · `WHOLE` (mark today ₱500) · `LABA 700` · `ASAWA 500` · `LABA SENT 5 kilo` (log what you hand over) · `LAUNDRY` (last 10 loads + ₱/kilo range) · `SAHOD` (see the tally) · `SAHOD SEND` (send it to Ruby to confirm) · `AWAY` · `BALIK` · `STATUS` · `RUBY …`. Plain text is relayed to Ruby.
 
 **Your email/Messenger gets**: no check-in by 8:20 · any `WALA` with its reason · any urgent `REPORT` · anything unrecognised.
 
