@@ -433,3 +433,35 @@ He helped Ron clean the solar panels. `ASAWA` is gone as a standing concept; `EX
 
 ### 15.4 Bug found in my own Worker
 It awaited the Apps Script call before answering Meta. Meta wants a fast 200 and retries — then unsubscribes the webhook — when it doesn't get one. With Claude in the path the wait got long enough to matter. The Worker now returns 200 immediately and finishes in `ctx.waitUntil`, and tells the sender in Taglish if the script is unreachable.
+
+
+---
+
+## 16. Laundry: outsourced vs. own machine (2026-09-19)
+
+**Problem:** the charge has gone ₱350 for a large load → ₱700 for visibly less, with no weight recorded either time. Price was being tracked without volume, so drift couldn't be distinguished from memory.
+
+**Fix in Rosie:** `LABA SENT 5 kilo` when laundry is handed over; the charge attaches to that load; ₱/kilo is computed; a load more than 25% above the trailing average lands in the morning brief with both numbers stated. `LAUNDRY` prints the last ten loads with the low/high/average spread. Loads charged with no weight recorded say so rather than averaging into nothing.
+
+**Machine economics** (estimates — assumptions stated, all pending real data):
+
+| | |
+|---|---|
+| Current spend | ~₱1,870/mo (inferred from one tally line: ₱700 per ~1.5 weeks) |
+| Machine | ₱12,000–15,000, small automatic |
+| Electricity + water | ~₱100/mo (cold cycle, no heater, ~0.15–0.3 kWh/load) |
+| Her handling time | ~₱520/mo (~8 hrs at ₱60 OT) |
+| **Net saving** | **~₱1,250/mo** |
+| **Payback** | **~11 months** |
+
+An earlier version of this section used ₱300/mo utilities, which assumed a heated cycle and roughly doubled the payback to 21 months. Corrected.
+
+**Automatic, not twin tub.** A twin tub needs attending — transfer, refill, drain — and her 4-hour shift is already at ~230 of 240 minutes. An automatic is load-and-walk-away: start it, work the block, hang before noon.
+
+**Buying criterion: spin speed over capacity.** The constraint in Baler is drying, not washing. 1000+ rpm versus the 700–800 typical in this price band is the difference between drying on the deck in an afternoon and still being damp at dusk. Also: sheltered from salt air, stainless drum.
+
+**Rainy season:** the yoga deck (shade net, thatch, upstairs airflow) is the better fallback than a dryer service — several loads a week through a long wet season would consume a real share of the ₱1,250. Price it locally before relying on it.
+
+**Decision rule:** take 4–6 weeks of Rosie's per-kilo data first. At ~₱1,000/mo actual, payback stretches past 18 months and it is arguable; at ~₱2,800/mo it is obvious. The baseline is worth having regardless — it is how the machine's payoff gets verified after the fact.
+
+**Out of scope:** Kahana has its own laundry service. Household volume only.
