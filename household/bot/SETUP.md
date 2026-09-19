@@ -1,7 +1,7 @@
 # Bahay Cemento bot — build guide
 
-Stack: Facebook Page → ManyChat Pro → Google Apps Script (bound to the sheet) → Google Sheet → morning brief.
-Cost: ManyChat Pro ≈ US$15/mo. Everything else ₱0.
+Stack: Facebook Page → Meta app (dev mode) → Cloudflare Worker (glue) → Google Apps Script (bound to the sheet) → Google Sheet → morning brief.
+Cost: ₱0. (ManyChat alternative at the end, ≈ US$15/mo, if you'd rather not touch the Meta developer console.)
 
 ## 1. The sheet (15 min)
 
@@ -30,7 +30,7 @@ tiara_away    (blank)
 ## 2. Apps Script (10 min)
 
 Extensions → Apps Script. Paste `Code.gs`. Project properties → Script properties:
-- `MANYCHAT_TOKEN` — ManyChat → Settings → API
+- `PAGE_TOKEN` — from step 3
 - `TIARA_EMAIL` — tiaramejos@gmail.com
 - `SHARED_SECRET` — any long random string
 - `MESSAGE_TAG` — leave blank
@@ -47,23 +47,33 @@ Triggers (clock icon), all time-driven, timezone Asia/Manila:
 | `closeDay` | Mon–Fri 18:00 |
 | `monthlyRon` | Daily 8:00 (exits unless it's the 1st) |
 
-## 3. ManyChat (30 min)
+## 3. Meta app + Worker (45 min)
 
-1. Connect the Page. Settings → Growth Tools → **Ref URL** — the link you'll send Ruby and Ron to open the chat.
-2. One flow, **Catch-all**, set as the Default Reply for any message:
-   - **External Request** → POST to the web app URL, JSON body:
-     ```json
-     {"secret":"<SHARED_SECRET>","psid":"{{user_id}}","name":"{{full_name}}",
-      "text":"{{last_input_text}}","attachment_url":"{{last_input_attachment_url}}"}
-     ```
-     (if your ManyChat version lacks the attachment field, map the last attachment via a custom field and pass that)
-   - **Dynamic Content** step → same URL, same body. The script's JSON reply renders as the message.
-   - That's the whole flow. All logic lives in the sheet.
-3. Settings → Messenger → enable the opt-in for daily messages (ManyChat labels it under Recurring/Marketing messages; follow their current wizard). Send the opt-in to Ruby once; she taps once. Without it, the 7:55 push only works inside 24h of her last message — the `arrivalCheck` email still fires either way, so silence is never invisible.
+**Meta app** — developers.facebook.com → Create app → Business type. Add the **Messenger** product.
+1. Messenger settings → connect the Page → generate a **Page access token**. Save as `PAGE_TOKEN` in both the script properties and the Worker.
+2. App roles → **Testers** → add Ruby's and Ron's Facebook accounts. They each accept the invite (Facebook → Settings → Apps/Developer notifications). You're an admin already. *The app stays in development mode — no review needed for people with roles.*
+3. Leave the webhook for after the Worker exists.
+
+**Cloudflare Worker** — dash.cloudflare.com → Workers → Create → paste `worker.js`. Settings → Variables:
+- `VERIFY_TOKEN` — any string
+- `PAGE_TOKEN` — same token as above
+- `SCRIPT_URL` — the Apps Script web app URL
+- `SHARED_SECRET` — same as the script property
+
+Deploy; copy the Worker URL.
+
+**Back in Meta** — Messenger → Webhooks → Add callback URL = the Worker URL, verify token = `VERIFY_TOKEN`. Subscribe the Page to `messages`. Done.
+
+The Worker has no logic. It receives the Messenger event, POSTs it to the script, and relays whatever text the script returns. Everything editable lives in the sheet.
+
+**Daily 7:55 push:** in dev mode the Page can message testers directly, but Meta's 24-hour window still applies to unprompted sends. If the 7:55 message fails on days after Ruby was silent, set `MESSAGE_TAG` to `CONFIRMED_EVENT_UPDATE` in script properties — a scheduled work day is a confirmed event. The 8:20 `arrivalCheck` email to you works regardless.
+
+### ManyChat instead (if preferred)
+Skip the Meta app and Worker. ManyChat Pro → one Catch-all flow → External Request to the script URL with body `{"secret":…,"psid":"{{user_id}}","text":"{{last_input_text}}","attachment_url":…}` → Dynamic Content from the same URL. Swap `push()` in `Code.gs` for ManyChat's `sendContent` endpoint. ManyChat bills per Page; if you buy it anywhere, Kahana Baler's page is where it earns its keep.
 
 ## 4. First day
 
-1. You, Ruby, Ron each message the Page once. Copy PSIDs into `People`.
+1. You, Ruby, Ron each message the Page once. The Worker logs each event; PSIDs appear in the Worker's live logs (or in the Apps Script "Unknown sender" email you'll get). Copy them into `People`.
 2. Message the Page `STATUS` — you should get today's block and Ron's balance.
 3. Have Ruby send `LISTA`. She should get the everyday list. She replies `1`. She should get *"Salamat! Natitira: 2 3 4 5 6 7 8"*.
 4. Have Ron send `4`. He should get his balance.

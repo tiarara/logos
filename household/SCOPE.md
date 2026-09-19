@@ -300,14 +300,15 @@ Decide this before step 3; it's the difference between two days of work and two 
 
 | | Monthly |
 |---|---|
-| ManyChat Pro | ≈ US$15 (₱850) — the only cost |
-| Google Sheet + Apps Script | ₱0 |
-| Facebook Page | ₱0 |
+| Meta app in development mode (Ruby and Ron as testers — no app review) | ₱0 |
+| Cloudflare Worker (webhook glue, ~25 lines) | ₱0 |
+| Google Sheet + Apps Script (all logic) | ₱0 |
 | SMS fallback (Semaphore), only if needed | ≈ ₱25 |
+| *ManyChat Pro, only if preferred over the Meta console* | *≈ ₱850 — per Page; better spent on Kahana's page* |
 
-The logic runs as Apps Script bound to the sheet rather than a Cloudflare Worker: same code shape, but a Worker's only hard part is authenticating to Google Sheets, and a bound script simply *is* the sheet. Ports to a Worker in an hour if ever wanted.
+Logic lives in Apps Script bound to the sheet, so there's no Google auth to build. The Worker exists only because Meta's webhook needs a direct 200 and Apps Script answers with a redirect.
 
-Build files: `bot/Code.gs` (all logic), `bot/tasks.csv` (the numbered lists, Taglish), `bot/SETUP.md` (step-by-step, ~1 hour end to end).
+Build files: `bot/Code.gs` (all logic), `bot/worker.js` (glue), `bot/tasks.csv` (the numbered lists, Taglish), `bot/SETUP.md` (step-by-step, ~1 hour end to end).
 
 Decided: Block C weeks 3 and 4 are whole days (₱500). The 7:55 message says so.
 

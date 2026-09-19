@@ -1,12 +1,12 @@
 /**
  * Bahay Cemento — household bot logic.
  * Runs as a Google Apps Script bound to the "Bahay Cemento" sheet.
- * ManyChat calls doPost() with each inbound message and renders the returned
- * Dynamic Content. Time-driven triggers handle the morning list, the arrival
+ * The Cloudflare Worker (worker.js) calls doPost() with each inbound message and
+ * relays the returned messages. Time-driven triggers handle the morning list, the arrival
  * check, the noon nudge, the end-of-day close, and Ron's monthly balance.
  *
  * Script Properties (File > Project properties > Script properties):
- *   MANYCHAT_TOKEN   ManyChat API key
+ *   PAGE_TOKEN       Messenger Page access token (from the Meta app)
  *   TIARA_EMAIL      where silence alerts go
  *   SHARED_SECRET    must match the header ManyChat sends
  *   MESSAGE_TAG      optional; leave blank unless Meta policy needs one
@@ -73,16 +73,15 @@ function reply(texts) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 function push(psid, texts) {
+  // Sends via the Messenger Send API directly (PAGE_TOKEN). With ManyChat instead, swap for its sendContent endpoint.
   const props = PropertiesService.getScriptProperties();
-  const body = {
-    subscriber_id: psid,
-    data: { version: 'v2', content: { messages: [].concat(texts).map(t => ({ type: 'text', text: t })) } },
-  };
-  const tag = props.getProperty('MESSAGE_TAG'); if (tag) body.message_tag = tag;
-  UrlFetchApp.fetch('https://api.manychat.com/fb/sending/sendContent', {
-    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
-    headers: { Authorization: 'Bearer ' + props.getProperty('MANYCHAT_TOKEN') },
-    payload: JSON.stringify(body),
+  const tag = props.getProperty('MESSAGE_TAG');
+  [].concat(texts).forEach(t => {
+    const body = { recipient: { id: psid }, message: { text: t }, messaging_type: tag ? 'MESSAGE_TAG' : 'UPDATE' };
+    if (tag) body.tag = tag;
+    UrlFetchApp.fetch('https://graph.facebook.com/v21.0/me/messages?access_token=' + props.getProperty('PAGE_TOKEN'), {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true, payload: JSON.stringify(body),
+    });
   });
 }
 function tellTiara(subject, body) {
