@@ -133,19 +133,136 @@ A Facebook Page can only message someone freely within 24 hours of *their* last 
 
 ---
 
-## 7. Open questions
+## 7. People and pay
 
-1. **Weeks 3 and 4 as whole days — can you commit to that monthly?** If not, tell me and I'll rebalance by moving work out of Week 4 into the weekly blocks. This is the single biggest open item.
-2. **Is the maintenance worker in this system?** Your earlier answer assumed a second person. Nothing in the house data mentions one. If he's ad-hoc/on-call, his flow is issue-driven only — no daily list, no checklist page.
-3. **Is Bedroom 1 usually occupied or usually empty?** It changes Thursday's load by ~10 min and whether "change sheets when occupied" needs a clearer trigger.
-4. **Pay cadence and rate** — weekly / fortnightly / monthly, fixed or per-day? Needed for the Payouts table.
-5. **Pressure washer** — buy or not? If yes, "pressure wash deck + exteriors" joins Week 4, which is already the overloaded week. It would need to displace something.
-6. **Should Ruby be able to check her own payout history** (`SAHOD` → last 3 payouts)? Trivial to add, good for trust.
+### Ruby — cleaner
+| | |
+|---|---|
+| Schedule | Mon–Fri, 8:00–12:00 (half day) |
+| Half day | ₱300 |
+| Whole day | ₱500 |
+| Overtime | ₱62.50/hr (stated as 500 ÷ 8) |
+| OT rule | Allowed, but she must state the reason. No reason logged = not approved. |
+
+### Kuya (Ruby's brother) — maintenance, retainer
+| | |
+|---|---|
+| Retainer | ₱3,000/month |
+| Includes | 4 full days/month · food-waste pickup for the chickens 2×/week from partner stores and neighbours · small repairs within the week as needed |
+
+Roughly **₱9,900/month in labour** before overtime, supplies, or parts.
 
 ---
 
-## 8. Recommended sequence
+## 8. Two problems with the rates
 
-1. **Now:** review `CHECKLIST.md`, resolve the Week 3/4 whole-day question, generate the `.docx`, print, laminate.
-2. **Month 1:** run it on paper. Ruby ticks the page, sends the two photos she already sends. Watch for tasks that are wrong, missing, or consistently skipped. Log her actual Messenger phrasing — every parsing rule in phase 2 should come from her real messages, not from my guesses.
-3. **Month 2:** build the Airtable base and the reporting layer, if month 1 shows you still want it. You may find the paper version plus two photos is genuinely enough.
+### 8.1 Ruby's overtime pays less than her normal hours
+
+Her half day is ₱300 for 4 hours — **₱75/hour**. The stated OT rate is ₱62.50/hour. So every extra hour she works is paid 17% *below* her normal rate. Overtime that's cheaper than regular time is backwards, and she will notice.
+
+It also creates an inconsistency at the top end:
+
+| Scenario | Hours | Pay |
+|---|---|---|
+| Scheduled whole day | 8 | **₱500** |
+| Half day + 4 hours OT | 8 | **₱550** |
+
+Same work, same hours, different price — purely because of what you called it that morning.
+
+**Three ways to fix it, pick one:**
+
+| | Half day | Whole day | OT rate | Monthly cost |
+|---|---|---|---|---|
+| **A — one honest rate** (recommended) | ₱300 | ₱600 | ₱75/hr | ~₱7,100 |
+| **B — keep ₱500, fix OT** | ₱300 | ₱500 | ₱75/hr | ~₱6,900 + OT |
+| **C — leave as is** | ₱300 | ₱500 | ₱62.50/hr | ~₱6,900 + cheap OT |
+
+**A** is the cleanest: one rate, ₱75/hour, everything derives from it. A whole day is just eight hours. Costs you about ₱200/month more than what you have now and removes every edge case — no arbitrage, no "is today a whole day or a long half day" conversation, and the maths is simple enough for Ruby to check herself, which matters more than the ₱200.
+
+**C** is defensible if whole days are a bulk rate she's already agreed to and *you* schedule them in advance — the arbitrage only bites if she's the one choosing. But the below-base OT rate stays a live grievance.
+
+**B** is the compromise and the worst of the three: OT still overtakes the whole-day rate at 3 hours.
+
+### 8.2 The retainer has no consumption tracking
+
+₱3,000/month buys 4 full days, ~8 pickups, and repairs. Nothing currently records what's been used. By the 25th of the month, neither of you will remember whether it's been 2 days or 4 — and that's exactly the conversation that damages a working relationship.
+
+The retainer needs a **balance**, visible to both of you:
+
+```
+Kuya — November · ₱3,000 retainer
+Full days:  ▓▓▓░  3 of 4 used   (Nov 5, 12, 19)
+Pickups:    7 of ~8             (last: Nov 21, Aling Rosa's)
+Repairs:    2 done, 1 open      (gate hinge — reported Nov 18, due Nov 25)
+```
+
+**Also unresolved, and it will come up within two months:**
+- **Do parts and materials come out of the ₱3,000, or are they reimbursed on top?** Almost certainly on top — but it needs to be said out loud and logged as a separate payout type, or the retainer silently becomes a hardware budget.
+- **Do unused full days roll over?** If not, say so now. If they do, the retainer becomes a liability that accumulates.
+- **What counts as "small"?** A repair that needs a day of work is a retainer day, not a repair. Draw the line before you need it.
+- **Which partner stores?** Log the source per pickup. If a neighbour quietly stops saving scraps, a log shows it; memory won't.
+
+---
+
+## 9. What this adds to the build
+
+### Data model changes
+`People` gains: rate type (daily / retainer), half-day rate, whole-day rate, hourly rate, retainer amount, retainer inclusions.
+
+`Payouts` gains a `Type`: **Retainer** · **Parts & materials** (reimbursed on top — never inside the retainer) · **Overtime**.
+
+New table, **`Retainer Usage`** — one row per full day, pickup, or repair:
+
+| Field | Notes |
+|---|---|
+| Date, Person, Kind | Full day / Pickup / Repair |
+| Source | for pickups: which store or neighbour |
+| Description | for repairs |
+| Reported | when he raised it |
+| Due | reported + 7 days, per the "within the week" term |
+| Completed | actual date — the gap between this and Due is the only number that tells you whether the retainer is working |
+| Photo, Parts cost | |
+
+Overtime gets its own fields on `Task Log`: hours, **reason (required)**, approved yes/no. The reason field is required at the point of entry — if the bot can't get a reason, the hours don't log.
+
+### Messenger flows
+**Ruby, on overtime:**
+```
+Ruby: OT 2
+Bot:  Salamat! Bakit po kailangan ng overtime?
+Ruby: May bisita bukas, nilinis ko lahat ng kwarto
+Bot:  Na-record po. 2 oras OT — ₱150. ✅
+```
+The bot states the peso amount back to her. She can check the arithmetic on the spot, which is worth more than any ledger she can't see.
+
+**Kuya, on pickup:** `PICKUP` → *"Saan po?"* → free text → logged, counter decrements.
+**Kuya, on a repair:** `TAPOS` + photo → closes the open item, records the Due-vs-Completed gap.
+**Kuya, on the 1st:** *"Bagong buwan po — 4 full days at ~8 pickups ulit. Kailan po kayo pwede sa first full day?"*
+
+He has fewer touchpoints than Ruby and no daily list at all — his flow is entirely event-driven. No checklist page for him; he doesn't need one.
+
+---
+
+## 10. Open questions
+
+**Decide before printing:**
+1. **Weeks 3 and 4 as whole days** — can you commit monthly? Still the biggest open item. At Ruby's rates that's 2 × ₱500 instead of 2 × ₱300, so **₱400/month** to make the heavy weeks actually fit. Cheap.
+2. **Overtime rate** — A, B, or C from §8.1. Recommend A.
+
+**Decide before the retainer's second month:**
+3. Parts and materials — reimbursed on top of ₱3,000, or included?
+4. Unused full days — roll over or expire?
+5. Where's the line between a "small repair" and a retainer full day?
+
+**Nice to settle whenever:**
+6. Is Bedroom 1 usually occupied? Changes Thursday's load by ~10 min.
+7. Should Ruby and Kuya see their own pay history (`SAHOD` → last 3 payouts)? Trivial to add, good for trust.
+8. Pressure washer — buy or not? If yes it joins Week 4, which is already the overloaded week, so something has to move.
+
+---
+
+## 11. Recommended sequence
+
+1. **Now:** review `CHECKLIST.md`, settle the Week 3/4 whole-day question and the OT rate, generate the `.docx`, print, laminate.
+2. **Month 1:** run it on paper. Ruby ticks the page and sends the two photos. Track Kuya's retainer usage in a note on your phone — four days and eight pickups is small enough to count by hand, and you'll learn what the real pattern is before building anything to hold it.
+3. **Month 2:** build the Airtable base, if month 1 shows you still want it. The retainer tracker is the piece most likely to justify itself — it's the one thing neither of you can hold in your head.
