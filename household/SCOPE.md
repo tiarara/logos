@@ -259,7 +259,7 @@ He has fewer touchpoints than Ruby and no daily list at all — his flow is enti
 
 ## 10. Open questions
 
-**Decide before printing:**
+**Decided:** Block C weeks 3 and 4 are whole days. OT ₱60/hr.
 1. **Weeks 3 and 4 as whole days** — can you commit monthly? Still the biggest open item. At Ruby's rates that's 2 × ₱500 instead of 2 × ₱300, so **₱400/month** to make the heavy weeks actually fit. Cheap.
 **Decide before the retainer's second month:**
 3. Parts and materials — reimbursed on top of ₱3,000, or included?
@@ -296,7 +296,24 @@ Decide this before step 3; it's the difference between two days of work and two 
 
 ---
 
-## 12. Morning brief integration
+## 12. Costs and build
+
+| | Monthly |
+|---|---|
+| ManyChat Pro | ≈ US$15 (₱850) — the only cost |
+| Google Sheet + Apps Script | ₱0 |
+| Facebook Page | ₱0 |
+| SMS fallback (Semaphore), only if needed | ≈ ₱25 |
+
+The logic runs as Apps Script bound to the sheet rather than a Cloudflare Worker: same code shape, but a Worker's only hard part is authenticating to Google Sheets, and a bound script simply *is* the sheet. Ports to a Worker in an hour if ever wanted.
+
+Build files: `bot/Code.gs` (all logic), `bot/tasks.csv` (the numbered lists, Taglish), `bot/SETUP.md` (step-by-step, ~1 hour end to end).
+
+Decided: Block C weeks 3 and 4 are whole days (₱500). The 7:55 message says so.
+
+---
+
+## 13. Morning brief integration
 
 The brief is an existing cloud routine (`Morning brief (cloud)`, 6:00 AM Manila). It reads Google via the Composio connector (`personal` account) and Slack, sorts everything into **Needs you** / **Sorted**, and emails the result. Nothing about that pipeline needs to change — the house data just has to be somewhere it can already read, and its prompt gets one more section.
 

@@ -1,0 +1,90 @@
+block,no,line
+EVERYDAY,1,SAHIG — vacuum LAHAT muna (buhok ng aso) tapos mop: kwarto sala kusina hagdan sulok skirting
+EVERYDAY,2,BUONG BAHAY — sapot sa kisame; window sills at door tracks; halaman (diligan lang kung tuyo; walang naiipong tubig); mangkok nina Gordie at Leroy; basura ILABAS
+EVERYDAY,3,KUSINA — pinggan at drying rack; counter kalan splashback (mantika sa burner); lababo at gripo; BUKSAN ang ref (panis? natapon?); plastik/papel/BSF; hanging baskets
+EVERYDAY,4,MASTER CR — inodoro (upuan tangke bidet hose); lababo counter gripo; salamin; SQUEEGEE ang glass; basura
+EVERYDAY,5,GUEST CR — inodoro at bidet; pedestal sink at gripo; salamin; walis+mop pati shower floor (squeegee sa drain); basura
+EVERYDAY,6,SALA at HAGDAN — punasan ang baitang; ayusin ang sofa cushions; brush ang log table; entry shelf
+EVERYDAY,7,YOGA DECK — walisin; pagpagin ang mats
+EVERYDAY,8,PORCH — walisin; doormat; sapatos; mesa bench stool
+A,1,Maliliit na appliance — blender air fryer kettle frother French press
+A,2,Labas ng ref — hawakan at ibabaw
+A,3,Pantry shelves at takip ng garapon — TINGNAN kung may LANGGAM
+A,4,Sabitan ng kubyertos at baso at tasa
+A,5,Louvre slats
+A,6,Labhan ang floor mats
+A,7,Grout sa splashback at counter (baking soda paste + matigas na brush) — tapos PATUYUIN
+A,8,Grout ng sahig ng kusina lalo sa harap ng kalan at lababo — mop tapos PATUYUIN
+A,9,Dingding ng kusina + switch + hawakan; sulok sa itaas — amag?
+B,1,Master CR tiles — dingding at sahig ng shower; matigas na brush; grout at sulok
+B,2,SHOWER GLASS — vinegar+sabon; kuskusin; banlawan; squeegee pababa; PUNASAN HANGGANG TUYONG-TUYO — glass frame fittings
+B,3,Master CR — buhok sa drain
+B,4,Master CR shelves AT ang mga bote sa ibabaw
+B,5,Master CR — patuyuin ang wire caddies (kalawang)
+B,6,Master CR — punasan ang laundry basket
+B,7,Guest CR tiles — lalo ang grout
+B,8,Guest CR — buhok sa drain
+B,9,Guest CR — shower curtain IBUKA nang husto; punasan ang laylayan
+B,10,Guest CR shelves; toilet paper
+B,11,Yoga deck — rattan furniture coffee table bar table stool railings
+B,12,Dingding ng dalawang CR + switch + hawakan; sulok sa itaas — amag?
+C1,1,AC filter — master
+C1,2,AC filter — Bedroom 1
+C1,3,LAHAT ng ceiling fan — ibabaw AT ilalim ng blades
+C1,4,Mga takip ng pendant light
+C2,1,OXALIC ACID sa shower glass — gloves; bukas ang bintana; HUWAG ihalo sa bleach; banlawan nang husto; squeegee; PATUYUIN
+C2,2,Descale ang dalawang shower head
+C2,3,Dingding at sulok ng kisame — amag? dalawang CR
+C2,4,Master CR — alisin LAHAT sa shelf; punasan; ibalik
+C2,5,Labhan ang guest shower curtain — sabon + kaunting suka; ibilad
+C2,6,Guest CR dingding at pinto; takip ng drain
+C3,1,BUONG LOOB NG REF — tanggalin shelves at drawer; maligamgam na tubig + mild na sabon; goma ng pinto; PATUYUIN LAHAT bago ibalik; pinakaluma sa harap
+C3,2,Burner grates at drip area
+C3,3,Buong grout ng counter — dulo hanggang dulo
+C3,4,Labhan ang kurtina sa ilalim ng counter
+C3,5,Paligid ng tangke ng LPG
+C3,6,HILAHIN ang ref at rolling cart — linisin ang likod at ilalim
+C4,1,IUSOG lahat ng muwebles AT kama — ilalim at likod
+C4,2,Velvet sofa — malalim na vacuum bawat puwang at butones; brush ang nap. MAY MANTSA = SABIHIN MUNA KAY TIARA. HUWAG BASAIN
+C4,3,Iusog ang sofa; linisin ang ilalim
+C4,4,Deck couch at armchair — labhan ang dilaw na cover; ibilad ang foam hanggang TUYONG-TUYO; punasan ang rattan
+C4,5,Ibilad LAHAT ng deck cushion
+C4,6,Sapot sa shade net at pawid
+C4,7,Baitang sa deck
+C4,8,Safety check — TRX at rings anchor at strap
+C4,9,Matataas na transom window sa sala
+C4,10,Master — louvre windows at riles; pagpagin ang kurtina
+C4,11,Bedroom 1 — bintana kurtina sabitan sa pinto
+C4,12,Bedroom 1 — itagilid ang kutson; ibilad (maaraw lang)
+C4,13,Labhan ang kurtina — kwarto ngayong buwan (sala → master → Bedroom 1)
+C4,14,Porch — kuskusin ang buong deck; matigas na walis + sabon; hayaang matuyo
+C4,15,Gilid ng pawid — pugad ng putakti?
+C4,16,Tubig sa platito ng halaman — itapon
+C4,17,Master — taas ng rack; wicker suitcase at basket
+C4,18,Master — drawer unit AT ang mga bote sa ibabaw
+C4,19,Master — ibilad at paikutin ang nakasabit na damit
+C4,20,Bedroom 1 — ceiling fan at rattan pendant
+C4,21,Solar wall — TUYONG TELA LANG
+D,1,Master — palitan ang kumot at punda sa DALAWANG kama; unan sa ayos
+D,2,Labhan ang bedding + tuwalya + bath mat — simulan agad
+D,3,Master — wall shelf at decor
+D,4,Master — nightstand at lamesa
+D,5,Master — buong salamin
+D,6,Master — clothing rack
+D,7,Bedroom 1 — kumot (kung may tumutuloy lang)
+D,8,Bedroom 1 — wall shelves; folding table at upuan
+D,9,Yoga deck — mop ang pintadong sahig
+D,10,Yoga deck — LAHAT ng gym gear: rings TRX dumbbells kettlebell plates ball blocks balance board roller
+D,11,Yoga deck — irolyo at itago ang mats (hindi sa sahig)
+D,12,Dingding ng mga kwarto + switch + hawakan; sulok sa itaas — amag?
+E,1,Velvet sofa — MALAMBOT na brush lang; sundan ang nap. HUWAG BASAIN
+E,2,Paikutin ang sofa cushions
+E,3,Sala — wall shelves at pendant lights
+E,4,Sliding door glass at screens
+E,5,Surf gear area — walisin; HUWAG galawin ang surfboards
+E,6,Porch — screen doors at riles
+E,7,Porch — fan blades at cage
+E,8,Porch — malilim na bahagi: madulas? kuskusin
+E,9,Dingding ng sala at porch + switch + hawakan
+E_SCREENS,1,Screens ng bintana at pinto — MAGKABILANG panig
+E_SCREENS,2,Brushin ang lahat ng riles ng pinto
