@@ -249,11 +249,7 @@ Bot:  Na-record po. 2 oras OT — ₱120. ✅
 ```
 The bot states the peso amount back to her. She can check the arithmetic on the spot, which is worth more than any ledger she can't see.
 
-**Kuya, on pickup:** `PICKUP` → *"Saan po?"* → free text → logged, counter decrements.
-**Kuya, on a repair:** `TAPOS` + photo → closes the open item, records the Due-vs-Completed gap.
-**Kuya, on the 1st:** *"Bagong buwan po — 4 full days at ~8 pickups ulit. Kailan po kayo pwede sa first full day?"*
-
-He has fewer touchpoints than Ruby and no daily list at all — his flow is entirely event-driven. No checklist page for him; he doesn't need one.
+**Ron reports nothing on a schedule.** He keeps his own; the system doesn't second-guess it. His entire surface: you send `RON …` to the Page, he receives it with a due date, he replies `TAPOS` when done (you get told). `LISTA` shows him what's open. Retainer day counts, if you ever want them, are rows you add by hand.
 
 ---
 

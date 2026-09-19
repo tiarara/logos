@@ -3,7 +3,7 @@
  * Runs as a Google Apps Script bound to the "Bahay Cemento" sheet.
  * The Cloudflare Worker (worker.js) calls doPost() with each inbound message and
  * relays the returned messages. Time-driven triggers handle the morning list, the arrival
- * check, the noon nudge, the end-of-day close, and Ron's monthly balance.
+ * check, the noon nudge, and the end-of-day close.
  *
  * Script Properties (File > Project properties > Script properties):
  *   PAGE_TOKEN       Messenger Page access token (from the Meta app)
@@ -217,19 +217,19 @@ function handleRuby(p, text) {
 }
 
 function handleRon(p, text) {
+  // Ron reports nothing on a schedule. He only closes tasks Tiara sent him.
   const u = upper(text);
-  if (/^(PICKUP|1)$/.test(u)) { setState(p, 'pickup:source'); return 'Saan po galing?'; }
-  if (/^(TAPOS|2)$/.test(u)) {
-    const open = rows('Retainer').filter(r => r.kind === 'REPAIR' && !r.completed).sort((a, b) => new Date(a.date) - new Date(b.date));
-    if (!open.length) { setState(p, 'day:desc'); return 'Walang nakalistang repair. Full day po ba ngayon? Ano ang ginawa?'; }
-    setCell('Retainer', open[0]._row, 'completed', today());
-    return 'Tapos na: ' + open[0].source_or_description + ' ✅ Salamat Ron!';
+  const open = rows('Retainer').filter(r => r.kind === 'REPAIR' && !r.completed).sort((a, b) => new Date(a.date) - new Date(b.date));
+  if (/^(TAPOS|DONE|OK|TAPOS NA)( \d+)?$/.test(u) && open.length) {
+    const n = Number((u.match(/\d+/) || [])[0]);
+    const target = n && open[n - 1] ? open[n - 1] : open[0];
+    setCell('Retainer', target._row, 'completed', today());
+    tellTiara('Ron finished: ' + target.source_or_description, 'Sent ' + target.date + ', due ' + target.due + '.');
+    return 'Tapos na: ' + target.source_or_description + ' ✅ Salamat Ron!';
   }
-  if (/^(FULL DAY|DAY)$/.test(u)) { setState(p, 'day:desc'); return 'Ano po ang ginawa ngayong full day?'; }
-  if (/^(REPORT|PROBLEMA|MAY PROBLEMA|3)$/.test(u)) { setState(p, 'issue:type'); return issueTypePrompt(); }
-  if (/^(BALANCE|4)$/.test(u)) return ronBalance();
+  if (/^(LISTA|LIST)$/.test(u)) return open.length ? 'Mga naka-linya:\n' + open.map((r, i) => (i + 1) + ' ' + r.source_or_description + ' (hanggang ' + r.due + ')').join('\n') + '\nReply TAPOS 1, TAPOS 2...' : 'Wala pong naka-linya ngayon. 👍';
   tellTiara('Note from ' + p.name, text);
-  return 'Naipasa ko kay Tiara.\n1 PICKUP · 2 TAPOS · 3 PROBLEMA · 4 BALANCE';
+  return 'Naipasa ko kay Tiara. 🙏';
 }
 
 function handleAdmin(p, text) {
@@ -250,7 +250,7 @@ function handleAdmin(p, text) {
   if (/^RON /.test(u)) {
     const what = text.slice(4).trim(); const due = Utilities.formatDate(new Date(Date.now() + 7 * 86400000), TZ, 'yyyy-MM-dd');
     append('Retainer', { date: today(), person: ron.name, kind: 'REPAIR', source_or_description: what, due: due });
-    push(ron.psid, 'Mula kay Tiara: ' + what + '\nHanggang ' + due + ' po. Reply TAPOS pag tapos na.');
+    push(ron.psid, 'Mula kay Tiara: ' + what + '\nHanggang ' + due + ' po. Reply TAPOS pag tapos na. 🙏');
     return 'Sent to Ron, due ' + due + '.';
   }
   if (u === 'AWAY') { setQ('tiara_away', 'yes'); return 'Away mode on — photos required.'; }
@@ -284,26 +284,17 @@ function handleState(p, text) {
     append('Log', { date: today(), time: now(), person: p.name, event: 'OT', hours: h, reason: text });
     setState(p, ''); return 'Na-record po. ' + h + ' oras OT — ₱' + (h * OT_RATE) + '. ✅';
   }
-  if (st[0] === 'pickup') { append('Retainer', { date: today(), person: p.name, kind: 'PICKUP', source_or_description: text }); setState(p, ''); return 'Salamat Ron! Na-record: ' + text + ' ✅'; }
-  if (st[0] === 'day') { append('Retainer', { date: today(), person: p.name, kind: 'DAY', source_or_description: text, completed: today() }); setState(p, ''); return 'Na-record ang full day. ' + ronBalance(); }
   setState(p, ''); return 'Sige po.';
 }
 
 function issueTypePrompt() { return 'Ano po ang problema?\n1 May sira\n2 Kailangan ayusin\n3 Kulang na gamit (sabon, bleach...)\n4 Iba pa'; }
 
-function ronBalance() {
-  const m = today().slice(0, 7); const r = rows('Retainer').filter(x => String(x.date).slice(0, 7) === m);
-  const days = r.filter(x => x.kind === 'DAY').length, pick = r.filter(x => x.kind === 'PICKUP').length;
-  const open = rows('Retainer').filter(x => x.kind === 'REPAIR' && !x.completed);
-  return 'Ngayong buwan: ' + days + ' of 4 full days · ' + pick + ' pickups · ' + open.length + ' open repair' + (open.length === 1 ? '' : 's')
-    + (open.length ? ':\n' + open.map(x => '• ' + x.source_or_description + ' (hanggang ' + x.due + ')').join('\n') : '');
-}
 function statusText() {
   const b = q('block_today') || blockForToday();
   return 'Today: Block ' + b + (b === 'C' ? ' wk' + cWeek() : '') + ' · phase ' + (q('phase') || 'not started')
     + '\nEveryday ' + qSet('everyday_done').length + '/8 · focus ' + qSet('focus_done').length + '/' + tasks(focusBlockKey(b)).length
     + '\nNext: ' + q('next_block') + ' · C last ' + (q('c_last_done') || 'never') + ' · away ' + (q('tiara_away') || 'no')
-    + '\nRon — ' + ronBalance();
+    + '\nRon open: ' + rows('Retainer').filter(x => x.kind === 'REPAIR' && !x.completed).map(x => x.source_or_description + ' (due ' + x.due + ')').join('; ');
 }
 
 // ---------- scheduled ----------
@@ -329,8 +320,4 @@ function closeDay() {              // 18:00 Mon–Fri
   openItems('EVERYDAY', qSet('everyday_done')).forEach(t => append('Log', { date: today(), time: now(), person: ruby.name, event: 'ROOM', block: 'EVERYDAY', item_no: t.no, item: t.line.split(' — ')[0], done: 'not reported' }));
   if (q('focus_sent')) { openItems(key, qSet('focus_done')).forEach(t => append('Log', { date: today(), time: now(), person: ruby.name, event: 'TASK', block: b, item_no: t.no, item: t.line.slice(0, 60), done: 'not reported' })); advanceQueue(b); }
   setQ('phase', 'closed'); setQ('override_today', ''); setQ('pending_adds', '');
-}
-function monthlyRon() {            // 08:00 on the 1st
-  if (today().slice(8) !== '01') return; const ron = personByRole('ron'); if (!ron) return;
-  push(ron.psid, 'Bagong buwan po Ron — 4 full days at ~8 pickups ulit. Kailan po kayo pwede sa first full day?\n1 PICKUP · 2 TAPOS · 3 PROBLEMA · 4 BALANCE');
 }

@@ -14,7 +14,7 @@ Create a Google Sheet named **Bahay Cemento** on the `personal` account (the bri
 | `Queue` | `key` · `value` — seed rows below |
 | `Log` | `date` · `time` · `person` · `event` · `block` · `item_no` · `item` · `done` · `hours` · `reason` · `photo_url` |
 | `Issues` | `id` · `reported` · `person` · `type` · `description` · `urgency` · `status` · `note` · `photo_url` |
-| `Retainer` | `date` · `person` · `kind` · `source_or_description` · `due` · `completed` · `parts_cost` · `photo_url` |
+| `Retainer` | `date` · `person` · `kind` · `source_or_description` · `due` · `completed` · `parts_cost` · `photo_url` — Ron's tasks from you; add `DAY` rows by hand if you want to count his retainer days |
 | `Payouts` | `date` · `person` · `type` · `amount` · `method` · `ref` · `confirmed` · `period` |
 
 `Queue` seed:
@@ -45,7 +45,6 @@ Triggers (clock icon), all time-driven, timezone Asia/Manila:
 | `arrivalCheck` | Mon–Fri 8:20 |
 | `noonNudge` | Mon–Fri 12:00 |
 | `closeDay` | Mon–Fri 18:00 |
-| `monthlyRon` | Daily 8:00 (exits unless it's the 1st) |
 
 ## 3. Meta app + Worker (45 min)
 
@@ -76,7 +75,7 @@ Skip the Meta app and Worker. ManyChat Pro → one Catch-all flow → External R
 1. You, Ruby, Ron each message the Page once. The Worker logs each event; PSIDs appear in the Worker's live logs (or in the Apps Script "Unknown sender" email you'll get). Copy them into `People`.
 2. Message the Page `STATUS` — you should get today's block and Ron's balance.
 3. Have Ruby send `LISTA`. She should get the everyday list. She replies `1`. She should get *"Salamat! Natitira: 2 3 4 5 6 7 8"*.
-4. Have Ron send `4`. He should get his balance.
+4. Send `RON test lang` from your account. Ron should receive it; he replies `TAPOS`; you get an email.
 5. `AWAY` / `BALIK` from you — confirm the reply.
 
 ## 5. What each person sees
@@ -103,7 +102,7 @@ Then, when all 8 are in: the Block B list, numbered 1–12. Then *"Tapos na laha
 
 Ruby's words: numbers · `TAPOS LAHAT` · `REPORT` · `WALA` · `OT 2` · `LISTA` (resend) · `WALANG LITRATO`. Anything else is forwarded to you.
 
-**Ron**: `1 PICKUP` · `2 TAPOS` · `3 PROBLEMA` · `4 BALANCE` · `FULL DAY`. Anything else forwarded to you.
+**Ron**: nothing on a schedule. When you send `RON …` he gets it with a due date; he replies `TAPOS` (or `TAPOS 2` if several are open) to close it, `LISTA` to see what's open. Anything else is forwarded to you.
 
 **You**: `ADD …` · `OVERRIDE …` · `RON …` · `AWAY` · `BALIK` · `STATUS` · `RUBY …` (relay). Plain text is relayed to Ruby.
 
