@@ -358,3 +358,38 @@ Paste-ready, self-activating (silent until the sheet has rows): `brief-section.m
 ### 13.4 When to switch it on
 
 Now. The section does nothing until the sheet exists, so there is no reason to wait. Check the next morning's brief arrived as usual.
+
+
+---
+
+## 14. What Ruby's real messages changed (2026-09-19)
+
+Screenshots of the live Messenger thread, read as data. Three corrections and one bug.
+
+### 14.1 She already does the payroll tally — the bot should do it for her
+She sends a period summary unprompted: `5 half Day 1500 / 2 whole day 1000 / Laba 800 / 3300`, arithmetic correct, computed from memory. The `RECEIVED` confirmation I scoped was solving the wrong problem. The bot logs every day already, so it builds the tally and **she confirms it**:
+
+- `SAHOD` (you) → the tally, from the last payout date forward
+- `SAHOD SEND` → sends it to Ruby: *"Tama po ba?"* → `TAMA` logs agreement; anything else is forwarded to you as a dispute, with both versions side by side
+
+This removes her bookkeeping and replaces two memories with one record. It is the single highest-value thing in the build.
+
+### 14.2 She writes sentences, not keywords
+*"Di na po ako kumuha kanina ma'am kc may Tira po ako…"* — run-on Taglish, heavy `po`, abbreviations (`kc`, `cge`), trailing `,,`. Numbers should still work (her money tally is precisely structured), but the parser now also accepts `opo / tapos na po / ayos na` as "all done", catches *"di ko po natapos yung…"* as a logged not-done plus a note to you, and forwards anything else rather than failing.
+
+### 14.3 Three things missing from the model
+- **Laba** is a separate paid service (₱700 + supplies), not part of any block → `LABA 700`
+- **Her asawa** appears in the pay tally as a worker → `ASAWA 500`
+- **She fronts cash for supplies** and adds it to the bill → `GASTOS 100 Zonrox`, carried into the tally automatically
+
+### 14.4 The bodega rule
+You buy bulk supplies chosen for lower-chemical content; she bought retail soap because stock ran short. Now on the rules page: take from the bodega first, never buy retail while stock exists, and say when stock is low rather than waiting for it to run out. The `REPORT` menu's option 3 reads "Kulang na sa BODEGA".
+
+### 14.5 Bug found by reading the code against her messages
+`REPORT` had a `3` alias and `WALA` had `4` — both collide with ticking rooms 3 and 4, so the aliases were dead. Removed. Separately, a bare number outside the task range (she might send `3300`) was silently treated as a room tick; it is now forwarded to you.
+
+### 14.6 Still unknown
+1. **Laba** — fixed rate per period, or per load? Is it Ruby's own extra service or part of the arrangement?
+2. **Asawa** — who is he in this, what does he do, what's the rate? In the tally he appears folded into the 2 whole days (₱1,000), which is ambiguous: 2 whole days for Ruby with his help free, or one day each? That ambiguity is exactly what the generated tally removes going forward.
+3. **Supply advances** — should she front cash at all now the bodega rule is explicit, or only in emergencies?
+4. **Pay period** — the tally covers 7 working days, so not a clean week. Fixed fortnight, or whenever she asks?

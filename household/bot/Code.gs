@@ -23,6 +23,8 @@ const BLOCKS = {
 const ORDER = ['A', 'B', 'C', 'D', 'E'];
 const C_OVERDUE_DAYS = 35;
 const OT_RATE = 60;
+const RATE_HALF = 300;
+const RATE_WHOLE = 500;
 
 // ---------- sheet helpers ----------
 
@@ -143,7 +145,7 @@ function startDay(ruby) {
   const b = blockForToday();
   setQ('today', today()); setQ('block_today', b); setQ('phase', q('override_today') ? 'override' : 'everyday');
   setQ('everyday_done', ''); setQ('focus_done', ''); setQ('focus_sent', ''); setQ('wala', '');
-  append('Log', { date: today(), time: now(), person: ruby.name, event: 'START', block: b });
+  append('Log', { date: today(), time: now(), person: ruby.name, event: 'START', block: b, item: wholeDay(b) ? 'whole' : 'half' });
   return morningText(ruby);
 }
 function tick(ruby, nums) {
@@ -192,35 +194,72 @@ function doPost(e) {
   return reply('Salamat!');
 }
 
-const NUMS = /^(\d+[\s,]*)+$/;
-function upper(t) { return t.toUpperCase().replace(/\s+/g, ' '); }
+// Ruby writes in full Taglish sentences, not keywords. Numbers are the happy path;
+// these catch the way she actually talks. Anything unmatched is forwarded to Tiara.
+const NUMS = /^[\d\s,]+$/;
+const YES = /\b(opo|oo|tapos na|tapos po|tapos na po|ayos na|lahat na|ok na|okay na|done na|natapos)\b/i;
+const NOPE = /\b(hindi|hindi ko|di|di ko|wala|hindi po)\b[^.]{0,30}\b(tapos|natapos|nagawa|nalinis|nagawa ko)\b/i;
+function upper(t) { return t.toUpperCase().replace(/\s+/g, ' ').trim(); }
+function phaseMax() { return q('phase') === 'focus' ? tasks(focusBlockKey(q('block_today'))).length : 8; }
+function tickAll(p) {
+  const key = q('phase') === 'focus' ? focusBlockKey(q('block_today')) : 'EVERYDAY';
+  return tick(p, tasks(key).map(t => t.no));
+}
+function money(n) { return '₱' + Number(n).toLocaleString('en-PH'); }
 
 function handleRuby(p, text) {
   const u = upper(text);
   if (q('today') !== today()) return startDay(p);
-  if (NUMS.test(u)) return tick(p, u.split(/[\s,]+/).map(Number));
-  if (/^(TAPOS LAHAT|DONE ALL|LAHAT)$/.test(u)) {
-    const phase = q('phase'); const key = phase === 'focus' ? focusBlockKey(q('block_today')) : 'EVERYDAY';
-    return tick(p, tasks(key).map(t => t.no));
+
+  // money and supplies — she already reports these unprompted
+  let m = text.match(/^GASTOS\s*([\d,.]+)\s*(.*)$/i);
+  if (m) {
+    const amt = parseFloat(m[1].replace(/,/g, ''));
+    append('Log', { date: today(), time: now(), person: p.name, event: 'GASTOS', amount: amt, item: m[2] || '' });
+    return 'Na-record po: ' + money(amt) + (m[2] ? ' — ' + m[2] : '') + '. Idadagdag sa sahod. ✅';
   }
-  if (/^(REPORT|3)$/.test(u)) { setState(p, 'issue:type'); return issueTypePrompt(); }
-  if (/^(WALA|WALA AKO|4)$/.test(u)) { setState(p, 'wala:reason'); return 'Salamat sa pagsabi. Bakit po?'; }
-  if (/^OT\s*(\d+(\.\d+)?)?$/.test(u)) {
-    const h = (u.match(/\d+(\.\d+)?/) || [])[0];
+  m = text.match(/^LABA\s*([\d,.]+)\s*(.*)$/i);
+  if (m) {
+    const amt = parseFloat(m[1].replace(/,/g, ''));
+    append('Log', { date: today(), time: now(), person: p.name, event: 'LABA', amount: amt, item: m[2] || '' });
+    return 'Na-record ang laba: ' + money(amt) + '. ✅';
+  }
+
+  if (/^(REPORT|PROBLEMA|MAY PROBLEMA)$/.test(u)) { setState(p, 'issue:type'); return issueTypePrompt(); }
+  if (/^(WALA|WALA AKO|WALA PO AKO)$/.test(u)) { setState(p, 'wala:reason'); return 'Salamat sa pagsabi. Bakit po?'; }
+  if (/^OT\s*([\d.]+)?$/.test(u)) {
+    const h = (u.match(/[\d.]+/) || [])[0];
     if (!h) { setState(p, 'ot:hours'); return 'Ilang oras po ang OT?'; }
     setState(p, 'ot:reason:' + h); return 'Bakit po kailangan ng overtime?';
   }
   if (/^WALANG LITRATO$/.test(u)) { append('Log', { date: today(), time: now(), person: p.name, event: 'PHOTO', done: 'no' }); return 'Sige po, na-record. ✅'; }
   if (/^(LISTA|LIST|ULIT)$/.test(u)) return q('phase') === 'focus' ? focusText(q('block_today')) : morningText(p);
+  if (/^(SAHOD|BAYAD)$/.test(u)) return tallyText(p, '');
+  if (/^(TAPOS LAHAT|DONE ALL|LAHAT|TAPOS NA LAHAT)$/.test(u)) return tickAll(p);
+
+  if (NUMS.test(text.trim())) {
+    const max = phaseMax();
+    const nums = text.trim().split(/[\s,]+/).map(Number).filter(n => n >= 1 && n <= max);
+    if (nums.length) return tick(p, nums);
+    tellTiara('Number from ' + p.name + " that isn't a task", text);   // e.g. a peso total
+    return 'Pasensya po, hindi ko masyadong naintindihan — pero naipasa ko na kay Tiara. 🙏';
+  }
+  if (NOPE.test(text)) {                                   // "di ko po natapos yung CR kasi..."
+    append('Log', { date: today(), time: now(), person: p.name, event: 'NOTE', item: text, done: 'no' });
+    tellTiara(p.name + " says something wasn't finished", text);
+    return 'Salamat sa pagsabi po, na-record ko at sinabi ko na kay Tiara. 🙏';
+  }
+  if (YES.test(text)) return tickAll(p);
+
   tellTiara('Note from ' + p.name, text);
-  return 'Naipasa ko kay Tiara. Para sa listahan, reply LISTA.';
+  return 'Naipasa ko po kay Tiara. Para sa listahan, reply LISTA.';
 }
 
 function handleRon(p, text) {
   // Ron reports nothing on a schedule. He only closes tasks Tiara sent him.
   const u = upper(text);
   const open = rows('Retainer').filter(r => r.kind === 'REPAIR' && !r.completed).sort((a, b) => new Date(a.date) - new Date(b.date));
-  if (/^(TAPOS|DONE|OK|TAPOS NA)( \d+)?$/.test(u) && open.length) {
+  if ((/\b(TAPOS|DONE|OK|AYOS|NATAPOS)\b/.test(u) || YES.test(text)) && open.length) {
     const n = Number((u.match(/\d+/) || [])[0]);
     const target = n && open[n - 1] ? open[n - 1] : open[0];
     setCell('Retainer', target._row, 'completed', today());
@@ -234,7 +273,7 @@ function handleRon(p, text) {
 
 function handleAdmin(p, text) {
   const u = upper(text); const ruby = personByRole('ruby'); const ron = personByRole('ron');
-  if (/^ADD /.test(u)) {
+  if (/^ADD /i.test(text)) {
     const what = text.slice(4).trim();
     if (q('today') === today() && q('phase') !== 'closed' && hourNow() < 12) {
       setQ('pending_adds', (q('pending_adds') ? q('pending_adds') + '\n' : '') + what);
@@ -243,22 +282,63 @@ function handleAdmin(p, text) {
       return 'Sent to Ruby.' + (hourNow() >= 10 ? ' She is ' + (hourNow() - 8) + 'h in — this may run past 12.' : '');
     }
     setQ('pending_adds', (q('pending_adds') ? q('pending_adds') + '\n' : '') + what);
-    append('Log', { date: q('today') === today() ? today() : 'next', time: now(), person: ruby.name, event: 'ADD', item: what });
+    append('Log', { date: today(), time: now(), person: ruby.name, event: 'ADD', item: what });
     return 'Held for tomorrow\'s morning list.';
   }
-  if (/^OVERRIDE /.test(u)) { setQ('override_today', text.slice(9).trim()); if (q('today') === today() && q('phase') !== 'closed') push(ruby.psid, '⚠️ Ibang gawain ngayon (mula kay Tiara):\n' + text.slice(9).trim() + '\nAng block ngayon ay bukas na lang.'); return 'Override set. Block deferred.'; }
-  if (/^RON /.test(u)) {
+  if (/^OVERRIDE /i.test(text)) { setQ('override_today', text.slice(9).trim()); if (q('today') === today() && q('phase') !== 'closed') push(ruby.psid, '⚠️ Ibang gawain ngayon (mula kay Tiara):\n' + text.slice(9).trim() + '\nAng block ngayon ay bukas na lang.'); return 'Override set. Block deferred.'; }
+  if (/^RON /i.test(text)) {
     const what = text.slice(4).trim(); const due = Utilities.formatDate(new Date(Date.now() + 7 * 86400000), TZ, 'yyyy-MM-dd');
     append('Retainer', { date: today(), person: ron.name, kind: 'REPAIR', source_or_description: what, due: due });
     push(ron.psid, 'Mula kay Tiara: ' + what + '\nHanggang ' + due + ' po. Reply TAPOS pag tapos na. 🙏');
     return 'Sent to Ron, due ' + due + '.';
   }
+  if (u === 'WHOLE') {                       // mark today a whole day (₱500)
+    const r = rows('Log').filter(x => String(x.date) === today() && x.event === 'START').pop();
+    if (r) { setCell('Log', r._row, 'item', 'whole'); return 'Today logged as a whole day (' + money(RATE_WHOLE) + ').'; }
+    return 'No day started yet.';
+  }
+  let m = text.match(/^LABA\s*([\d,.]+)\s*(.*)$/i);
+  if (m) { append('Log', { date: today(), time: now(), person: ruby.name, event: 'LABA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return 'Laundry logged.'; }
+  m = text.match(/^ASAWA\s*([\d,.]+)\s*(.*)$/i);
+  if (m) { append('Log', { date: today(), time: now(), person: 'Asawa', event: 'ASAWA', amount: parseFloat(m[1].replace(/,/g, '')), item: m[2] || '' }); return "Husband's work logged."; }
+  if (/^SAHOD/i.test(text)) {                // SAHOD  or  SAHOD 2026-09-08  or  SAHOD SEND
+    const send = /SEND/i.test(text); const from = (text.match(/\d{4}-\d{2}-\d{2}/) || [])[0] || '';
+    const t = tallyText(ruby, from);
+    if (send) { push(ruby.psid, t + '\n\nTama po ba? Reply TAMA, o sabihin niyo kung ano ang mali.'); setState(ruby, 'tally:' + t.replace(/[:\n]/g, ' ')); return 'Sent to Ruby for confirmation:\n\n' + t; }
+    return t;
+  }
   if (u === 'AWAY') { setQ('tiara_away', 'yes'); return 'Away mode on — photos required.'; }
   if (u === 'BALIK') { setQ('tiara_away', ''); return 'Home — photos off.'; }
   if (u === 'STATUS') return statusText();
-  if (/^RUBY /.test(u)) { push(ruby.psid, text.slice(5)); return 'Relayed to Ruby.'; }
+  if (/^RUBY /i.test(text)) { push(ruby.psid, text.slice(5)); return 'Relayed to Ruby.'; }
   if (ruby) push(ruby.psid, text);
-  return 'Relayed to Ruby. (ADD / OVERRIDE / RON / AWAY / BALIK / STATUS)';
+  return 'Relayed to Ruby. (ADD / OVERRIDE / RON / WHOLE / LABA / ASAWA / SAHOD / AWAY / BALIK / STATUS)';
+}
+
+/** Builds the pay tally in the shape Ruby already sends it herself. */
+function tallyText(ruby, from) {
+  if (!from) {
+    const last = rows('Payouts').filter(x => x.person === ruby.name && x.date).sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    from = last ? Utilities.formatDate(new Date(new Date(last.date).getTime() + 86400000), TZ, 'yyyy-MM-dd')
+                : Utilities.formatDate(new Date(Date.now() - 14 * 86400000), TZ, 'yyyy-MM-dd');
+  }
+  const L = rows('Log').filter(x => String(x.date) >= from && String(x.date) <= today());
+  const starts = L.filter(x => x.event === 'START' && x.person === ruby.name);
+  const half = starts.filter(x => x.item !== 'whole').length, whole = starts.filter(x => x.item === 'whole').length;
+  const ot = L.filter(x => x.event === 'OT').reduce((n, x) => n + Number(x.hours || 0), 0);
+  const laba = L.filter(x => x.event === 'LABA').reduce((n, x) => n + Number(x.amount || 0), 0);
+  const gastos = L.filter(x => x.event === 'GASTOS');
+  const gTotal = gastos.reduce((n, x) => n + Number(x.amount || 0), 0);
+  const asawa = L.filter(x => x.event === 'ASAWA').reduce((n, x) => n + Number(x.amount || 0), 0);
+  const lines = []; let total = 0;
+  if (half) { lines.push(half + ' half day — ' + money(half * RATE_HALF)); total += half * RATE_HALF; }
+  if (whole) { lines.push(whole + ' whole day — ' + money(whole * RATE_WHOLE)); total += whole * RATE_WHOLE; }
+  if (ot) { lines.push(ot + ' oras OT — ' + money(ot * OT_RATE)); total += ot * OT_RATE; }
+  if (laba) { lines.push('Laba — ' + money(laba)); total += laba; }
+  if (asawa) { lines.push('Asawa — ' + money(asawa)); total += asawa; }
+  if (gTotal) { lines.push('Gamit na binili niyo — ' + money(gTotal) + (gastos.length ? ' (' + gastos.map(x => x.item).filter(Boolean).join(', ') + ')' : '')); total += gTotal; }
+  if (!lines.length) return 'Wala pang record simula ' + from + '.';
+  return 'Record ko po simula ' + from + ':\n' + lines.join('\n') + '\n————————\nTOTAL — ' + money(total);
 }
 
 function handleState(p, text) {
@@ -272,6 +352,11 @@ function handleState(p, text) {
       setState(p, ''); if (urg === 'Now') tellTiara('URGENT from ' + p.name, st[2] + ': ' + st.slice(3).join(':'));
       return 'Salamat! Na-record na po. ✅';
     }
+  }
+  if (st[0] === 'tally') {
+    if (/\b(TAMA|OPO|OO|TAMA PO|OK)\b/i.test(text)) { setState(p, ''); tellTiara(p.name + ' confirmed the tally', st.slice(1).join(':')); return 'Salamat po! ✅'; }
+    setState(p, ''); tellTiara(p.name + ' disputes the tally', 'Bot said: ' + st.slice(1).join(':') + '\n\nShe says: ' + text);
+    return 'Sige po, sinabi ko na kay Tiara para matingnan. 🙏';
   }
   if (st[0] === 'wala') {
     append('Log', { date: today(), time: now(), person: p.name, event: 'WALA', item: text });
@@ -287,7 +372,7 @@ function handleState(p, text) {
   setState(p, ''); return 'Sige po.';
 }
 
-function issueTypePrompt() { return 'Ano po ang problema?\n1 May sira\n2 Kailangan ayusin\n3 Kulang na gamit (sabon, bleach...)\n4 Iba pa'; }
+function issueTypePrompt() { return 'Ano po ang problema?\n1 May sira\n2 Kailangan ayusin\n3 Kulang na sa BODEGA (sabon, bleach...)\n4 Iba pa'; }
 
 function statusText() {
   const b = q('block_today') || blockForToday();

@@ -28,6 +28,14 @@ Malinis na kwarto pero madumi ang banyo = hindi tapos.
 Kung hindi ka makakapasok, sabihin mo sa akin **kahapon pa** — hindi sa mismong araw, hindi pagkatapos.
 Bawal tumanggap ng trabaho sa ibang kliyente sa mga araw natin.
 
+## Supplies / Mga Gamit
+**Sa BODEGA muna, laging.** May stock tayo doon — sabon, bleach, at iba pa.
+*Take from the bodega first, always.*
+Huwag bumili sa tindahan kung may stock pa sa bodega.
+Ang sabon sa bodega ay pinili dahil **mas kaunti ang masamang chemical** para sa damit at katawan.
+**Kapag kulang na o mauubos na, sabihin agad** — huwag hintaying maubos. Reply REPORT.
+*Tell me when stock is low — don't wait until it runs out.*
+
 ## Tools / Kagamitan
 **Kung sira o walang baterya ang gamit, gawin mo sa kamay.**
 Ang electric scrubber ay pantulong lang, hindi requirement. Laging pwede ang brush at kamay.

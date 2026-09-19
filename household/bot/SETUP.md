@@ -12,7 +12,7 @@ Create a Google Sheet named **Bahay Cemento** on the `personal` account (the bri
 | `People` | `psid` · `name` · `role` · `gcash` · `state` |
 | `Tasks` | `block` · `no` · `line` — import `tasks.csv` |
 | `Queue` | `key` · `value` — seed rows below |
-| `Log` | `date` · `time` · `person` · `event` · `block` · `item_no` · `item` · `done` · `hours` · `reason` · `photo_url` |
+| `Log` | `date` · `time` · `person` · `event` · `block` · `item_no` · `item` · `done` · `hours` · `amount` · `reason` · `photo_url` |
 | `Issues` | `id` · `reported` · `person` · `type` · `description` · `urgency` · `status` · `note` · `photo_url` |
 | `Retainer` | `date` · `person` · `kind` · `source_or_description` · `due` · `completed` · `parts_cost` · `photo_url` — Ron's tasks from you; add `DAY` rows by hand if you want to count his retainer days |
 | `Payouts` | `date` · `person` · `type` · `amount` · `method` · `ref` · `confirmed` · `period` |
@@ -100,11 +100,11 @@ TAPOS LAHAT · REPORT · WALA · OT
 ```
 Then, when all 8 are in: the Block B list, numbered 1–12. Then *"Tapos na lahat — salamat Ruby! ✅"* (plus the photo line if you're away).
 
-Ruby's words: numbers · `TAPOS LAHAT` · `REPORT` · `WALA` · `OT 2` · `LISTA` (resend) · `WALANG LITRATO`. Anything else is forwarded to you.
+Ruby's words: numbers · `TAPOS LAHAT` · `REPORT` · `WALA` · `OT 2` · `GASTOS 100 Zonrox` · `LABA 700` · `SAHOD` · `LISTA` · `WALANG LITRATO`. She also writes in full sentences — `opo / tapos na po` ticks everything, and *"di ko po natapos yung…"* is logged and forwarded. Anything else goes to you.
 
 **Ron**: nothing on a schedule. When you send `RON …` he gets it with a due date; he replies `TAPOS` (or `TAPOS 2` if several are open) to close it, `LISTA` to see what's open. Anything else is forwarded to you.
 
-**You**: `ADD …` · `OVERRIDE …` · `RON …` · `AWAY` · `BALIK` · `STATUS` · `RUBY …` (relay). Plain text is relayed to Ruby.
+**You**: `ADD …` · `OVERRIDE …` · `RON …` · `WHOLE` (mark today ₱500) · `LABA 700` · `ASAWA 500` · `SAHOD` (see the tally) · `SAHOD SEND` (send it to Ruby to confirm) · `AWAY` · `BALIK` · `STATUS` · `RUBY …`. Plain text is relayed to Ruby.
 
 **Your email/Messenger gets**: no check-in by 8:20 · any `WALA` with its reason · any urgent `REPORT` · anything unrecognised.
 
