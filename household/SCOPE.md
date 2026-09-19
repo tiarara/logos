@@ -159,7 +159,7 @@ A Facebook Page can only message someone freely within 24 hours of *their* last 
 | Schedule | Mon–Fri, 8:00–12:00 (half day) |
 | Half day | ₱300 |
 | Whole day | ₱500 |
-| Overtime | ₱62.50/hr (stated as 500 ÷ 8) |
+| Overtime | **₱60/hr** (decided 2026-09-19) |
 | OT rule | Allowed, but she must state the reason. No reason logged = not approved. |
 
 ### Kuya (Ruby's brother) — maintenance, retainer
@@ -174,32 +174,9 @@ Roughly **₱9,900/month in labour** before overtime, supplies, or parts.
 
 ## 8. Two problems with the rates
 
-### 8.1 Ruby's overtime pays less than her normal hours
+### 8.1 Overtime rate — settled at ₱60/hr
 
-Her half day is ₱300 for 4 hours — **₱75/hour**. The stated OT rate is ₱62.50/hour. So every extra hour she works is paid 17% *below* her normal rate. Overtime that's cheaper than regular time is backwards, and she will notice.
-
-It also creates an inconsistency at the top end:
-
-| Scenario | Hours | Pay |
-|---|---|---|
-| Scheduled whole day | 8 | **₱500** |
-| Half day + 4 hours OT | 8 | **₱550** |
-
-Same work, same hours, different price — purely because of what you called it that morning.
-
-**Three ways to fix it, pick one:**
-
-| | Half day | Whole day | OT rate | Monthly cost |
-|---|---|---|---|---|
-| **A — one honest rate** (recommended) | ₱300 | ₱600 | ₱75/hr | ~₱7,100 |
-| **B — keep ₱500, fix OT** | ₱300 | ₱500 | ₱75/hr | ~₱6,900 + OT |
-| **C — leave as is** | ₱300 | ₱500 | ₱62.50/hr | ~₱6,900 + cheap OT |
-
-**A** is the cleanest: one rate, ₱75/hour, everything derives from it. A whole day is just eight hours. Costs you about ₱200/month more than what you have now and removes every edge case — no arbitrage, no "is today a whole day or a long half day" conversation, and the maths is simple enough for Ruby to check herself, which matters more than the ₱200.
-
-**C** is defensible if whole days are a bulk rate she's already agreed to and *you* schedule them in advance — the arbitrage only bites if she's the one choosing. But the below-base OT rate stays a live grievance.
-
-**B** is the compromise and the worst of the three: OT still overtakes the whole-day rate at 3 hours.
+For the record: her half day is ₱300 for 4 hours (₱75/hr), so OT at ₱60/hr is below her effective base rate, and a half day plus 4 hours OT (₱540) costs more than a scheduled whole day (₱500). Tiara has decided on ₱60 knowing this. The practical consequence is that whole days should always be *scheduled by Tiara in advance*, never arrived at by Ruby staying late — which the `OVERRIDE` and Block C whole-day rules already ensure.
 
 ### 8.2 The retainer has no consumption tracking
 
@@ -249,7 +226,7 @@ Overtime gets its own fields on `Task Log`: hours, **reason (required)**, approv
 Ruby: OT 2
 Bot:  Salamat! Bakit po kailangan ng overtime?
 Ruby: May bisita bukas, nilinis ko lahat ng kwarto
-Bot:  Na-record po. 2 oras OT — ₱150. ✅
+Bot:  Na-record po. 2 oras OT — ₱120. ✅
 ```
 The bot states the peso amount back to her. She can check the arithmetic on the spot, which is worth more than any ledger she can't see.
 
@@ -265,8 +242,6 @@ He has fewer touchpoints than Ruby and no daily list at all — his flow is enti
 
 **Decide before printing:**
 1. **Weeks 3 and 4 as whole days** — can you commit monthly? Still the biggest open item. At Ruby's rates that's 2 × ₱500 instead of 2 × ₱300, so **₱400/month** to make the heavy weeks actually fit. Cheap.
-2. **Overtime rate** — A, B, or C from §8.1. Recommend A.
-
 **Decide before the retainer's second month:**
 3. Parts and materials — reimbursed on top of ₱3,000, or included?
 4. Unused full days — roll over or expire?
@@ -283,7 +258,7 @@ He has fewer touchpoints than Ruby and no daily list at all — his flow is enti
 
 The earlier version said run it on paper for a month, then build if you still want it. That advice assumed the paper would get used. It doesn't, so:
 
-1. **Now (1 hour):** reprint `CHECKLIST.md` as 9 laminated pages — Block A–E, queue tracker, the can't-come page. Settle the OT rate and the Week 3/4 whole-day question first.
+1. **Now (1 hour):** reprint `CHECKLIST.md` as 9 laminated pages — Block A–E, queue tracker, the can't-come page. Settle the Week 3/4 whole-day question first.
 2. **Now (1 hour, zero build):** put the queue tracker where Ruby starts her day, and agree the four reply words with her in person. Even with you sending the morning message by hand, the *queue* fixes the missed-day problem immediately — that half of this is free and doesn't wait on any build.
 3. **Next (~2 days):** build the reminder. Airtable holds the queue and the log; Make.com sends the morning message, runs the 10:00 and 11:00 escalation, and handles `WALA AKO` / `OVERRIDE`. This is the part that removes you from the loop, and it's the only part that does.
 4. **After (~1 day):** `REPORT` inbox, Kuya's retainer tracker, payouts and `RECEIVED`.
