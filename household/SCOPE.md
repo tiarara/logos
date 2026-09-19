@@ -300,7 +300,7 @@ Decide this before step 3; it's the difference between two days of work and two 
 | Cloudflare Worker (webhook glue, ~25 lines) | ₱0 |
 | Google Sheet + Apps Script (all logic) | ₱0 |
 | SMS fallback (Semaphore), only if needed | ≈ ₱25 |
-| *ManyChat Pro, only if preferred over the Meta console* | *≈ ₱850 — per Page; better spent on Kahana's page* |
+| *ManyChat Pro, only if preferred over the Meta console* | *≈ ₱1,700+ — Pro tier, billed per Page, not shareable* |
 
 Logic lives in Apps Script bound to the sheet, so there's no Google auth to build. The Worker exists only because Meta's webhook needs a direct 200 and Apps Script answers with a redirect.
 

@@ -73,7 +73,7 @@ The Worker has no logic. It receives the Messenger event, POSTs it to the script
 **Daily 7:55 push:** in dev mode the Page can message testers directly, but Meta's 24-hour window still applies to unprompted sends. If the 7:55 message fails on days after Ruby was silent, set `MESSAGE_TAG` to `CONFIRMED_EVENT_UPDATE` in script properties — a scheduled work day is a confirmed event. The 8:20 `arrivalCheck` email to you works regardless.
 
 ### ManyChat instead (if preferred)
-Skip the Meta app and Worker. ManyChat Pro → one Catch-all flow → External Request to the script URL with body `{"secret":…,"psid":"{{user_id}}","text":"{{last_input_text}}","attachment_url":…}` → Dynamic Content from the same URL. Swap `push()` in `Code.gs` for ManyChat's `sendContent` endpoint. ManyChat bills per Page; if you buy it anywhere, Kahana Baler's page is where it earns its keep.
+Skip the Meta app and Worker. ManyChat Pro → one Catch-all flow → External Request to the script URL with body `{"secret":…,"psid":"{{user_id}}","text":"{{last_input_text}}","attachment_url":…}` → Dynamic Content from the same URL. Swap `push()` in `Code.gs` for ManyChat's `sendContent` endpoint. ManyChat bills per Page and the External Request step is Pro-only (≈US$29–39/mo), so this is the expensive path for a three-person household bot.
 
 ## 4. First day
 
