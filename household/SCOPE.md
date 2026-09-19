@@ -45,7 +45,7 @@ The floor-alternation logic survives: the queue order is still down / up / down 
 
 **The one exception is Block C, the monthly rotation.** That work is calendar-anchored — a fridge cleaned every 5 weeks instead of every 4 is fine, every 8 is not. So Block C keeps a month column on the tracker, and the rule on its page reads: *if the queue is running late, do Block C next.* It jumps the queue rather than drifting with it.
 
-**This changes the printed artifact**, which now has 9 pages: the day pages are relabelled Block A–E, the calendar becomes a queue tracker with a separate monthly grid, and there's a new page 9 for what to do when she can't come.
+**The printed artifact shrinks to one page.** With the numbered lists arriving on Messenger and the queue in the sheet, the block pages and tracker are redundant. `RULES.md` — rules, attendance, safety, product guide — is the only thing that goes on the wall.
 
 ---
 
@@ -277,7 +277,7 @@ He has fewer touchpoints than Ruby and no daily list at all — his flow is enti
 
 The earlier version said run it on paper for a month, then build if you still want it. That advice assumed the paper would get used. It doesn't, so:
 
-1. **Now (1 hour):** reprint `CHECKLIST.md` as 9 laminated pages — Block A–E, queue tracker, the can't-come page. Settle the Week 3/4 whole-day question first.
+1. **Now (10 min):** print and laminate `RULES.md`.
 2. **Now (1 hour, zero build):** put the queue tracker where Ruby starts her day, and agree the four reply words with her in person. Even with you sending the morning message by hand, the *queue* fixes the missed-day problem immediately — that half of this is free and doesn't wait on any build.
 3. **Next (~2 days):** build the reminder. Airtable holds the queue and the log; Make.com sends the morning message, runs the 10:00 and 11:00 escalation, and handles `WALA AKO` / `OVERRIDE`. This is the part that removes you from the loop, and it's the only part that does.
 4. **After (~1 day):** `REPORT` inbox, Kuya's retainer tracker, payouts and `RECEIVED`.
