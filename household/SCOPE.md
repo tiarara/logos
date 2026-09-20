@@ -310,6 +310,8 @@ Decide this before step 3; it's the difference between two days of work and two 
 
 Logic lives in Apps Script bound to the sheet, so there's no Google auth to build. The Worker exists only because Meta's webhook needs a direct 200 and Apps Script answers with a redirect.
 
+**Channel decided: Meta Page** (2026-09-20) — buttons and photos are worth the extra setup over SMS, and it costs nothing per message. SMS via Semaphore remains the documented fallback if Meta's rules bite.
+
 Build files: `bot/Code.gs` (all logic), `bot/worker.js` (glue), `bot/tasks.csv` (the numbered lists, Taglish), `bot/SETUP.md` (step-by-step, ~1 hour end to end).
 
 Decided: Block C weeks 3 and 4 are whole days (₱500). The 7:55 message says so.

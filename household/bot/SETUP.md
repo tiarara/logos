@@ -53,6 +53,9 @@ Triggers (clock icon), all time-driven, timezone Asia/Manila:
 
 ## 3. Meta app + Worker (45 min)
 
+> **Do the tester invites first.** Ruby and Ron each have to accept in their own Facebook notifications, which can sit for a day. It is the only step that waits on someone else — send them, then carry on with the rest.
+
+
 **Meta app** — developers.facebook.com → Create app → Business type. Add the **Messenger** product.
 1. Messenger settings → connect the Page → generate a **Page access token**. Save as `PAGE_TOKEN` in both the script properties and the Worker.
 2. App roles → **Testers** → add Ruby's and Ron's Facebook accounts. They each accept the invite (Facebook → Settings → Apps/Developer notifications). You're an admin already. *The app stays in development mode — no review needed for people with roles.*
