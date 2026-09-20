@@ -133,6 +133,10 @@ When Claude resolves something, Rosie writes the phrasing into `Phrasebook`, so 
 
 **Correcting her:** open the `Phrasebook` tab and fix or delete the row. That's the whole training loop — readable, editable, no black box.
 
+**Ship without it first.** Leave `ANTHROPIC_API_KEY` unset and Rosie runs tiers 1–2 only, forwarding anything she can't parse straight to you — messages you'd be reading anyway. After two weeks, count the forwards. Three a week: add those phrasings to `Phrasebook` by hand and never pay for tier 3 at all. Twenty a week: set the key.
+
+**Changing model or provider** is two script properties, no code edit: `LLM_MODEL` and `LLM_URL`. Roughly, per month at first (falling as the phrasebook fills): Opus 5 ≈ ₱320 · Haiku 4.5 (`claude-haiku-4-5`) ≈ ₱64 · Grok 4.6 ≈ ₱100 but needs a second vendor and a differently-shaped request.
+
 **Cost:** `claude-opus-5` at $5/$25 per million tokens, ~1K in and a few hundred out per call, firing only on messages the rules miss. Expect roughly **₱150–350/month at first, falling** as the phrasebook fills. Leave `ANTHROPIC_API_KEY` unset to run at ₱0 with tier 3 off.
 
 **Safety:** Claude sees only the one message plus the phrasebook — never your calendar, email or the rest of the sheet. It cannot send messages or write rows itself; it returns a classification and Rosie's own code decides what happens.

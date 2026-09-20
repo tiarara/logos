@@ -8,6 +8,7 @@
  * Script Properties (File > Project properties > Script properties):
  *   PAGE_TOKEN       Messenger Page access token (from the Meta app)
  *   ANTHROPIC_API_KEY  optional — enables the learning layer; without it Rosie just forwards what rules miss
+ *   LLM_MODEL / LLM_URL  optional — override the model or endpoint without touching code
  *   TIARA_EMAIL      where silence alerts go
  *   SHARED_SECRET    must match the header ManyChat sends
  *   MESSAGE_TAG      optional; leave blank unless Meta policy needs one
@@ -15,7 +16,14 @@
 
 const BOT_NAME = 'Rosie';
 const TZ = 'Asia/Manila';
-const MODEL = 'claude-opus-5';
+// Tier 3 is one HTTP call — swap provider by changing these two script properties,
+// no code edit. Defaults to Claude; any OpenAI-compatible endpoint works the same way.
+function llmCfg() {
+  const P = PropertiesService.getScriptProperties();
+  return { url: P.getProperty('LLM_URL') || 'https://api.anthropic.com/v1/messages',
+           model: P.getProperty('LLM_MODEL') || 'claude-opus-5',
+           key: P.getProperty('ANTHROPIC_API_KEY') || P.getProperty('LLM_KEY') };
+}
 const BLOCKS = {
   A: { name: 'Kusina', page: 3, floor: 'down' },
   B: { name: 'Mga Banyo', page: 4, floor: 'up' },
@@ -201,8 +209,8 @@ function learnPhrase(text, intent, note) {
 const INTENTS = ['done_all', 'done_some', 'not_done', 'absent', 'overtime', 'issue', 'expense', 'laundry', 'confirm_tally', 'dispute_tally', 'question', 'other'];
 
 function askClaude(text, p) {
-  const key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
-  if (!key) return null;
+  const cfg = llmCfg();
+  if (!cfg.key) return null;                                // no key = tier 3 off, rules + phrasebook only
   const book = rows('Phrasebook').slice(-40).map(x => '- "' + x.phrase + '" = ' + x.intent).join('\n');
   const sys = [
     'You classify one Messenger message from a Filipino household worker to her employer.',
@@ -221,7 +229,7 @@ function askClaude(text, p) {
   ].join('\n');
 
   const body = {
-    model: MODEL,
+    model: cfg.model,
     max_tokens: 1024,
     output_config: { effort: 'low' },
     system: sys,
@@ -243,9 +251,9 @@ function askClaude(text, p) {
     messages: [{ role: 'user', content: text }],
   };
   try {
-    const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+    const res = UrlFetchApp.fetch(cfg.url, {
       method: 'post', contentType: 'application/json', muteHttpExceptions: true,
-      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      headers: { 'x-api-key': cfg.key, 'anthropic-version': '2023-06-01' },
       payload: JSON.stringify(body),
     });
     if (res.getResponseCode() !== 200) { Logger.log('claude ' + res.getResponseCode() + ' ' + res.getContentText()); return null; }
