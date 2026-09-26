@@ -148,7 +148,7 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--ground);co
 #endh{font-family:Display;font-weight:600;font-size:92px;letter-spacing:-.035em;line-height:1.02;margin-top:44px}
 #endp{font-size:28px;color:var(--ink);opacity:.85;margin-top:24px}
 #cta{margin-top:40px;padding:20px 40px;border-radius:14px;background:var(--cta);color:#1b0b02;font-weight:700;font-size:30px}
-#baler{position:absolute;bottom:56px;left:0;right:0;text-align:center;font-size:40px;color:var(--mint)}
+#sig{position:absolute;bottom:56px;left:0;right:0;text-align:center;font-size:40px;color:var(--mint)}
 
 #cursor{position:absolute;left:0;top:0;width:34px;height:34px;z-index:50;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
 #ripple{position:absolute;width:60px;height:60px;margin:-30px;border-radius:50%;border:3px solid var(--indigo);z-index:49}
@@ -231,7 +231,7 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--ground);co
     <div id="endp">Live in 2 weeks, or your ₱15,000 setup comes back.</div>
     <div id="cta">sentrohq.tech</div>
   </div>
-  <div id="baler" class="hand">Built in Baler, for resorts like yours.</div>
+  <div id="sig" class="hand">Built for resorts like yours.</div>
 </div>
 
 <div id="ripple"></div>
@@ -385,7 +385,7 @@ window.render=function(t){
   const e2=eOut(P(t,13.05,13.55)); tf($('endh'),{o:e2,y:(1-e2)*30});
   const e3=eOut(P(t,13.35,13.8)); tf($('endp'),{o:e3,y:(1-e3)*20});
   const e4=eBack(P(t,13.55,13.95)); tf($('cta'),{o:clamp(e4*2),s:.9+.1*e4});
-  const e5=eOut(P(t,13.8,14.2)); tf($('baler'),{o:e5,y:(1-e5)*14});
+  const e5=eOut(P(t,13.8,14.2)); tf($('sig'),{o:e5,y:(1-e5)*14});
 
   // ===== cursor
   const ap=center($('approve')), bn=center($('nv0')); bn[0]-=40;
