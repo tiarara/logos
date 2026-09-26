@@ -2,243 +2,243 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Sentro 15s</title>
+<title>Sentro HQ 15s</title>
 <style>
-@font-face{font-family:Inter;font-weight:400;src:url(node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2)}
-@font-face{font-family:Inter;font-weight:600;src:url(node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2)}
-@font-face{font-family:Inter;font-weight:700;src:url(node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2)}
-@font-face{font-family:Inter;font-weight:800;src:url(node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2)}
-@font-face{font-family:Serif;font-style:italic;src:url(node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2)}
+@font-face{font-family:Display;font-weight:500;src:url(node_modules/@fontsource/stack-sans-headline/files/stack-sans-headline-latin-500-normal.woff2)}
+@font-face{font-family:Display;font-weight:600;src:url(node_modules/@fontsource/stack-sans-headline/files/stack-sans-headline-latin-600-normal.woff2)}
+@font-face{font-family:Figtree;font-weight:400;src:url(node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2)}
+@font-face{font-family:Figtree;font-weight:500;src:url(node_modules/@fontsource/figtree/files/figtree-latin-500-normal.woff2)}
+@font-face{font-family:Figtree;font-weight:600;src:url(node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2)}
+@font-face{font-family:Figtree;font-weight:700;src:url(node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2)}
+@font-face{font-family:Hand;font-weight:500;src:url(node_modules/@fontsource/caveat/files/caveat-latin-500-normal.woff2)}
 :root{
-  --bg:#0A0F1E; --panel:#111830; --panel2:#18213D; --line:#243056;
-  --text:#F4F1EA; --muted:#8C96B5; --mint:#5EEAD4; --amber:#FFB86B;
-  --airbnb:#FF5A5F; --booking:#3B82F6; --expedia:#FACC15; --email:#A78BFA; --direct:#5EEAD4;
+  /* sentrohq.tech site tokens */
+  --ground:#111615; --deep:#0b1110; --ink:#ecefec; --muted:#9ba5a3;
+  --mint:#6cc0a8; --cta:#e47a36; --card:#1f2726; --hair:#2b3432;
+  /* Sentro HQ app tokens */
+  --app:#ffffff; --app-bg:#f7f7f5; --app-line:#e7e7e7; --app-ink:#1f1f1f; --app-muted:#777;
+  --indigo:#6b5cf5; --indigo-deep:#4b3fd1; --indigo-wash:#ecebfd;
+  --live:#4caf50; --live-wash:#eef6e6; --live-ink:#33591f; --up:#2e7d32; --today:#fdf9ea;
+  --msgr:#1877f2; --ig:#d62976; --agoda:#5b3cc4; --bcom:#003580; --web:#2a9d8f; --mail:#6b7280;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--ground);color:var(--ink);font-family:Figtree,sans-serif;-webkit-font-smoothing:antialiased}
 .abs{position:absolute}
-#stage{position:absolute;inset:0;overflow:hidden}
-.glow{position:absolute;width:1100px;height:1100px;border-radius:50%;filter:blur(40px)}
-#g1{background:radial-gradient(circle,rgba(94,234,212,.20),transparent 60%)}
-#g2{background:radial-gradient(circle,rgba(255,184,107,.14),transparent 60%)}
-#dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1.2px,transparent 1.3px);background-size:36px 36px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.photo{position:absolute;inset:-40px;background-size:cover;background-position:center}
+.shade{position:absolute;inset:0}
+.hand{font-family:Hand,cursive;font-weight:500}
+.disp{font-family:Display,Figtree,sans-serif}
 
-/* scene 1: notification chaos */
-.note{position:absolute;width:350px;padding:16px 18px;border-radius:16px;background:rgba(24,33,61,.92);border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.45);display:flex;gap:14px;align-items:flex-start}
-.note .ic{width:38px;height:38px;border-radius:10px;flex:none;display:grid;place-items:center;font-weight:800;font-size:17px;color:#0A0F1E}
-.note .ch{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:4px}
-.note .tx{font-size:17px;font-weight:600;line-height:1.3}
-#h1wrap{position:absolute;left:0;right:0;top:420px;text-align:center}
-#kicker{font-size:24px;color:var(--muted);font-weight:600;letter-spacing:.02em;margin-bottom:16px}
-#h1{font-size:92px;font-weight:800;letter-spacing:-.035em;line-height:1}
-#h1 em{font-family:Serif;font-weight:400;font-style:italic;color:var(--amber);letter-spacing:-.01em}
-#flash{position:absolute;left:960px;top:540px;width:1400px;height:1400px;margin:-700px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,240,.9) 0,rgba(94,234,212,.45) 12%,rgba(94,234,212,.12) 35%,transparent 65%)}
-
-/* logo */
-.logo{display:flex;align-items:center;gap:26px}
-.mark circle{fill:none}
-.word{font-weight:800;letter-spacing:-.045em;line-height:1}
-#logo1{position:absolute;left:0;right:0;top:0;height:1080px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#logo1 .word{font-size:150px}
-#wordclip{overflow:hidden;display:inline-block;padding-bottom:10px}
-#tag1{margin-top:34px;font-size:40px;font-weight:600;color:var(--muted);letter-spacing:-.01em}
-#tag1 b{color:var(--text)}
+/* scene 1 */
+#p1 .shade{background:linear-gradient(90deg,rgba(11,17,16,.92) 0,rgba(11,17,16,.55) 55%,rgba(11,17,16,.35) 100%)}
+#s1txt{position:absolute;left:120px;top:330px;width:900px}
+#clock{font-size:92px;color:var(--cta);line-height:1;margin-bottom:26px}
+.h1l{font-family:Display;font-weight:600;font-size:88px;letter-spacing:-.03em;line-height:1.02}
+.note{position:absolute;left:1200px;width:560px;height:86px;padding:14px 18px;border-radius:18px;background:rgba(236,239,236,.96);color:#161a1a;display:flex;gap:14px;align-items:center;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.note .ic{width:46px;height:46px;border-radius:12px;flex:none;display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px}
+.note .t{flex:1;min-width:0}
+.note .t b{display:flex;justify-content:space-between;font-size:15px;font-weight:700}
+.note .t b span{color:#8a8a8a;font-weight:600;font-size:13px}
+.note .t p{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
 
 /* app window */
-#win{position:absolute;left:700px;top:150px;width:1100px;height:780px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:0 60px 140px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.02) inset;overflow:hidden;transform-origin:50% 60%}
-#side{position:absolute;left:0;top:0;bottom:0;width:210px;background:#0D1428;border-right:1px solid var(--line);padding:26px 18px}
-#side .logo{gap:10px;margin-bottom:38px;padding-left:6px}
-#side .word{font-size:30px}
-.nav{position:relative;height:46px;display:flex;align-items:center;gap:12px;padding:0 14px;font-size:17px;font-weight:600;color:var(--muted);margin-bottom:6px;border-radius:12px;z-index:1}
-.nav.on{color:var(--text)}
-.nav i{width:18px;height:18px;border-radius:5px;border:2px solid currentColor;display:block}
-#navhl{position:absolute;left:0;width:174px;height:46px;border-radius:12px;background:rgba(94,234,212,.12);border:1px solid rgba(94,234,212,.35);z-index:0}
-.navbadge{margin-left:auto;background:var(--airbnb);color:#fff;font-size:12px;font-weight:700;border-radius:20px;padding:2px 8px}
-#main{position:absolute;left:210px;top:0;right:0;bottom:0}
-#topbar{position:absolute;left:0;right:0;top:0;height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:16px}
-#search{flex:1;height:38px;border-radius:10px;background:var(--panel2);color:var(--muted);font-size:15px;display:flex;align-items:center;padding:0 14px}
-#who{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--mint),#3B82F6)}
-.view{position:absolute;left:0;right:0;top:64px;bottom:0}
+#bgblur{position:absolute;inset:-40px;background:url(img/night.jpg) center/cover;filter:blur(30px) saturate(.8)}
+#bgdim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,22,21,.97) 0,rgba(17,22,21,.9) 40%,rgba(17,22,21,.75) 100%)}
+#win{position:absolute;left:720px;top:130px;width:1110px;height:820px;border-radius:22px;background:var(--app-bg);overflow:hidden;color:var(--app-ink);box-shadow:0 60px 140px rgba(0,0,0,.6);transform-origin:50% 55%}
+#top{position:absolute;left:0;right:0;top:0;height:64px;background:#fff;border-bottom:1px solid var(--app-line);display:flex;align-items:center;padding:0 24px;gap:34px;font-size:16px}
+#top .lg{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px}
+#top .lg em{width:32px;height:32px;border-radius:9px;background:var(--indigo);color:#fff;font-style:normal;font-size:15px;display:grid;place-items:center;font-weight:700}
+#top small{color:#8a8a8a;letter-spacing:.08em;font-size:12px;margin-right:8px;font-weight:600}
+#top .live{margin-left:auto;color:#555}
+#top .live::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--live);margin-right:8px}
+#nav{position:absolute;left:0;top:64px;bottom:0;width:200px;background:#fff;border-right:1px solid var(--app-line);padding:16px 12px}
+.nv{position:relative;z-index:1;height:44px;padding:0 14px;display:flex;align-items:center;font-size:17px;color:#555;border-radius:10px;margin-bottom:4px}
+.nv.on{color:var(--indigo-deep);font-weight:600}
+.nv .bd{margin-left:auto;background:var(--indigo);color:#fff;font-size:12px;font-weight:700;border-radius:20px;padding:1px 8px}
+#hl{position:absolute;left:12px;width:176px;height:44px;border-radius:10px;background:var(--indigo-wash);z-index:0}
+#main{position:absolute;left:200px;top:64px;right:0;bottom:0}
+.view{position:absolute;inset:0}
 
 /* inbox */
-#list{position:absolute;left:0;top:0;bottom:0;width:340px;border-right:1px solid var(--line)}
-.row{position:absolute;left:0;right:0;height:92px;padding:16px 18px;display:flex;gap:12px;border-bottom:1px solid rgba(36,48,86,.6)}
-.row.sel{background:rgba(94,234,212,.07)}
-.av{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:15px;color:#0A0F1E}
-.rn{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-.rn .t{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
-.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;color:#0A0F1E}
-.rs{font-size:14px;color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:220px}
-.unread{position:absolute;right:18px;top:52px;width:10px;height:10px;border-radius:50%;background:var(--mint)}
-#conv{position:absolute;left:340px;right:0;top:0;bottom:0}
-#convhead{height:78px;border-bottom:1px solid var(--line);padding:16px 26px}
-#convhead b{font-size:19px}
-#convhead div{font-size:14px;color:var(--muted);margin-top:4px}
-.bub{position:absolute;max-width:380px;padding:16px 18px;border-radius:18px;font-size:17px;line-height:1.4}
-#b1{left:26px;top:112px;background:var(--panel2);border-bottom-left-radius:6px}
-#b2{right:26px;top:230px;background:var(--mint);color:#0A0F1E;font-weight:600;border-bottom-right-radius:6px}
-#b2 small{display:block;font-size:12px;font-weight:700;opacity:.65;margin-top:6px;text-align:right}
-#composer{position:absolute;left:26px;right:26px;bottom:26px;min-height:92px;border-radius:16px;border:1px solid var(--line);background:#0D1428;padding:16px 110px 16px 18px;font-size:17px;line-height:1.4}
-#caret{display:inline-block;width:2px;height:20px;background:var(--mint);vertical-align:-3px;margin-left:1px}
-#send{position:absolute;right:14px;bottom:14px;height:44px;padding:0 20px;border-radius:12px;background:var(--mint);color:#0A0F1E;font-weight:800;font-size:16px;display:grid;place-items:center}
+#list{position:absolute;left:0;top:0;bottom:0;width:350px;background:#fff;border-right:1px solid var(--app-line)}
+#list h4{height:60px;display:flex;align-items:center;padding:0 20px;font-size:19px;font-weight:600;border-bottom:1px solid var(--app-line)}
+.row{position:absolute;left:0;right:0;height:92px;padding:14px 20px;border-bottom:1px solid #f0f0f0}
+.row.sel{background:var(--indigo-wash)}
+.row b{display:flex;align-items:center;gap:8px;font-size:16px}
+.row b .tm{margin-left:auto;color:#999;font-weight:500;font-size:13px}
+.pill{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:20px;color:#fff}
+.row p{font-size:14.5px;color:#666;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{position:absolute;right:20px;top:58px;width:9px;height:9px;border-radius:50%;background:var(--indigo)}
+#conv{position:absolute;left:350px;right:0;top:0;bottom:0}
+#ch{height:60px;border-bottom:1px solid var(--app-line);background:#fff;display:flex;align-items:center;gap:10px;padding:0 24px;font-size:18px;font-weight:600}
+.bub{position:absolute;max-width:400px;padding:15px 18px;border-radius:18px;font-size:18px;line-height:1.4}
+#g1{left:24px;top:96px;background:#fff;border:1px solid var(--app-line);border-bottom-left-radius:6px}
+#g1 small,#sent small{display:block;font-size:12.5px;color:#999;margin-top:6px}
+#draft{position:absolute;left:24px;right:24px;top:230px;border-radius:16px;background:#fff;border:1.5px solid var(--indigo);padding:16px 18px;box-shadow:0 14px 30px rgba(75,63,209,.12)}
+#draft .lab{font-size:13px;font-weight:700;color:var(--indigo-deep);letter-spacing:.04em;text-transform:uppercase;display:flex;gap:8px;align-items:center}
+#draft .lab span{color:#999;font-weight:600;text-transform:none;letter-spacing:0}
+#draft .tx{font-size:18px;line-height:1.45;margin-top:10px;min-height:52px}
+#draft .btns{display:flex;gap:10px;margin-top:14px}
+.btn{height:42px;padding:0 18px;border-radius:10px;font-weight:700;font-size:15px;display:grid;place-items:center}
+#approve{background:var(--indigo);color:#fff}
+#edit{background:#f1f1f1;color:#555}
+#sent{right:24px;top:230px;background:var(--indigo);color:#fff;border-bottom-right-radius:6px}
+#sent small{color:rgba(255,255,255,.75);text-align:right}
+#src{position:absolute;right:24px;top:356px;font-size:13.5px;color:#888}
 
 /* calendar */
-#mail{position:absolute;left:24px;right:24px;top:22px;height:196px;border-radius:18px;background:#0D1428;border:1px solid var(--line);padding:20px 22px;overflow:hidden}
-#mail .h{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted);font-weight:600}
-#mail .h b{color:var(--text);font-size:18px}
-#fields{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin-top:18px}
-.fld{border-radius:10px;padding:8px 12px;border:1px solid transparent}
-.fld span{display:block;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.fld b{font-size:18px}
-#scan{position:absolute;top:0;bottom:0;width:120px;background:linear-gradient(90deg,transparent,rgba(94,234,212,.28),transparent)}
-#cal{position:absolute;left:24px;right:24px;top:240px;height:430px}
-.ch-h{position:absolute;top:0;height:44px;font-size:13px;font-weight:700;color:var(--muted);text-align:center;line-height:1.25}
-.ch-h b{display:block;font-size:19px;color:var(--text)}
-.rm{position:absolute;left:0;width:150px;height:84px;display:flex;align-items:center;font-size:16px;font-weight:700;border-top:1px solid var(--line)}
-.cellrow{position:absolute;left:150px;right:0;height:84px;border-top:1px solid var(--line);background-image:linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:96px 100%}
-.bar{position:absolute;height:56px;border-radius:12px;padding:8px 14px;font-size:14px;font-weight:700;color:#0A0F1E;overflow:hidden;white-space:nowrap}
-.bar small{display:block;font-size:12px;font-weight:600;opacity:.7}
-#newbar{background:var(--expedia);transform-origin:0 50%}
-#roomnote{position:absolute;padding:8px 12px;border-radius:10px;background:var(--panel2);border:1px solid rgba(94,234,212,.4);font-size:13px;font-weight:600;white-space:nowrap}
-#roomnote span{color:var(--mint)}
-#fly{position:absolute;padding:8px 14px;border-radius:12px;background:var(--expedia);color:#0A0F1E;font-size:14px;font-weight:800;white-space:nowrap}
+.ph{padding:22px 26px 0}
+.ph h3{font-size:24px;font-weight:600}
+.ph .sub{font-size:14.5px;color:var(--app-muted);margin-top:4px}
+.livebar{margin:16px 26px 0;background:var(--live-wash);border:1px solid #cfe3bf;color:var(--live-ink);border-radius:10px;padding:11px 16px;font-size:15px}
+#mails{position:absolute;left:26px;right:26px;top:170px;height:80px}
+.mail{position:absolute;top:0;height:74px;width:410px;border-radius:14px;background:#fff;border:1px solid var(--app-line);padding:12px 16px;box-shadow:0 10px 24px rgba(0,0,0,.06)}
+.mail span{font-size:12.5px;color:#999;font-weight:600}
+.mail b{display:block;font-size:17px;margin-top:4px}
+#calg{position:absolute;left:26px;right:26px;top:270px;bottom:26px;background:#fff;border:1px solid var(--app-line);border-radius:14px;overflow:hidden}
+#calg .mh{height:48px;display:flex;align-items:center;padding:0 18px;font-weight:700;font-size:17px;border-bottom:1px solid var(--app-line)}
+#calg .mh span{margin-left:auto;font-weight:500;color:#999;font-size:14px}
+.dh{position:absolute;top:48px;height:30px;font-size:12px;font-weight:700;color:#999;text-align:center;line-height:30px}
+.cell{position:absolute;border-top:1px solid #f0f0f0;border-left:1px solid #f0f0f0;font-size:13px;color:#999;padding:6px 8px;font-weight:600}
+.cell.out{color:#d0d0d0}
+.ev{position:absolute;height:30px;border-radius:7px;padding:0 10px;font-size:13px;font-weight:700;color:#fff;line-height:30px;white-space:nowrap;overflow:hidden}
+#blocked{position:absolute;right:26px;top:176px;padding:10px 16px;border-radius:999px;background:var(--live-wash);border:1px solid #cfe3bf;color:var(--live-ink);font-weight:700;font-size:15px}
 
-/* dashboard */
-#kpis{position:absolute;left:24px;right:24px;top:24px;height:150px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.kpi{border-radius:18px;background:#0D1428;border:1px solid var(--line);padding:20px}
-.kpi span{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.kpi b{display:block;font-size:44px;font-weight:800;letter-spacing:-.03em;margin-top:12px}
-.kpi small{font-size:14px;font-weight:600;color:var(--mint)}
-#chart{position:absolute;left:24px;right:24px;top:196px;bottom:24px;border-radius:18px;background:#0D1428;border:1px solid var(--line);padding:22px 26px}
-#chart .ttl{font-size:17px;font-weight:700}
-#chart .ttl span{color:var(--muted);font-weight:600;font-size:14px;margin-left:10px}
-#bars{position:absolute;left:26px;right:26px;bottom:48px;top:74px;display:flex;align-items:flex-end;gap:14px}
-.cb{flex:1;border-radius:8px 8px 3px 3px;background:#2A3868;transform-origin:50% 100%}
-.cb.hi{background:linear-gradient(180deg,var(--mint),#2BB7A5)}
-#months{position:absolute;left:26px;right:26px;bottom:18px;display:flex;gap:14px}
-#months div{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+/* bookings (the real screen) */
+#bk .grid2{position:absolute;left:26px;right:26px;top:180px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{background:#fff;border:1px solid var(--app-line);border-radius:14px;overflow:hidden}
+.box .hd{display:flex;justify-content:space-between;padding:13px 16px;font-size:12.5px;letter-spacing:.08em;color:#777;font-weight:600;border-bottom:1px solid #eee}
+.bi{display:grid;grid-template-columns:78px 1fr auto;padding:12px 16px;border-bottom:1px solid #f2f2f2;font-size:15px}
+.bi:last-child{border-bottom:0}
+.bi.tdy{background:var(--today)}
+.bi .d{color:#888}
+.bi b{font-size:16px}
+.bi small{display:block;color:#888;font-size:13px;margin-top:3px}
+.bi .c{color:#3949ab;font-weight:500}
+#bk .grid3{position:absolute;left:26px;right:26px;top:430px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.m{background:#fff;border:1px solid var(--app-line);border-radius:14px;padding:18px 18px 16px}
+.m .hd{display:flex;justify-content:space-between;font-size:12.5px;letter-spacing:.08em;color:#777;font-weight:600}
+.m .v{font-size:40px;font-weight:600;letter-spacing:-.02em;margin-top:12px}
+.m .ft{display:flex;justify-content:space-between;font-size:14px;color:#777;margin-top:10px}
+.m .ft .u{color:var(--up)}
+#bk .note2{position:absolute;left:26px;right:26px;top:600px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mini{background:#fff;border:1px solid var(--app-line);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:16px}
+.mini .n{font-size:34px;font-weight:600;color:var(--indigo-deep);min-width:56px}
+.mini p{font-size:15px;color:#555;line-height:1.35}
+.mini p b{color:var(--app-ink)}
 
 /* captions */
-.cap{position:absolute;left:120px;top:360px;width:520px}
-.cap .eb{font-size:16px;font-weight:800;letter-spacing:.16em;color:var(--mint);margin-bottom:22px}
-.cap h2{font-size:58px;font-weight:800;letter-spacing:-.035em;line-height:1.04}
-.cap p{font-size:22px;color:var(--muted);line-height:1.45;margin-top:22px;font-weight:600}
+.cap{position:absolute;left:110px;top:330px;width:540px}
+.cap .eb{font-size:16px;font-weight:700;letter-spacing:.16em;color:var(--mint);margin-bottom:22px}
+.cap h2{font-family:Display;font-weight:600;font-size:56px;letter-spacing:-.03em;line-height:1.04}
+.cap p{font-size:22px;color:var(--muted);line-height:1.45;margin-top:22px}
 
-/* cursor */
-#cursor{position:absolute;left:0;top:0;width:34px;height:34px;z-index:50;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
-#ripple{position:absolute;width:60px;height:60px;margin:-30px;border-radius:50%;border:3px solid var(--mint);z-index:49}
+/* morning interstitial */
+#p2 .shade{background:linear-gradient(0deg,rgba(11,17,16,.85) 0,rgba(11,17,16,.2) 60%)}
+#morn{position:absolute;left:120px;bottom:120px}
+#morn .hand{font-size:120px;color:var(--cta);line-height:1}
+#morn p{font-family:Display;font-weight:600;font-size:64px;letter-spacing:-.03em;margin-top:10px}
 
 /* end card */
-#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#end .word{font-size:130px}
-#endtag{margin-top:34px;font-size:38px;font-weight:600;text-align:center;line-height:1.3;color:var(--muted);max-width:1100px}
-#endtag b{color:var(--text)}
-#cta{margin-top:46px;padding:20px 38px;border-radius:999px;background:var(--mint);color:#0A0F1E;font-size:30px;font-weight:800;letter-spacing:-.01em}
+#p3 .shade{background:radial-gradient(ellipse at center,rgba(11,17,16,.55) 0,rgba(11,17,16,.88) 70%)}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.brand{display:flex;align-items:center;gap:16px;background:#fff;color:#161a1a;border-radius:22px;padding:14px 26px 14px 18px;font-weight:700;font-size:40px;letter-spacing:-.02em}
+.brand i{width:50px;height:50px;border-radius:14px;background:var(--cta);position:relative}
+.brand i::after{content:"";position:absolute;inset:14px;border-radius:50%;background:#fff}
+#endh{font-family:Display;font-weight:600;font-size:92px;letter-spacing:-.035em;line-height:1.02;margin-top:44px}
+#endp{font-size:28px;color:var(--ink);opacity:.85;margin-top:24px}
+#cta{margin-top:40px;padding:20px 40px;border-radius:14px;background:var(--cta);color:#1b0b02;font-weight:700;font-size:30px}
+#baler{position:absolute;bottom:56px;left:0;right:0;text-align:center;font-size:40px;color:var(--mint)}
+
+#cursor{position:absolute;left:0;top:0;width:34px;height:34px;z-index:50;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+#ripple{position:absolute;width:60px;height:60px;margin:-30px;border-radius:50%;border:3px solid var(--indigo);z-index:49}
+#fade{position:absolute;inset:0;background:#000;pointer-events:none}
 </style>
 </head>
 <body>
-<div id="stage">
-  <div id="g1" class="glow"></div><div id="g2" class="glow"></div><div id="dots"></div>
+<!-- Scene 1: 11:47 PM -->
+<div id="p1" class="abs" style="inset:0;overflow:hidden"><div class="photo" id="p1i" style="background-image:url(img/night.jpg)"></div><div class="shade"></div></div>
+<div id="s1txt"><div id="clock" class="hand">11:47 PM</div><div class="h1l" id="l1">Guests message at midnight.</div><div class="h1l" id="l2" style="color:var(--mint)">OTAs book while you sleep.</div></div>
+<div id="notes"></div>
 
-  <!-- Scene 1 -->
-  <div id="notes"></div>
-  <div id="h1wrap"><div id="kicker">Friday, 9:14 PM</div><div id="h1"><span id="cnt">0</span> unread across <em>5 apps.</em></div></div>
-  <div id="flash"></div>
+<!-- App scenes -->
+<div id="appbg" class="abs" style="inset:0;overflow:hidden"><div id="bgblur"></div><div id="bgdim"></div></div>
+<div class="cap" id="cap0"><div class="eb">EVERY ENQUIRY ANSWERED</div><h2>Replies drafted from your own rates.</h2><p>You approve them. Once it has earned it, routine ones go out by themselves.</p></div>
+<div class="cap" id="cap1"><div class="eb">EVERY OTA BOOKING CAUGHT</div><h2>Agoda and Booking.com land on your calendar.</h2><p>The same dates get blocked on your website. No more copying by hand.</p></div>
+<div class="cap" id="cap2"><div class="eb">YOUR MORNING SCREEN</div><h2>Know how your resort is doing before your first coffee.</h2><p>Last night's bookings, this month's revenue and the next 30 nights, on one screen.</p></div>
 
-  <!-- Scene 2 -->
-  <div id="logo1">
-    <div class="logo">
-      <svg class="mark" id="mk1" width="150" height="150" viewBox="0 0 150 150">
-        <circle id="ring1" cx="75" cy="75" r="62" stroke="#5EEAD4" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="100" transform="rotate(-90 75 75)"/>
-        <circle id="dot1" cx="75" cy="75" r="22" style="fill:#FFB86B;transform-origin:75px 75px"/>
-      </svg>
-      <span id="wordclip"><span class="word" id="word1">sentro</span></span>
-    </div>
-    <div id="tag1">One place for your <b>guests</b> and your <b>bookings</b>.</div>
+<div id="win">
+  <div id="top"><div class="lg"><em>S</em>SentroHQ</div><div><small>PROPERTY</small>Casa Alon</div><div class="live">Live · Tiara</div></div>
+  <div id="nav"><div id="hl"></div>
+    <div class="nv" id="nv0">Bookings</div>
+    <div class="nv" id="nv1">Inbox<span class="bd" id="ibd">5</span></div>
+    <div class="nv">Expenses</div>
+    <div class="nv">Team</div>
   </div>
-
-  <!-- Captions -->
-  <div class="cap" id="cap0"><div class="eb">INBOX</div><h2>Every guest message lands in one inbox.</h2><p>Airbnb, Booking.com, Expedia and email, answered from one screen.</p></div>
-  <div class="cap" id="cap1"><div class="eb">CALENDAR</div><h2>Booking emails fill your calendar by themselves.</h2><p>Guest, dates, channel and room setup, read straight from the confirmation.</p></div>
-  <div class="cap" id="cap2"><div class="eb">DASHBOARD</div><h2>Know how the business is doing tonight.</h2><p>Occupancy, revenue and today's arrivals on one screen.</p></div>
-
-  <!-- App window -->
-  <div id="win">
-    <div id="side">
-      <div class="logo">
-        <svg width="34" height="34" viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" stroke="#5EEAD4" stroke-width="16" fill="none"/><circle cx="75" cy="75" r="24" fill="#FFB86B"/></svg>
-        <span class="word">sentro</span>
-      </div>
-      <div id="navwrap" style="position:relative">
-        <div id="navhl"></div>
-        <div class="nav" id="nav0"><i></i>Inbox<span class="navbadge" id="navbadge">5</span></div>
-        <div class="nav" id="nav1"><i></i>Calendar</div>
-        <div class="nav" id="nav2"><i></i>Dashboard</div>
-        <div class="nav"><i></i>Properties</div>
-        <div class="nav"><i></i>Settings</div>
+  <div id="main">
+    <div class="view" id="vi">
+      <div id="list"><h4>Inbox</h4></div>
+      <div id="conv">
+        <div id="ch">Ana Villanueva <span class="pill" style="background:var(--msgr)">Messenger</span></div>
+        <div class="bub" id="g1">Hi po! May available pa po for this Saturday, 2 pax?<small>Fri 11:47 PM</small></div>
+        <div id="draft"><div class="lab">Draft for your approval <span>· from your rates</span></div><div class="tx" id="dtx"></div>
+          <div class="btns"><div class="btn" id="approve">Approve and send</div><div class="btn" id="edit">Edit</div></div></div>
+        <div class="bub" id="sent">Yes po, our Garden Room is free Sat to Sun, ₱3,800 with breakfast. Want me to hold it?<small>Sent in under a minute</small></div>
       </div>
     </div>
-    <div id="main">
-      <div id="topbar"><div id="search">Search guests, bookings, properties</div><div id="who"></div></div>
-
-      <div class="view" id="v0">
-        <div id="list"></div>
-        <div id="conv">
-          <div id="convhead"><b>Maria Santos</b><div>Airbnb · Mini Suite · Oct 3 to 6 · 2 guests</div></div>
-          <div class="bub" id="b1">Hi! We land at 11am. Any chance of an early check-in?</div>
-          <div class="bub" id="b2"><span id="b2t"></span><small>Sent · 9:15 PM</small></div>
-          <div id="composer"><span id="typed"></span><span id="caret"></span><div id="send">Send</div></div>
-        </div>
+    <div class="view" id="vc">
+      <div class="ph"><h3>Bookings</h3><div class="sub">Revenue, occupancy, and today's operations from the reservations calendar</div></div>
+      <div id="mails">
+        <div class="mail" id="m0" style="left:0"><span>Agoda · booking email · 1:12 AM</span><b>Surf Loft · Oct 3 to 5</b></div>
+        <div class="mail" id="m1" style="left:428px"><span>Booking.com · booking email · 2:40 AM</span><b>Family Villa · Oct 14 to 16</b></div>
       </div>
-
-      <div class="view" id="v1">
-        <div id="mail">
-          <div class="h"><span class="pill" style="background:var(--expedia)">Expedia</span><b>New reservation</b><span style="margin-left:auto">Booking email · 9:16 PM</span></div>
-          <div id="fields">
-            <div class="fld"><span>Guest</span><b>Daniel Cruz</b></div>
-            <div class="fld"><span>Dates</span><b>Oct 8 to 11</b></div>
-            <div class="fld"><span>Room</span><b>Mini Suite</b></div>
-            <div class="fld"><span>Channel</span><b>Expedia</b></div>
-            <div class="fld"><span>Guests</span><b>1 adult</b></div>
-            <div class="fld"><span>Ref</span><b>EX-88213</b></div>
-          </div>
-          <div id="scan"></div>
-        </div>
-        <div id="cal"></div>
-        <div id="fly">Daniel Cruz · Oct 8 to 11</div>
+      <div id="blocked">✓ Same dates blocked on your website</div>
+      <div id="calg"><div class="mh">Reservations calendar · October 2026<span>Casa Alon</span></div></div>
+    </div>
+    <div class="view" id="bk">
+      <div class="ph"><h3>Bookings</h3><div class="sub">Revenue, occupancy, and today's operations from the reservations calendar</div></div>
+      <div class="livebar">Live from the reservations calendar, updated every 15 minutes. Today is <b>Sep 26, 2026</b>.</div>
+      <div class="grid2">
+        <div class="box" id="bx0"><div class="hd"><span>ARRIVALS</span><span>1 TODAY</span></div>
+          <div class="bi"><span class="d">23 Wed</span><div><b>Carlo Mendoza</b><small>Surf Loft · 4 guests · 2 nights</small></div><span class="c">Direct</span></div>
+          <div class="bi tdy"><span class="d">Today</span><div><b>Rina Castillo</b><small>Garden Room · 2 guests · 1 night</small></div><span class="c">Agoda</span></div></div>
+        <div class="box" id="bx1"><div class="hd"><span>DEPARTURES</span><span>0 TODAY</span></div>
+          <div class="bi"><span class="d">25 Fri</span><div><b>Carlo Mendoza</b><small>Surf Loft · 4 guests · 2 nights</small></div><span class="c">Direct</span></div>
+          <div class="bi"><span class="d">27 Sun</span><div><b>Rina Castillo</b><small>Garden Room · 2 guests · 1 night</small></div><span class="c">Agoda</span></div></div>
       </div>
-
-      <div class="view" id="v2">
-        <div id="kpis">
-          <div class="kpi"><span>Occupancy</span><b id="k0">0%</b><small>+9 pts vs Sept</small></div>
-          <div class="kpi"><span>Revenue · Oct</span><b id="k1">₱0</b><small>On track for a record month</small></div>
-          <div class="kpi"><span>Arrivals today</span><b id="k2">0</b><small>All rooms ready</small></div>
-          <div class="kpi"><span>Unanswered</span><b id="k3">38</b><small id="k3s" style="opacity:0">Inbox zero</small></div>
-        </div>
-        <div id="chart"><div class="ttl">Revenue by month<span>All properties</span></div><div id="bars"></div><div id="months"></div></div>
+      <div class="grid3">
+        <div class="m" id="k0"><div class="hd"><span>TODAY</span><span>SEP 26</span></div><div class="v" id="kv0">₱0</div><div class="ft"><span><span class="u">▲ 18%</span> vs last Sat</span><span>3 room-nights</span></div></div>
+        <div class="m" id="k1"><div class="hd"><span>THIS WEEK</span><span>SEP 21–27</span></div><div class="v" id="kv1">₱0</div><div class="ft"><span><span class="u">▲ 9%</span> vs last week</span><span>13 room-nights</span></div></div>
+        <div class="m" id="k2"><div class="hd"><span>THIS MONTH</span><span>SEP 1–30</span></div><div class="v" id="kv2">₱0</div><div class="ft"><span><span class="u">▲ 12%</span> vs last month</span><span>49 room-nights</span></div></div>
+      </div>
+      <div class="note2">
+        <div class="mini" id="mi0"><div class="n">1</div><p><b>Needs you today.</b> Anything a guest is still waiting on shows up here.</p></div>
+        <div class="mini" id="mi1"><div class="n" style="color:#c2560f">4.8</div><p><b>Average review this month.</b> New reviews and how guests feel, week by week.</p></div>
       </div>
     </div>
   </div>
-
-  <!-- End card -->
-  <div id="end">
-    <div class="logo">
-      <svg class="mark" width="130" height="130" viewBox="0 0 150 150">
-        <circle id="ring2" cx="75" cy="75" r="62" stroke="#5EEAD4" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="100" transform="rotate(-90 75 75)"/>
-        <circle id="dot2" cx="75" cy="75" r="22" style="fill:#FFB86B;transform-origin:75px 75px"/>
-      </svg>
-      <span class="word">sentro</span>
-    </div>
-    <div id="endtag">The <b>inbox and business dashboard</b><br>for BnBs and property managers.</div>
-    <div id="cta">app.sentrohq.tech</div>
-  </div>
-
-  <div id="ripple"></div>
-  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 10.5-7 1.2 4.2 7.6-3 1.6-4.2-7.7L4 20z" fill="#fff" stroke="#0A0F1E" stroke-width="1.4" stroke-linejoin="round"/></svg>
 </div>
 
+<!-- Morning interstitial -->
+<div id="p2" class="abs" style="inset:0;overflow:hidden"><div class="photo" id="p2i" style="background-image:url(img/matcha.jpg)"></div><div class="shade"></div>
+  <div id="morn"><div class="hand" id="mt">7:02 AM.</div><p id="mp">Coffee, and the numbers are already in.</p></div></div>
+
+<!-- End card -->
+<div id="p3" class="abs" style="inset:0;overflow:hidden"><div class="photo" id="p3i" style="background-image:url(img/dusk.jpg)"></div><div class="shade"></div>
+  <div id="end">
+    <div class="brand" id="eb"><i></i>Sentro HQ</div>
+    <div id="endh">Your resort,<br>before your first coffee.</div>
+    <div id="endp">Live in 2 weeks, or your ₱15,000 setup comes back.</div>
+    <div id="cta">sentrohq.tech</div>
+  </div>
+  <div id="baler" class="hand">Built in Baler, for resorts like yours.</div>
+</div>
+
+<div id="ripple"></div>
+<svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 10.5-7 1.2 4.2 7.6-3 1.6-4.2-7.7L4 20z" fill="#fff" stroke="#161a1a" stroke-width="1.4" stroke-linejoin="round"/></svg>
+<div id="fade"></div>
+
 <script>
-// ---------- helpers ----------
 const $ = id => document.getElementById(id);
 const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
 const lerp = (a,b,p) => a+(b-a)*p;
@@ -253,225 +253,156 @@ function tf(el,{o=1,x=0,y=0,s=1,r=0,b=0}={}){
   el.style.transform=`translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`;
   el.style.filter=b>0.05?`blur(${b}px)`:'none';
 }
-// in/out window: returns {o,y}
-function inOut(t,a,b,c,d,dist=30){
-  const pi=eOut(P(t,a,b)), po=eIn(P(t,c,d));
-  return {o:pi*(1-po), y:(1-pi)*dist - po*dist};
-}
-const CH={Airbnb:'--airbnb','Booking.com':'--booking',Expedia:'--expedia',Email:'--email',Direct:'--direct'};
-const col = ch => `var(${CH[ch]})`;
+function inOut(t,a,b,c,d,dist=30){const pi=eOut(P(t,a,b)),po=eIn(P(t,c,d));return {o:pi*(1-po),y:(1-pi)*dist-po*dist}}
+const peso = n => '₱'+Math.round(n).toLocaleString('en-US');
 
-// ---------- scene 1 data ----------
+// ---- scene 1 notifications (sample data)
+const CH={Messenger:'var(--msgr)',Instagram:'var(--ig)',Agoda:'var(--agoda)','Booking.com':'var(--bcom)',Email:'var(--mail)','Website chat':'var(--web)'};
 const NOTES=[
- ['Airbnb','Hi! Any chance of early check-in?',160,110],
- ['Booking.com','New booking · Garden Room · Oct 5 to 7',1400,90],
- ['Email','Expedia: New reservation EX-88213',760,70],
- ['Airbnb','What’s the wifi password?',110,300],
- ['Direct','Can we bring our dog?',1480,280],
- ['Expedia','Guest message: late arrival, around 1am',60,720],
- ['Booking.com','Reservation cancelled #44120',1440,760],
- ['Email','Where do we park?',520,860],
- ['Airbnb','We left a charger in the Loft 🙏',1000,880],
- ['Direct','Do you have a room for 4 this weekend?',170,510],
- ['Expedia','Modification: +1 night, Family Room',1500,520],
- ['Email','Invoice for October cleaning',1010,225],
- ['Booking.com','Is breakfast included?',560,250],
- ['Airbnb','Door code isn’t working!',1100,690],
+ ['Messenger','Ana Villanueva','Hi po! May available pa po for this Saturday, 2 pax?','11:47 PM'],
+ ['Instagram','Josh Tan','Do you allow pets? We have a small dog','11:32 PM'],
+ ['Agoda','New booking','Surf Loft · Oct 3 to 5 · 2 guests','11:05 PM'],
+ ['Website chat','Mika Reyes','Is there parking for 2 cars?','10:51 PM'],
+ ['Booking.com','New booking','Family Villa · Oct 14 to 16 · 5 guests','10:20 PM'],
+ ['Email','Paolo Cruz','Rates for a company outing of 20?','9:58 PM'],
+ ['Messenger','Liza Santos','What time is check-in po?','9:41 PM'],
 ];
-const notesEl=$('notes');
-NOTES.forEach(([ch,tx,x,y],i)=>{
-  const d=document.createElement('div');d.className='note';d.id='n'+i;
-  d.style.left=x+'px';d.style.top=y+'px';
-  d.innerHTML=`<div class="ic" style="background:${col(ch)}">${ch[0]}</div><div><div class="ch">${ch}</div><div class="tx">${tx}</div></div>`;
-  notesEl.appendChild(d);
+NOTES.forEach(([ch,who,tx,tm],i)=>{
+  const d=document.createElement('div');d.className='note';d.id='n'+i;d.style.top=(122+i*102)+'px';
+  const ab=ch==='Booking.com'?'B.':ch==='Website chat'?'Web':ch.slice(0,2);
+  d.innerHTML=`<div class="ic" style="background:${CH[ch]}">${ab}</div><div class="t"><b>${ch} · ${who}<span>${tm}</span></b><p>${tx}</p></div>`;
+  $('notes').appendChild(d);
 });
 
-// ---------- inbox rows ----------
+// ---- inbox rows
 const ROWS=[
- ['Maria Santos','MS','Airbnb','Hi! We land at 11am. Any chance…','9:14'],
- ['Kenji Ito','KI','Booking.com','Is breakfast included?','9:02'],
- ['Liam O’Connor','LO','Direct','Can we bring our dog?','8:47'],
- ['Daniel Cruz','DC','Expedia','Late arrival, around 1am','8:31'],
- ['Ana Reyes','AR','Email','Where do we park?','8:10'],
+ ['Ana Villanueva','Messenger','Hi po! May available pa po for this Saturday...','11:47'],
+ ['Josh Tan','Instagram','Do you allow pets? We have a small dog','11:32'],
+ ['Mika Reyes','Website chat','Is there parking for 2 cars?','10:51'],
+ ['Paolo Cruz','Email','Rates for a company outing of 20?','9:58'],
+ ['Liza Santos','Messenger','What time is check-in po?','9:41'],
 ];
-const list=$('list');
-ROWS.forEach(([n,ini,ch,s,tm],i)=>{
-  const r=document.createElement('div');r.className='row'+(i===0?' sel':'');r.id='r'+i;r.style.top=(i*92)+'px';
-  r.innerHTML=`<div class="av" style="background:${col(ch)}">${ini}</div><div><div class="rn">${n}<span class="t">${tm}</span></div><div style="margin-top:6px"><span class="pill" style="background:${col(ch)}">${ch}</span></div><div class="rs">${s}</div></div><div class="unread" id="u${i}"></div>`;
-  list.appendChild(r);
+ROWS.forEach(([n,ch,s,tm],i)=>{
+  const r=document.createElement('div');r.className='row'+(i===0?' sel':'');r.id='r'+i;r.style.top=(60+i*92)+'px';
+  r.innerHTML=`<b>${n} <span class="pill" style="background:${CH[ch]}">${ch}</span><span class="tm">${tm}</span></b><p>${s}</p><div class="dot" id="d${i}"></div>`;
+  $('list').appendChild(r);
 });
 
-// ---------- calendar ----------
-const cal=$('cal');
-const DAYS=[['MON',6],['TUE',7],['WED',8],['THU',9],['FRI',10],['SAT',11],['SUN',12]];
-DAYS.forEach(([d,n],i)=>{const h=document.createElement('div');h.className='ch-h';h.style.left=(150+i*96)+'px';h.style.width='96px';h.innerHTML=`${d}<b>${n}</b>`;cal.appendChild(h)});
-const ROOMS=['Mini Suite','Garden Room','Loft','Family Room'];
-ROOMS.forEach((r,i)=>{
-  const y=52+i*90;
-  const a=document.createElement('div');a.className='rm';a.style.top=y+'px';a.textContent=r;cal.appendChild(a);
-  const c=document.createElement('div');c.className='cellrow';c.style.top=y+'px';cal.appendChild(c);
-});
-function bar(row,d0,d1,label,sub,ch,id){
-  const b=document.createElement('div');b.className='bar';if(id)b.id=id;
-  b.style.left=(150+d0*96+5)+'px';b.style.width=((d1-d0)*96-10)+'px';b.style.top=(52+row*90+14)+'px';
-  b.style.background=col(ch);b.innerHTML=`${label}<small>${sub}</small>`;cal.appendChild(b);return b;
+// ---- October 2026 calendar (Mon start; Oct 1 is a Thursday)
+const calg=$('calg'), CW=122, CH0=78, RH=62;
+['MON','TUE','WED','THU','FRI','SAT','SUN'].forEach((d,i)=>{const e=document.createElement('div');e.className='dh';e.style.left=(i*CW)+'px';e.style.width=CW+'px';e.textContent=d;calg.appendChild(e)});
+for(let r=0;r<5;r++)for(let c=0;c<7;c++){
+  const day=r*7+c-2; const e=document.createElement('div');e.className='cell'+(day<1||day>31?' out':'');
+  e.style.left=(c*CW)+'px';e.style.top=(CH0+r*RH)+'px';e.style.width=CW+'px';e.style.height=RH+'px';
+  e.textContent=day<1?(30+day):day>31?day-31:day;calg.appendChild(e);
 }
-bar(0,0,2,'Paolo Lim','Airbnb','Airbnb');
-bar(1,0,3,'Kenji Ito','Booking.com','Booking.com');
-bar(2,1,5,'Liam O’Connor','Direct','Direct');
-bar(3,4,7,'Ana Reyes','Email','Email');
-bar(1,5,7,'J. Tan','Airbnb','Airbnb');
-const newbar=bar(0,2,5,'Daniel Cruz','Expedia · EX-88213','Expedia','newbar');
-const rn=document.createElement('div');rn.id='roomnote';rn.innerHTML='<span>Room setup</span> · 1 double + trundle';
-rn.style.left=(150+2*96+5)+'px';rn.style.top=(52+14+56+10)+'px';cal.appendChild(rn);
+function ev(r,c0,c1,label,col,id){const e=document.createElement('div');e.className='ev';if(id)e.id=id;
+  e.style.left=(c0*CW+4)+'px';e.style.width=((c1-c0)*CW-8)+'px';e.style.top=(CH0+r*RH+26)+'px';e.style.background=col;e.textContent=label;calg.appendChild(e);return e}
+ev(0,3,5,'Garden Room · Direct','#9aa3a1');
+ev(1,1,3,'Surf Loft · Messenger','#9aa3a1');
+ev(2,4,7,'Garden Room · Airbnb','#9aa3a1');
+ev(3,0,2,'Family Villa · Direct','#9aa3a1');
+const e0=ev(0,5,7,'Surf Loft · Agoda','var(--agoda)','e0');       // Oct 3, 4
+const e1=ev(2,2,4,'Family Villa · Booking.com','var(--bcom)','e1'); // Oct 14, 15
 
-// ---------- chart ----------
-const H=[.42,.38,.5,.62,.55,.48,.6,.7,.66,.74,.82,.93];
-const M=['NOV','DEC','JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT'];
-H.forEach((h,i)=>{const b=document.createElement('div');b.className='cb'+(i===11?' hi':'');b.id='cb'+i;b.style.height=(h*100)+'%';$('bars').appendChild(b);
-  const m=document.createElement('div');m.textContent=M[i];$('months').appendChild(m)});
-
-const REPLY='Hi Maria! Your room will be ready at 12pm. I’ll send the door code tomorrow morning.';
-
+const DRAFT='Yes po, our Garden Room is free Sat to Sun, ₱3,800 with breakfast. Want me to hold it?';
 function center(el){const r=el.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2]}
 
-// ---------- render ----------
-window.render = function(t){
-  // background drift
-  tf($('g1'),{x:-200+Math.sin(t*.35)*160,y:-300+Math.cos(t*.3)*80});
-  tf($('g2'),{x:1100+Math.cos(t*.4)*140,y:300+Math.sin(t*.33)*120});
-
-  // ===== Scene 1: chaos (0 - 2.8) =====
-  NOTES.forEach((n,i)=>{
-    const el=$('n'+i), a=.08+i*.1;
-    const p=P(t,a,a+.4), pb=eBack(p);
-    const q=eIn(P(t,2.2+i*.018,2.72+i*.018));
-    const cx=n[2]+175, cy=n[3]+45;
-    const fx=Math.sin(t*2.2+i)*5, fy=Math.cos(t*1.8+i*1.7)*6;
-    tf(el,{o:clamp(p*3)*(1-P(q,.6,1)), x:(960-cx)*q+fx*(1-q), y:(540-cy)*q+fy*(1-q)+(1-pb)*40,
-      s:(.7+.3*pb)*(1-.85*q), r:(i%2?-1:1)*(3*(1-pb)+q*25)});
+window.render=function(t){
+  // ===== Scene 1 (0 - 3.0)
+  const s1o=1-eIn(P(t,2.6,3.0));
+  $('p1').style.opacity=s1o;
+  $('p1i').style.transform=`scale(${1.12-0.08*P(t,0,3.2)})`;
+  const ck=eOut(P(t,.1,.5)); tf($('clock'),{o:ck*s1o,y:(1-ck)*20});
+  const l1=eOut(P(t,.35,.8)); tf($('l1'),{o:l1*s1o,y:(1-l1)*40});
+  const l2=eOut(P(t,.75,1.2)); tf($('l2'),{o:l2*s1o,y:(1-l2)*40});
+  NOTES.forEach((_,i)=>{
+    const a=.25+i*.2, p=eBack(P(t,a,a+.45));
+    const q=eIn(P(t,2.45+i*.03,2.9+i*.03));
+    tf($('n'+i),{o:clamp(P(t,a,a+.15))*(1-q),x:(1-p)*220+q*-180,y:q*(420-(122+i*102))*.6,s:1-q*.35});
   });
-  const h=inOut(t,.35,.85,2.05,2.45,40);
-  tf($('h1wrap'),{o:h.o,y:h.y,s:1-eIn(P(t,2.05,2.45))*.1,b:eIn(P(t,2.05,2.45))*12});
-  $('cnt').textContent=Math.round(38*eOut(P(t,.4,1.9)));
-  const fl=P(t,2.62,3.2);
-  tf($('flash'),{o:fl>0?Math.pow(1-fl,1.5):0,s:.02+eOut(fl)*1.1});
 
-  // ===== Scene 2: logo (2.75 - 4.4) =====
-  const L=$('logo1');
-  const lo=eIn(P(t,3.9,4.2));
-  tf(L,{o:(t>2.7?1:0)*(1-lo),y:-lo*80,s:1-lo*.15,b:lo*10});
-  $('ring1').style.strokeDashoffset=100*(1-eIO(P(t,2.75,3.45)));
-  $('dot1').style.transform=`scale(${eBack(P(t,2.95,3.35))})`;
-  $('mk1').style.transform=`rotate(${(1-eOut(P(t,2.75,3.5)))*-90}deg)`;
-  const wp=eExpo(P(t,3.1,3.7));
-  $('word1').style.display='inline-block';
-  $('word1').style.transform=`translateY(${(1-wp)*170}px)`;
-  const tg=eOut(P(t,3.4,3.85));
-  tf($('tag1'),{o:tg,y:(1-tg)*24});
+  // ===== App background + window
+  const ab=eOut(P(t,2.75,3.3))*(1-eIn(P(t,8.3,8.6)))+eOut(P(t,9.6,9.95))*(1-eIn(P(t,12.5,12.9)));
+  $('appbg').style.opacity=ab;
+  const wIn1=eOut(P(t,2.95,3.6)), wOut1=eIn(P(t,8.15,8.45)), wIn2=eOut(P(t,9.85,10.4)), wOut2=eIn(P(t,12.45,12.85));
+  const wv=t<9?wIn1*(1-wOut1):wIn2*(1-wOut2);
+  const wp=t<9?(1-wIn1):(1-wIn2);
+  const wo=t<9?wOut1:wOut2;
+  const W=$('win');W.style.opacity=wv;
+  W.style.transform=`perspective(2400px) translate(${wp*140}px,${wp*50+wo*30}px) rotateY(${wp*-14}deg) scale(${(.93+.07*(1-wp))*(1-wo*.06)})`;
+  W.style.filter=wo>0.02?`blur(${wo*8}px)`:'none';
 
-  // ===== App window (4.2 - 13.4) =====
-  const wi=eOut(P(t,4.2,4.9)), wo=eIn(P(t,12.85,13.35));
-  const W=$('win');
-  W.style.opacity=wi*(1-wo);
-  W.style.transform=`perspective(2400px) translate(${(1-wi)*120}px,${(1-wi)*60 + wo*40}px) rotateY(${(1-wi)*-14}deg) rotateX(${(1-wi)*6}deg) scale(${(.92+.08*wi)*(1-wo*.08)})`;
-  W.style.filter=wo>0.02?`blur(${wo*10}px)`:'none';
-
-  // nav highlight
-  const n1=eIO(P(t,7.62,7.9)), n2=eIO(P(t,10.55,10.83));
-  const hl=(n1+n2)*52;
-  $('navhl').style.top=hl+'px';
-  ['nav0','nav1','nav2'].forEach((id,i)=>$(id).classList.toggle('on',Math.round((n1+n2))===i));
+  // nav: Inbox until 5.65, then Bookings
+  const nsw=eIO(P(t,5.65,5.9));
+  const navIdx=t<9?1-nsw:0;
+  $('hl').style.top=(16+navIdx*48)+'px';
+  $('nv0').classList.toggle('on',navIdx<.5);$('nv1').classList.toggle('on',navIdx>=.5);
 
   // views
-  const v0=1-eIn(P(t,7.62,7.85));
-  tf($('v0'),{o:v0,x:-(1-v0)*40});
-  const v1i=eOut(P(t,7.75,8.05)), v1o=eIn(P(t,10.55,10.78));
-  tf($('v1'),{o:v1i*(1-v1o),x:(1-v1i)*40-v1o*40});
-  const v2i=eOut(P(t,10.68,10.98));
-  tf($('v2'),{o:v2i,x:(1-v2i)*40});
+  const vi=1-eIn(P(t,5.65,5.85)); tf($('vi'),{o:t<9?vi:0,x:-(1-vi)*30});
+  const vc=eOut(P(t,5.75,6.05)); tf($('vc'),{o:t<9?vc:0,x:(1-vc)*30});
+  tf($('bk'),{o:t>9?1:0});
 
   // captions
-  [[4.6,5.1,7.5,7.8],[7.8,8.3,10.45,10.75],[10.8,11.3,12.75,13.1]].forEach(([a,b,c,d],i)=>{
-    const k=inOut(t,a,b,c,d,36); tf($('cap'+i),{o:k.o,y:k.y});
-  });
+  [[3.3,3.8,5.45,5.75],[5.9,6.4,8.1,8.4],[10.0,10.5,12.3,12.6]].forEach(([a,b,c,d],i)=>{const k=inOut(t,a,b,c,d,36);tf($('cap'+i),{o:k.o,y:k.y})});
 
-  // --- inbox ---
-  ROWS.forEach((r,i)=>{const p=eOut(P(t,4.75+i*.1,5.2+i*.1));tf($('r'+i),{o:p,x:(1-p)*-30})});
-  const b1=eBack(P(t,5.25,5.6)); tf($('b1'),{o:clamp(b1*2),y:(1-b1)*20,s:.9+.1*b1});
-  const ty=P(t,5.75,6.85);
-  const sent=t>=7.08;
-  $('typed').textContent=sent?'':REPLY.slice(0,Math.round(REPLY.length*ty));
-  $('caret').style.opacity=sent?0:(Math.floor(t*3)%2?1:.2);
-  const b2=eBack(P(t,7.08,7.4)); tf($('b2'),{o:clamp(b2*2),y:(1-b2)*30,s:.9+.1*b2});
-  $('b2t').textContent=REPLY;
-  const sd=$('send'); sd.style.transform=`scale(${1-.1*Math.sin(Math.PI*P(t,6.98,7.12))})`;
-  $('u0').style.opacity=sent?0:1;
-  $('navbadge').textContent=sent?'4':'5';
+  // --- inbox
+  ROWS.forEach((_,i)=>{const p=eOut(P(t,3.2+i*.08,3.6+i*.08));tf($('r'+i),{o:p,x:(1-p)*-24})});
+  const g=eBack(P(t,3.45,3.8)); tf($('g1'),{o:clamp(g*2),y:(1-g)*16});
+  const dr=eOut(P(t,3.75,4.05)), sent=t>=4.78;
+  tf($('draft'),{o:dr*(sent?1-eIn(P(t,4.78,4.95)):1),y:(1-dr)*20});
+  $('dtx').textContent=DRAFT.slice(0,Math.round(DRAFT.length*P(t,3.85,4.45)));
+  $('approve').style.transform=`scale(${1-.08*Math.sin(Math.PI*P(t,4.66,4.82))})`;
+  const sb=eBack(P(t,4.85,5.2)); tf($('sent'),{o:clamp(sb*2),y:(1-sb)*24,s:.94+.06*sb});
+  $('d0').style.opacity=sent?0:1; $('ibd').textContent=sent?'4':'5';
 
-  // --- calendar ---
-  const sc=P(t,8.05,8.75);
-  $('scan').style.left=(-140+sc*1000)+'px';$('scan').style.opacity=sc>0&&sc<1?1:0;
-  document.querySelectorAll('.fld').forEach((f,i)=>{
-    const a=8.12+i*.09, on=P(t,a,a+.15)*(1-P(t,9.6,9.9));
-    f.style.background=`rgba(94,234,212,${.12*on})`;f.style.borderColor=`rgba(94,234,212,${.5*on})`;
-  });
-  // flying chip from mail card to Mini Suite bar
-  const fp=eIO(P(t,8.8,9.35));
-  const fx0=280, fy0=110, fx1=24+150+2*96+5, fy1=240+52+14;
-  const fly=$('fly');
-  fly.style.left=lerp(fx0,fx1,fp)+'px'; fly.style.top=(lerp(fy0,fy1,fp)-Math.sin(Math.PI*fp)*60)+'px';
-  fly.style.opacity=P(t,8.75,8.85)*(1-P(t,9.3,9.4));
-  fly.style.transform=`scale(${1+Math.sin(Math.PI*fp)*.12})`;
-  const nb=eOut(P(t,9.3,9.65));
-  newbar.style.transform=`scaleX(${nb})`;newbar.style.opacity=nb>0?1:0;
-  newbar.style.boxShadow=`0 0 ${40*(1-P(t,9.6,10.3))}px rgba(250,204,21,${.7*nb})`;
-  const rp=eBack(P(t,9.6,9.95)); tf(rn,{o:clamp(rp*2),y:(1-rp)*-10,s:.85+.15*rp});
+  // --- calendar catch
+  [['m0',6.1],['m1',6.3]].forEach(([id,a])=>{const p=eBack(P(t,a,a+.35));const q=eIO(P(t,a+.9,a+1.4));
+    tf($(id),{o:clamp(p*2)*(1-q),y:(1-p)*-24+q*120,s:1-q*.4})});
+  const ep0=eOut(P(t,7.2,7.5)), ep1=eOut(P(t,7.4,7.7));
+  e0.style.transformOrigin='0 50%';e1.style.transformOrigin='0 50%';
+  e0.style.transform=`scaleX(${ep0})`;e0.style.opacity=ep0>0?1:0;e0.style.boxShadow=`0 0 ${30*(1-P(t,7.5,8.2))}px rgba(91,60,196,.8)`;
+  e1.style.transform=`scaleX(${ep1})`;e1.style.opacity=ep1>0?1:0;e1.style.boxShadow=`0 0 ${30*(1-P(t,7.7,8.3))}px rgba(0,53,128,.8)`;
+  const bl=eBack(P(t,7.75,8.05)); tf($('blocked'),{o:clamp(bl*2),s:.85+.15*bl});
 
-  // --- dashboard ---
-  const kp=eOut(P(t,10.9,12.1));
-  $('k0').textContent=Math.round(87*kp)+'%';
-  $('k1').textContent='₱'+Math.round(412800*kp).toLocaleString('en-US');
-  $('k2').textContent=Math.round(6*kp);
-  $('k3').textContent=Math.round(38*(1-eOut(P(t,11.0,12.0))));
-  $('k3s').style.opacity=P(t,11.9,12.2);
-  $('k3').style.color=t>12?'var(--mint)':'var(--text)';
-  document.querySelectorAll('.kpi').forEach((k,i)=>{const p=eBack(P(t,10.75+i*.07,11.15+i*.07));tf(k,{o:clamp(p*2),y:(1-p)*24})});
-  H.forEach((_,i)=>{const p=eOut(P(t,11.0+i*.055,11.55+i*.055));$('cb'+i).style.transform=`scaleY(${p})`});
+  // --- morning interstitial (8.5 - 9.8)
+  const p2=eOut(P(t,8.35,8.75))*(1-eIn(P(t,9.6,9.95)));
+  $('p2').style.opacity=p2; $('p2i').style.transform=`scale(${1.1-0.07*P(t,8.4,10)})`;
+  const mt=eOut(P(t,8.7,9.05)); tf($('mt'),{o:mt,y:(1-mt)*30});
+  const mp=eOut(P(t,8.9,9.25)); tf($('mp'),{o:mp,y:(1-mp)*30});
 
-  // ===== cursor =====
-  const cur=$('cursor');
-  const send=center($('send')), nc=center($('nav1')), nd=center($('nav2'));
-  nc[0]-=40; nd[0]-=40;
-  const K=[[6.3,[1500,980]],[6.95,send],[7.3,send],[7.58,nc],[9.9,nc],[10.5,nd],[11.2,nd],[11.9,[1180,1000]]];
+  // --- bookings dashboard (9.6 - 12.8)
+  [['bx0',10.0],['bx1',10.08],['k0',10.2],['k1',10.28],['k2',10.36],['mi0',10.9],['mi1',11.0]].forEach(([id,a])=>{
+    const p=eBack(P(t,a,a+.4)); tf($(id),{o:clamp(p*2),y:(1-p)*24})});
+  const kc=eOut(P(t,10.3,11.6));
+  $('kv0').textContent=peso(11400*kc);$('kv1').textContent=peso(48600*kc);$('kv2').textContent=peso(186400*kc);
+
+  // ===== End card (12.7 - 15)
+  const p3=eOut(P(t,12.6,13.1));
+  $('p3').style.opacity=p3; $('p3i').style.transform=`scale(${1.12-0.08*P(t,12.6,15)})`;
+  const e1p=eBack(P(t,12.85,13.3)); tf($('eb'),{o:clamp(e1p*2),y:(1-e1p)*20,s:.9+.1*e1p});
+  const e2=eOut(P(t,13.05,13.55)); tf($('endh'),{o:e2,y:(1-e2)*30});
+  const e3=eOut(P(t,13.35,13.8)); tf($('endp'),{o:e3,y:(1-e3)*20});
+  const e4=eBack(P(t,13.55,13.95)); tf($('cta'),{o:clamp(e4*2),s:.9+.1*e4});
+  const e5=eOut(P(t,13.8,14.2)); tf($('baler'),{o:e5,y:(1-e5)*14});
+
+  // ===== cursor
+  const ap=center($('approve')), bn=center($('nv0')); bn[0]-=40;
+  const K=[[4.05,[1500,980]],[4.6,ap],[4.9,ap],[5.55,bn],[6.2,bn],[6.8,[1300,1010]]];
   let cx=K[0][1][0],cy=K[0][1][1];
-  for(let i=0;i<K.length-1;i++){
-    const [ta,pa]=K[i],[tb,pb]=K[i+1];
-    if(t>=ta&&t<=tb){const p=eIO(P(t,ta,tb));cx=lerp(pa[0],pb[0],p);cy=lerp(pa[1],pb[1],p)}
-    else if(t>tb){cx=pb[0];cy=pb[1]}
-  }
-  const co=P(t,6.3,6.5)*(1-P(t,11.5,11.9));
-  let press=0;[7.02,7.62,10.55].forEach(c=>press=Math.max(press,Math.sin(Math.PI*P(t,c-.08,c+.08))));
-  cur.style.opacity=co;cur.style.transform=`translate(${cx-6}px,${cy-4}px) scale(${1-.18*press})`;
-  let rip=0,rc=null;[7.02,7.62,10.55].forEach(c=>{const p=P(t,c,c+.45);if(p>0&&p<1){rip=p;rc=c}});
-  const R=$('ripple');R.style.left=cx+'px';R.style.top=cy+'px';
-  R.style.opacity=rip>0?(1-rip)*co:0;R.style.transform=`scale(${.3+eOut(rip)*1.4})`;
+  for(let i=0;i<K.length-1;i++){const [ta,pa]=K[i],[tb,pb]=K[i+1];
+    if(t>=ta&&t<=tb){const p=eIO(P(t,ta,tb));cx=lerp(pa[0],pb[0],p);cy=lerp(pa[1],pb[1],p)} else if(t>tb){cx=pb[0];cy=pb[1]}}
+  const co=P(t,4.05,4.25)*(1-P(t,6.3,6.7));
+  let press=0;[4.74,5.65].forEach(c=>press=Math.max(press,Math.sin(Math.PI*P(t,c-.08,c+.08))));
+  $('cursor').style.opacity=co;$('cursor').style.transform=`translate(${cx-6}px,${cy-4}px) scale(${1-.18*press})`;
+  let rip=0;[4.74,5.65].forEach(c=>{const p=P(t,c,c+.45);if(p>0&&p<1)rip=p});
+  const R=$('ripple');R.style.left=cx+'px';R.style.top=cy+'px';R.style.opacity=rip>0?(1-rip)*co:0;R.style.transform=`scale(${.3+eOut(rip)*1.4})`;
 
-  // ===== End card (13.2 - 15) =====
-  const E=$('end'), ep=eOut(P(t,13.25,13.9));
-  E.style.opacity=t>13.2?1:0;
-  $('ring2').style.strokeDashoffset=100*(1-eIO(P(t,13.25,13.95)));
-  $('dot2').style.transform=`scale(${eBack(P(t,13.45,13.85))})`;
-  tf(E.querySelector('.logo'),{o:ep,y:(1-ep)*30,s:.94+.06*ep});
-  const et=eOut(P(t,13.6,14.05)); tf($('endtag'),{o:et,y:(1-et)*24});
-  const ct=eBack(P(t,13.85,14.25)); tf($('cta'),{o:clamp(ct*2),y:(1-ct)*20,s:.9+.1*ct});
+  // fade in from black / tiny fade out at loop end
+  $('fade').style.opacity=(1-P(t,0,.35))+P(t,14.75,15)*0;
 };
-
-// live preview when opened in a browser: ?play
-if(location.search.includes('play')){
-  const t0=performance.now();
-  (function loop(){render(((performance.now()-t0)/1000)%15);requestAnimationFrame(loop)})();
-} else render(0);
+if(location.search.includes('play')){const t0=performance.now();(function loop(){render(((performance.now()-t0)/1000)%15);requestAnimationFrame(loop)})()} else render(0);
 </script>
 </body>
 </html>
