@@ -56,7 +56,7 @@ Work out the things Tiara can't easily see herself:
 - **Conflicts**: brief vs latest call, recording vs calendar, or Chris's view vs the client's. List each one with both sources.
 - **The client's process in their words**: how they actually work, quoted, if the call is about building or delivering something.
 - **Chris's coaching**: how he said to run the call, what to show first, what to hold back, and expectations to set. This often exists only in the syncs.
-- **Value baseline**: the time or cost figures from the diagnostic, and the question to ask so the client value ledger can be updated.
+- **Value baseline**: the time or cost figures from the diagnostic, or from the scoping call if there was no diagnostic, and the question to ask so the client value ledger can be updated.
 - **Internal-only context**: relationship notes, how the engagement is going, anything that shouldn't be said on the call. Keep it apart from everything else.
 
 ## Step 4: Build the prep page
@@ -66,18 +66,17 @@ Publish the prep as a page (an artifact where the surface supports it), built fr
 Sections, in order:
 
 1. **Header**: client (official spelling), contacts and emails, date, time in the client's time zone and in Manila, who's on the invite and who has accepted.
-2. **Check before the call**: anything to verify or finish beforehand, including overdue items we owe.
-3. **Purpose**: 2–4 goals for the call.
-4. **How the client works / what they want**: their process and priorities, with quotes.
-5. **Where things stand**: a dated timeline with the key rows highlighted, and the proposed, built, tested and live status of each deliverable.
-6. **Who owes what**: two columns, client and us.
-7. **Agenda**: minute-ranged slots adding up to the invite's length, with suggested wording for the opening.
-8. **Discovery questions**: grouped by topic, including a casual value-baseline question.
-9. **Install / demo steps**: only when something is being delivered.
-10. **Things not to miss**: Chris's advice, earlier issues, conflicts, brand or compliance notes, expectation-setting.
-11. **Close checklist**: named owner for each item, plus booking the next follow-up. Remind Tiara to make sure Fathom is recording.
-12. **Internal only (not for the call)**: visibly separated.
-13. **Sources checked**: every source with links, plus anything that couldn't be reached and why.
+2. **Purpose**: 2–4 goals for the call, followed by **Check before the call** callouts for anything to verify or finish beforehand, including overdue items we owe.
+3. **How the client works / what they want**: their process and priorities, with quotes.
+4. **Where things stand**: a dated timeline with the key rows highlighted, and the proposed, built, tested and live status of each deliverable.
+5. **Who owes what**: two columns, client and us.
+6. **Agenda**: minute-ranged slots adding up to the invite's length, with suggested wording for the opening.
+7. **Discovery questions**: grouped by topic, including a casual value-baseline question.
+8. **Install / demo steps**: only when something is being delivered.
+9. **Things not to miss**: Chris's advice, earlier issues, conflicts, brand or compliance notes, expectation-setting.
+10. **Close checklist**: named owner for each item, plus booking the next follow-up. Remind Tiara to make sure Fathom is recording.
+11. **Internal only (not for the call)**: visibly separated.
+12. **Sources checked**: every source with links, plus anything that couldn't be reached and why.
 
 Writing rules:
 
@@ -86,7 +85,7 @@ Writing rules:
 - Never show real advice-client names or personal data. Use the de-identified or dummy names that appear in the sources.
 - Keep it scannable. Tiara reads this minutes before the call.
 
-Also save a Markdown copy of the prep where the session allows it, named `YYYY-MM-DD-<client-slug>-<topic>.md` using the call date.
+Also save a Markdown copy of the prep where the session allows it, named `YYYY-MM-DD-<client-slug>-<topic>.md` using the call date. Put it in a `call-prep/` folder in the working directory (or the session's outputs folder in Cowork). When saving the HTML as a local file too, wrap it in `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">…</head><body>…</body></html>` so it doesn't open in quirks mode. The page publisher adds this wrapper itself.
 
 ## Step 5: Report back
 

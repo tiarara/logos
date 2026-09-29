@@ -19,21 +19,25 @@ Connector and tool names differ a little between Cowork, chat and Claude Code. U
   2. Pick client calls by **title** and **calendar invitees** (email domain, contact names).
   3. Pick Chris syncs by title: "Tiara + Chris Connect". Also check "Impromptu Google Meet Meeting" recordings, because client calls sometimes get that default title. The 22 Sep Ryan call did.
   4. Run `search_meetings` with the client name and the project keywords as a second net. `recorded_by: "anyone"`.
-- Transcripts are large (about 50 KB), so fetch no more than 3 at a time. If one is saved to a file, grep it for the client name, contacts, project terms and "Chris". Read the matching passages with some surrounding context instead of the whole thing.
+- Scan the **action items** from `list_meetings` for the contact's first name and the client name. They are the quickest pointers to promises and owners.
+- Transcripts are large (about 50 KB), so fetch no more than 3 at a time. A large transcript is saved to a JSON file with the text at `[0].text`. Extract it first (for example `python3 -c "import json;print(json.load(open(F))[0]['text'])"`), then grep it for the client name, contacts, project terms and "Chris". Read the matching passages with some surrounding context instead of the whole thing.
 - Read the **latest client call in full**. For Chris syncs, read the parts about this client, especially his guidance on running the call ("I would show him this first…", "set the expectation…").
 - Transcription errors are common with names. Check product and platform names against Baalda before calling something a mistake. "Paradino" looked like a mishearing but is a real platform in the Marlston brief.
 - Link every claim to the timestamped Fathom URL.
 
 ## Google Calendar (through Composio)
 
+- Call the tools directly with `COMPOSIO_MULTI_EXECUTE_TOOL`. There's no need for `COMPOSIO_SEARCH_TOOLS` first: it returns about 60 KB and adds nothing once you know the tool names below.
 - Toolkit `googlecalendar`, account alias **`work`** (tiara@nxtlayrai.com). The `personal` account (tiaramejos@gmail.com) is the default in Composio, so always pass `account: "work"`. Check personal only if nothing turns up in work.
-- Use `GOOGLECALENDAR_EVENTS_LIST` with `calendarId: "primary"`, `singleEvents: true`, `orderBy: "startTime"`, a `query` (the client name or contact first name), and a date window with explicit offsets (for example `+08:00`). Ask for `fields: "items(summary,start,end,status,attendees(email,responseStatus),hangoutLink)"`.
+- Use `GOOGLECALENDAR_EVENTS_LIST` with `calendarId: "primary"`, `singleEvents: true`, `orderBy: "startTime"`, `q` (the client name or contact first name; the argument is `q`, not `query`), and a date window with explicit offsets (for example `+08:00`). Ask for `fields: "items(summary,start,end,status,attendees(email,responseStatus),hangoutLink)"`.
 - Tiara is in Manila (UTC+8). Give times in the client's time zone and in Manila. Perth is also UTC+8. East-coast Australia is UTC+10 or +11.
 - Report attendee `responseStatus`: accepted, needsAction or declined.
+- When proposing the next call, check for daylight saving changes (NSW, VIC, ACT and TAS start in early October and end in early April; QLD and WA don't change) and for state public holidays in the client's state.
 
 ## Gmail (through Composio)
 
-- Toolkit `gmail`, account alias **`work`**. Search by the client's domain (`from:@domain OR to:@domain`) and contact names, over roughly the last 30 days.
+- Toolkit `gmail`, account alias **`work`**. Search by the client's **email domain only** (`from:@domain OR to:@domain newer_than:30d`). Don't search the client's name: it appears in signatures, invoices and morning briefs, and one test returned 201 threads (about 190k tokens). List the threads without full content first, then fetch only the relevant ones in full.
+- Also read Chris's threads with the client's other contacts (for example managers or IT). They often hold scope and access status.
 - Look for promises and attachments we sent, anything the client said they'd send, and whether they replied.
 - The separate Gmail connector (not Composio) has needed signing in again before. If it fails, use Composio.
 
@@ -54,7 +58,7 @@ Connector and tool names differ a little between Cowork, chat and Claude Code. U
 |---|---|---|
 | Marlston Forrest | Marston Forest, Malston Forest, Marsden Forest, "Ryan" | Ryan Pitts (ryan.pitts@marlstonforrest.com.au), Anthony. WA, Perth time |
 | Centra Wealth | Central Wealth, Sentra, Centro, Central World, "Zac/Zach" | Zac Zacharia, Jen Labonite (jen@centrawealth.com.au), Ariane (ariane@centrawealth.com.au) |
-| SafeSmart Access | SafeSmart, Safe Smart, "Harriette" | Harriette Hales (harrietteh@safesmartaccess.com.au), GM Alf |
+| SafeSmart Access | SafeSmart, Safe Smart, "Harriette" | Harriette Hales (harrietteh@safesmartaccess.com.au), GM Alf, Thomas Rolfe, Nathan. Sydney time (AEST/AEDT) |
 | Harding Wealth Management | Harding Wealth, "Simon" | Simon Harding |
 | Veracity Wealth | Veracity | none recorded |
 | Venture Corporate Advisory | Venture | none recorded |

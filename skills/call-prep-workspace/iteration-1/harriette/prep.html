@@ -1,0 +1,393 @@
+<title>SafeSmart Call Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: single reading column, briefing header, agenda as a minute-ruled timeline, workflow as a 3-stage pipeline */
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --fg: #1c2230;
+  --muted: #5b6475;
+  --line: #dde1e8;
+  --accent: #d9661f;
+  --accent-soft: #fbeadf;
+  --warn-bg: #fff4d6;
+  --warn-line: #e3b341;
+  --internal-bg: #eceef3;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171d; --surface: #1c2029; --fg: #e7e9ee; --muted: #9aa2b1; --line: #2d3340;
+    --accent: #f08a45; --accent-soft: #3a2518; --warn-bg: #33290f; --warn-line: #b88a1f; --internal-bg: #232834;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14171d; --surface: #1c2029; --fg: #e7e9ee; --muted: #9aa2b1; --line: #2d3340;
+  --accent: #f08a45; --accent-soft: #3a2518; --warn-bg: #33290f; --warn-line: #b88a1f; --internal-bg: #232834;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.55;
+  padding-inline: 16px; padding-block: 32px 64px;
+}
+.wrap { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; font-weight: 700; }
+h3 { font-size: 1.05rem; font-weight: 700; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+section { display: flex; flex-direction: column; gap: 16px; }
+.sec-head { display: flex; flex-direction: column; gap: 4px; }
+.lede { color: var(--muted); max-width: 62ch; }
+
+/* header */
+header { display: flex; flex-direction: column; gap: 14px; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.meta div { background: var(--surface); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.meta dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.meta dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+
+/* callouts */
+.callout { border-left: 4px solid var(--warn-line); background: var(--warn-bg); padding: 14px 16px; border-radius: 0 8px 8px 0; display: flex; flex-direction: column; gap: 6px; }
+.callout.internal { border-left-color: var(--muted); background: var(--internal-bg); }
+.callout strong.tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* goals */
+ol.goals { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; }
+
+/* pipeline */
+.pipeline { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: 2.2rem 1fr; gap: 4px 12px; align-items: start; }
+.stage .n { grid-row: span 2; font-family: var(--font-mono); font-size: 0.8rem; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.stage.inputs .n { background: var(--internal-bg); color: var(--muted); }
+.stage.focus { border-color: var(--accent); }
+.stage p { color: var(--muted); font-size: 0.95rem; }
+.arrow { text-align: center; color: var(--muted); font-size: 0.9rem; line-height: 1; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: var(--accent); color: var(--surface); vertical-align: 2px; margin-left: 6px; }
+blockquote { margin: 0; padding: 10px 16px; border-left: 3px solid var(--accent); font-style: italic; color: var(--fg); background: var(--surface); border-radius: 0 8px 8px 0; }
+
+/* timeline table */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.date { font-family: var(--font-mono); font-size: 0.82rem; white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums; }
+tr.key td { background: var(--accent-soft); }
+
+/* agenda */
+.agenda { display: flex; flex-direction: column; border-left: 2px solid var(--line); margin-left: 6px; }
+.slot { position: relative; padding: 0 0 22px 22px; display: flex; flex-direction: column; gap: 6px; }
+.slot:last-child { padding-bottom: 0; }
+.slot::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.slot .time { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.slot ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+code { font-family: var(--font-mono); font-size: 0.85em; background: var(--internal-bg); padding: 1px 5px; border-radius: 4px; }
+.say { font-style: italic; }
+
+/* question groups */
+.qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.qcard ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 5px; font-size: 0.97rem; }
+
+/* dont-miss list */
+dl.dontmiss { margin: 0; display: grid; grid-template-columns: minmax(120px, 11rem) 1fr; gap: 0; border-top: 1px solid var(--line); }
+dl.dontmiss dt, dl.dontmiss dd { padding: 10px 0; border-bottom: 1px solid var(--line); margin: 0; }
+dl.dontmiss dt { font-weight: 600; padding-right: 14px; }
+@media (max-width: 560px) {
+  dl.dontmiss { grid-template-columns: 1fr; }
+  dl.dontmiss dt { border-bottom: 0; padding-bottom: 0; }
+}
+
+/* checklist */
+.checks { display: flex; flex-direction: column; gap: 8px; }
+.checks label { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; cursor: pointer; }
+.checks input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.checks input:checked + span { color: var(--muted); text-decoration: line-through; }
+.who { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-right: 6px; }
+
+footer { display: flex; flex-direction: column; gap: 8px; font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+footer ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+</style>
+<style>
+.owes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.status { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.status.live { border-color: var(--accent); color: var(--accent); }
+.overdue { color: var(--accent); font-weight: 600; }
+</style>
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">NxtLayr.AI · Call prep · Tue 29 Sep 2026, 2:00 pm AEST (Sydney)</span>
+  <h1>SafeSmart Access: Friday pack first run with Harriette</h1>
+  <dl class="meta">
+    <div><dt>Client</dt><dd>Harriette Hales (Internal Sales), SafeSmart Access</dd></div>
+    <div><dt>Email</dt><dd>harrietteh@safesmartaccess.com.au</dd></div>
+    <div><dt>When</dt><dd>2:00–2:30 pm AEST (12:00–12:30 pm Manila) · <a href="https://meet.google.com/jqt-bfpv-shi">Google Meet</a></dd></div>
+    <div><dt>Invite status</dt><dd>Tiara accepted · Harriette accepted (28 Sep)</dd></div>
+    <div><dt>NxtLayr side</dt><dd>Tiara solo. Chris is not on the invite.</dd></div>
+  </dl>
+</header>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Purpose</span><h2>What this call needs to do</h2></div>
+  <ol class="goals">
+    <li>Have Harriette run the Friday Pack on her own HubSpot while sharing her screen, and confirm the HubSpot connection works. This is the first time it touches real HubSpot data.</li>
+    <li>Close the four open questions from your 25 Sep email (targets, who submits a planner, the "BD Team" box, meetings booked vs held).</li>
+    <li>Capture the value baseline in her words: how long Friday takes now, and what a normal Friday looks like.</li>
+    <li>Agree a side-by-side run this Friday (2 Oct) and book the review call.</li>
+  </ol>
+  <div class="callout">
+    <strong class="tag">Check before the call</strong>
+    <p>Confirm the plugin is visible to Harriette. Chris uploaded it on 25 Sep and sent the link (<code>claude.ai/customize/plugins/id/plugin_015vP2KPS2Z45VnLpchHCVCg</code>). He said he would try to limit it to her. Nobody has confirmed she can see it, or who else can. (<a href="https://nxtlayr-ai.slack.com/archives/D0BUQ8FEK2M">Slack DM, 25 Sep 1:06 pm</a>)</p>
+  </div>
+  <div class="callout">
+    <strong class="tag">Check before the call</strong>
+    <p>Have your own test output ready: last Friday's sample KPI pack and <code>Weekly Planners.pdf</code> (<a href="https://drive.google.com/drive/folders/1vjjfUnVVFBjMb4rc7Y8xnspxHj-YYh87">Drive: Safe Smart folder</a>). The KPI skill has never run against real HubSpot data, so you need something to compare against if the numbers look off.</p>
+  </div>
+  <div class="callout">
+    <strong class="tag">Check before the call</strong>
+    <p>Chris flies out today ("we leave on Tuesday", <a href="https://fathom.video/calls/837165646?timestamp=61">28 Sep sync 01:01</a>). Assume he can't be reached during the call. You also have the Valera call at 1:00 pm Manila, so keep a hard stop at 12:30.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Their process · 11 Sep call + 22 Sep email</span><h2>How Harriette's Friday works today</h2>
+  <p class="lede">A manual Friday afternoon job that only she knows how to do. The whole sales team gets it.</p></div>
+  <div class="pipeline">
+    <div class="stage inputs"><span class="n">in</span><h3>Targets + reps' planner forms</h3><p>The sales manager sets call and meeting targets. They change often, and there's a call sprint this month. Harriette keeps them in Excel. Reps fill in a HubSpot weekly planner form, due by 4:30 pm Friday.</p></div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="stage"><span class="n">1</span><h3>KPI report (about 1 hr)</h3><p>Screenshots from the HubSpot "KPI Report" dashboard go into a Canva template. Calls and meetings need targets, so she copies them into Excel to build comparison graphs.</p></div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="stage"><span class="n">2</span><h3>Planners (about 30 min)</h3><p>"Generate Weekly Planner Reports" in HubSpot emails a PDF for each person. She merges them in I Love PDF.</p></div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="stage focus"><span class="n">3</span><h3>Send to the whole sales team <span class="pill">today</span></h3><p>The KPI pack and the merged planners go out by email. Today we test whether the Friday Pack can do steps 1 to 3 for her, drafting only.</p></div>
+  </div>
+  <blockquote>"It would just be good if it was more automated because currently I'm generally staying after hours on a Friday afternoon to get them done. And I'm kind of the only one that can do it." (<a href="https://fathom.video/calls/817543059?timestamp=541">11 Sep, 09:01</a>)</blockquote>
+  <blockquote>"We wouldn't have to change any of their reports." (<a href="https://fathom.video/calls/817543059?timestamp=541">11 Sep, 09:01</a>). She wants the same output with less effort, not a new report.</blockquote>
+  <blockquote>"These change quite often, will they be editable in Claude?" (about the targets, <a href="https://mail.google.com/mail/#all/1a07e4f5495806a4">email, 22 Sep</a>)</blockquote>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Background</span><h2>What's happened so far</h2></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>What happened</th></tr></thead>
+      <tbody>
+        <tr><td class="date">8 Sep</td><td>Chris asks Tiara to scope SafeSmart's weekly planner process with Harriette (Slack DM).</td></tr>
+        <tr class="key"><td class="date">11 Sep</td><td><strong>Scoping call with Harriette.</strong> KPI report plus planners, about 1.5 hrs every Friday. She agrees to send sample PDFs and leaves HubSpot access to Alf. (<a href="https://fathom.video/calls/817543059">Fathom</a>)</td></tr>
+        <tr><td class="date">14 Sep</td><td>Chris sync: Chris floats a cloud managed agent. The decision is to build a simple skill first. (<a href="https://fathom.video/calls/818709023?timestamp=722">Fathom 12:02</a>)</td></tr>
+        <tr><td class="date">15 Sep</td><td>Chris meets Alf. Afterwards he tells Tiara to go ahead and build a skill that uses Harriette's own HubSpot connector. (<a href="https://fathom.video/calls/821345646?timestamp=3505">Fathom 58:25</a>)</td></tr>
+        <tr><td class="date">16 Sep</td><td>Thomas Rolfe activates a HubSpot Developer seat for Chris. It gives no CRM record access. (<a href="https://mail.google.com/mail/#all/1a0a3d04f005389f">email</a>)</td></tr>
+        <tr><td class="date">17 Sep</td><td>Tiara emails Harriette asking for the targets Excel, dashboard name, what "Posts" counts and the planner list.</td></tr>
+        <tr><td class="date">22 Sep</td><td>Harriette replies with the targets (images), "KPI Report" dashboard, Posts = "Post Status" on a Contact, and a planner list.</td></tr>
+        <tr><td class="date">23 Sep</td><td>Tiara confirms that targets will be editable in Claude.</td></tr>
+        <tr><td class="date">24 Sep</td><td>Tiara tells Chris the Friday pack skills are finished (Slack).</td></tr>
+        <tr class="key"><td class="date">25 Sep</td><td><strong>Chris uploads the plugin to SafeSmart's Claude.</strong> Tiara emails Harriette: v1 is ready, four questions, proposes a 30-min run-through. (<a href="https://mail.google.com/mail/#all/1a07e4f5495806a4">email</a>)</td></tr>
+        <tr><td class="date">28 Sep</td><td>Harriette: "when would suit you to meet again?" Tiara sends her Cal.com link and Harriette books today.</td></tr>
+        <tr class="key"><td class="date">29 Sep</td><td><strong>Today: first run on her HubSpot.</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Deliverable</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Friday Pack plugin (3 skills: <code>Friday Pack</code>, <code>Planners</code>, <code>Friday KPIs</code>)</td><td><span class="status">built</span></td><td>Installed in SafeSmart's Claude on 25 Sep. Not yet run by Harriette.</td></tr>
+        <tr><td><code>Planners</code>: merge PDFs, drop blank pages, list who hasn't submitted</td><td><span class="status">built</span></td><td>Tiara tested it on sample PDFs only. Not tested on a live Friday.</td></tr>
+        <tr><td><code>Friday KPIs</code>: pull KPI Report numbers from HubSpot</td><td><span class="status">built</span></td><td>Never run against HubSpot. Neither Tiara nor Chris has CRM access (<a href="https://fathom.video/calls/835143933?timestamp=598">25 Sep 09:58</a>).</td></tr>
+        <tr><td>Targets editable by chat ("Kurt's on leave Monday…")</td><td><span class="status">built</span></td><td>Loaded with the targets she sent on 22 Sep. Other targets were copied from her 4 Sep pack and need confirming.</td></tr>
+        <tr><td>Draft email to the sales team</td><td><span class="status">built</span></td><td>Drafts only. "Nothing is sent until you send it."</td></tr>
+        <tr><td>Cloud managed agent (runs Friday with nobody at the keyboard)</td><td><span class="status">proposed</span></td><td>Internal idea from 14 Sep only. Not scoped, not approved. Don't raise it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Open items</span><h2>Who owes what</h2></div>
+  <div class="owes">
+    <div class="qcard"><h3>SafeSmart (Harriette) owes us</h3><ul>
+      <li>Answers to the 4 questions in the 25 Sep email. Due today, on the call.</li>
+      <li>Run the pack on her HubSpot while you watch. Today.</li>
+      <li>A side-by-side Friday run next to her usual process. To agree today, for Fri 2 Oct.</li>
+      <li>Her time estimate for the value baseline. Today.</li>
+      <li>Sample KPI and planner PDFs, promised 11 Sep. <em>Received</em> (Drive 14 and 16 Sep).</li>
+      <li>Targets, dashboard name and planner list, requested 17 Sep. <em>Received</em> 22 Sep.</li>
+    </ul></div>
+    <div class="qcard"><h3>We owe SafeSmart</h3><ul>
+      <li>A working first version and a run-through, offered 25 Sep. Delivering today.</li>
+      <li>Targets editable in Claude, promised 23 Sep. Built, not yet shown to her.</li>
+      <li>Plugin limited to Harriette only (Chris, 25 Sep). <span class="overdue">Unconfirmed</span></li>
+      <li>Nothing we owe Harriette is overdue.</li>
+    </ul></div>
+  </div>
+  <div class="callout">
+    <strong class="tag">Conflict</strong>
+    <p><strong>Planner count.</strong> On the 11 Sep call she counted "19 reports" (<a href="https://fathom.video/calls/817543059?timestamp=434">07:14</a>). Her 22 Sep email lists 23 names plus "Greg Hales and Steve Dartnall", and the list includes Alf and Harriette herself. The "who hasn't submitted" check depends on this list. Confirm on the call who actually submits (your question 2).</p>
+  </div>
+  <div class="callout">
+    <strong class="tag">Conflict</strong>
+    <p><strong>Weekly planner design.</strong> The Baalda brief (12 Sep) describes the planner as a Cowork interview, then an A4 draft, then an approved PDF in the staff OneDrive folder. What Harriette runs, and what we built, is the existing HubSpot form, merged PDFs and an email to the team. The newer evidence (the call and emails) matches the build. Don't pitch the brief's version. Flag it to Chris so the brief can be updated.</p>
+  </div>
+  <div class="callout">
+    <strong class="tag">Conflict</strong>
+    <p><strong>Targets may be stale.</strong> The non-call and non-meeting targets (Posts 150, New opps 170, Won opps 86, regional splits) came from her 4 Sep pack. On 11 Sep she said targets were raised for a call sprint this month (<a href="https://fathom.video/calls/817543059?timestamp=320">05:20</a>). Confirm before the pack's comparisons are trusted.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Run of show · about 30 min</span><h2>Agenda</h2></div>
+  <div class="agenda">
+    <div class="slot">
+      <span class="time">0–3 min</span><h3>Open and frame it as a test</h3>
+      <ul>
+        <li>Fathom recording on. Mention that it's recording.</li>
+        <li class="say">"Thanks for making time. Today's a test run, not a switch-over. We'll run the Friday pack on your HubSpot together, check the numbers against what you'd normally send, and fix anything that's off. You keep doing your usual Friday until we've compared the two."</li>
+      </ul>
+    </div>
+    <div class="slot">
+      <span class="time">3–7 min</span><h3>Re-check the problem (value baseline)</h3>
+      <ul>
+        <li>Keep it casual, as Chris asked. It's not an interrogation.</li>
+        <li class="say">"Just to remind me, how long does the whole Friday pack take you at the moment, start to finish? And how often does it push you past knock-off?"</li>
+      </ul>
+    </div>
+    <div class="slot">
+      <span class="time">7–19 min</span><h3>She shares her screen and runs it</h3>
+      <ul>
+        <li>Follow the steps in "Install / demo steps" below. KPIs first, because that's the untested part.</li>
+        <li>Compare each KPI figure against HubSpot's KPI Report dashboard on screen. Note any that don't match. Don't fix them live.</li>
+      </ul>
+    </div>
+    <div class="slot">
+      <span class="time">19–25 min</span><h3>The four open questions and a targets change</h3>
+      <ul>
+        <li>Posts 150 · New opps 170 ($4.47M) · Won opps 86 · regions (Southern 45, Northern 38, NSW/ACT 65, WA 13): still current?</li>
+        <li>Who submits a planner and who only receives the pack (Alf, Greg, Steve? Harriette herself?).</li>
+        <li>What the "BD Team" box on the New Opps page counts.</li>
+        <li>Meetings: booked this week or held this week?</li>
+        <li>Have her change one target by chat and check the change is shown before it's saved.</li>
+      </ul>
+    </div>
+    <div class="slot">
+      <span class="time">25–30 min</span><h3>Agree next steps and close</h3>
+      <ul>
+        <li>Side-by-side run this Friday 2 Oct: her usual pack plus the Friday Pack, both before the 4:30 pm planner cut-off.</li>
+        <li>Book a short review for next week. Monday 5 Oct is the NSW Labour Day holiday, and Sydney moves to daylight saving on Sun 4 Oct.</li>
+        <li class="say">"If anything looks off on Friday, just email me the two versions and I'll sort it before we next talk."</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Discovery</span><h2>Questions to ask</h2></div>
+  <div class="qgrid">
+    <div class="qcard"><h3>HubSpot and data</h3><ul>
+      <li>Is the "KPI Report" dashboard shared with your user, or built under someone else's?</li>
+      <li>When targets change mid-month, who tells you, and how (email, Teams, verbal)?</li>
+      <li>Are there reps whose numbers you adjust by hand, for example part-timers or new starters?</li>
+    </ul></div>
+    <div class="qcard"><h3>Planners and sending</h3><ul>
+      <li>When someone misses 4:30, do you chase them, or does the pack go without them?</li>
+      <li>Is the send list the same every week? Is it the sales@ address or individual people?</li>
+      <li>Who covers when you're on leave? Should they get access to the pack too?</li>
+    </ul></div>
+    <div class="qcard"><h3>Value baseline</h3><ul>
+      <li>"How long does the Friday pack take you now, roughly? You mentioned about half an hour for planners and another hour for KPIs."</li>
+      <li>After the run: "If this works on Friday, how long do you think it'd take you?"</li>
+    </ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Delivery</span><h2>Demo steps (Harriette drives)</h2></div>
+  <div class="agenda">
+    <div class="slot"><span class="time">Step 1</span><h3>Find the plugin</h3><ul><li>She opens Claude (Cowork) and checks the Friday Pack plugin is listed under Customise → Plugins. If it's missing, use the link from the 25 Sep email.</li></ul></div>
+    <div class="slot"><span class="time">Step 2</span><h3>Check HubSpot is connected as her</h3><ul><li>Her own HubSpot connector must be authenticated. We have no HubSpot access, so the skill relies entirely on hers.</li></ul></div>
+    <div class="slot"><span class="time">Step 3</span><h3>Run <code>Friday KPIs</code> alone first</h3><ul><li>Compare calls, meetings, Posts, new and won opps against the KPI Report dashboard on screen. Write down any mismatch.</li></ul></div>
+    <div class="slot"><span class="time">Step 4</span><h3>Run <code>Planners</code></h3><ul><li>Use this week's planner PDFs if any have come in, or last week's. Check the "hasn't submitted" list against the real team.</li></ul></div>
+    <div class="slot"><span class="time">Step 5</span><h3>Run <code>Friday Pack</code> end to end</h3><ul><li>One PDF plus a draft email. Confirm the email is a draft and is not sent.</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Watch-outs</span><h2>Things not to miss</h2></div>
+  <dl class="dontmiss">
+    <dt>Test the connection</dt><dd>Chris: "we need to make sure that it's going to connect properly." That's the point of having her run it (<a href="https://fathom.video/calls/835143933?timestamp=624">25 Sep 10:24</a>, <a href="https://fathom.video/calls/835143933?timestamp=802">13:22</a>).</dd>
+    <dt>Baseline the value</dt><dd>Chris: "just like re-qualify what the problem was on the call… just casually, it doesn't have to be an interrogation" (<a href="https://fathom.video/calls/835143933?timestamp=850">25 Sep 14:10</a>). The figure feeds the client value ledger.</dd>
+    <dt>No new promises</dt><dd>Don't promise timelines. New work needs Alf's approval (<a href="https://fathom.video/calls/817543060?timestamp=1200">11 Sep sync 20:00</a>). If she asks for extras, note them and say you'll scope them with Chris.</dd>
+    <dt>Drafts only</dt><dd>Nothing sends automatically, and there are no HubSpot writes. Human review comes before sending (Baalda brief). Don't suggest a scheduled or unattended Friday run. Her laptop would need to be awake, and a company-wide runtime needs separate approval.</dd>
+    <dt>Earlier issue</dt><dd>Chris's SafeSmart sales artifact failed for staff because the connectors weren't set up for them (<a href="https://fathom.video/calls/818709023?timestamp=1045">14 Sep 17:25</a>). This is a skill that uses her connector, so it should behave differently. It's still the thing to watch.</dd>
+    <dt>Numbers = HubSpot's</dt><dd>Never fill in or guess a KPI figure. If the skill can't find one, it should show as missing (Baalda: never invent figures).</dd>
+    <dt>Time zone</dt><dd>Harriette is on Sydney time. From Sun 4 Oct, Sydney is UTC+11, so 12:00 Manila becomes 3:00 pm Sydney.</dd>
+    <dt>Fathom</dt><dd>Make sure Fathom joins. Chris has asked for it on every client call (<a href="https://fathom.video/calls/828015683?timestamp=2517">21 Sep 41:57</a>).</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Close</span><h2>Confirm before you hang up</h2></div>
+  <div class="checks">
+    <label for="ss0929-c1"><input type="checkbox" id="ss0929-c1"><span><span class="who">Harriette</span>Answers to the four questions, or a date she'll email them by.</span></label>
+    <label for="ss0929-c2"><input type="checkbox" id="ss0929-c2"><span><span class="who">Harriette</span>Side-by-side run on Fri 2 Oct, then email both versions to Tiara.</span></label>
+    <label for="ss0929-c3"><input type="checkbox" id="ss0929-c3"><span><span class="who">Tiara</span>Fix any KPI mismatches found today before Friday, and confirm with her by email.</span></label>
+    <label for="ss0929-c4"><input type="checkbox" id="ss0929-c4"><span><span class="who">Tiara</span>Record her time estimate and send it to Chris for the value ledger.</span></label>
+    <label for="ss0929-c5"><input type="checkbox" id="ss0929-c5"><span><span class="who">Both</span>Book the review call for the week of 5 Oct (not Mon 5 Oct, which is a NSW public holiday), in Sydney daylight time.</span></label>
+    <label for="ss0929-c6"><input type="checkbox" id="ss0929-c6"><span><span class="who">Tiara</span>Make sure Fathom is recording.</span></label>
+  </div>
+  <div class="callout internal">
+    <strong class="tag">Internal only · not for the call</strong>
+    <p><strong>Alf is sceptical.</strong> After meeting him on 15 Sep, Chris said the GM "said, nah, I don't think it takes her two hours on a Friday", but Chris OK'd the build anyway (<a href="https://fathom.video/calls/821345646?timestamp=3477">15 Sep 57:57</a>). That's why Harriette's own time figure matters. Don't mention Alf's view.</p>
+    <p><strong>Priority.</strong> Chris called Harriette's work "second priority" after the finance clients and said not to over-invest (<a href="https://fathom.video/calls/831512474?timestamp=1562">23 Sep 26:02</a>). Centra's priorities changed again this morning, so keep this call tight.</p>
+    <p><strong>The account.</strong> Chris expects SafeSmart to stay for "a year or two" and may expand internationally (UK, Canada, US) next year. He plans to bring you further into the account (<a href="https://fathom.video/calls/835143933?timestamp=2700">25 Sep 45:00</a>, <a href="https://fathom.video/calls/828015683?timestamp=2558">21 Sep 42:38</a>).</p>
+    <p><strong>Other SafeSmart threads.</strong> HubSpot sandbox and private-app access for Chris's BD intelligence build is still pending with Thomas (24 Sep). Don't discuss it with Harriette. Two SafeSmart support threads have you as triage owner since 11 Sep: Rory's HubSpot tasks and Zeb's Command Centre error. They're not for this call, but they're open.</p>
+    <p><strong>Transcription.</strong> The 25 Sep Fathom summary calls this "Harris Cape Club". That's a mishearing of Harriette/SafeSmart.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="eyebrow">Sources checked</span>
+  <ul>
+    <li>Baalda: 30 Clients/SafeSmart Access/00 Client brief.md (12 Sep)</li>
+    <li>Baalda: 30 Clients/README.md</li>
+    <li><a href="https://fathom.video/calls/817543059">Fathom: Harriette scoping call, 11 Sep (full transcript)</a></li>
+    <li><a href="https://fathom.video/calls/817543060">Fathom: Chris sync 11 Sep</a></li>
+    <li><a href="https://fathom.video/calls/818709023">Chris sync 14 Sep</a></li>
+    <li><a href="https://fathom.video/calls/821345646">Chris sync 15 Sep</a></li>
+    <li><a href="https://fathom.video/calls/828015683">Chris sync 21 Sep</a></li>
+    <li><a href="https://fathom.video/calls/831512474">Chris sync 23 Sep</a></li>
+    <li><a href="https://fathom.video/calls/835143933">Chris sync 25 Sep</a></li>
+    <li><a href="https://fathom.video/calls/837165646">Chris sync 28 Sep</a></li>
+    <li>Fathom summaries: 16, 17 Sep syncs (no SafeSmart content)</li>
+    <li>Google Calendar (work): today's invite; no later SafeSmart meetings booked to 15 Nov</li>
+    <li><a href="https://mail.google.com/mail/#all/1a07e4f5495806a4">Gmail: "Sales Weekly planners – question" thread</a></li>
+    <li><a href="https://mail.google.com/mail/#all/1a0a3d04f005389f">Gmail: Chris / Alf / Thomas "Meeting Summary + Next steps"</a></li>
+    <li>Gmail: "SafeSmart AI: what's new for sales" (22 Sep)</li>
+    <li>Slack: Tiara–Chris DM; #support-requests; #delivery</li>
+    <li><a href="https://drive.google.com/drive/folders/1vjjfUnVVFBjMb4rc7Y8xnspxHj-YYh87">Drive: Safe Smart folder (sample KPI + planner PDFs)</a></li>
+  </ul>
+  <p>Not reachable or not verified: the plugin's source files (on Tiara's machine, not in Drive); whether the plugin is limited to Harriette (no access to SafeSmart's Claude admin); HubSpot (no access); the target tables in Harriette's 22 Sep email (images, not opened); the sample PDFs (listed, not opened); the client status table Chris planned on 28 Sep (not in Slack yet).</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.checks input').forEach(function (box) {
+  var key = 'callprep-' + box.id;
+  try { box.checked = localStorage.getItem(key) === '1'; } catch (e) {}
+  box.addEventListener('change', function () {
+    try { localStorage.setItem(key, box.checked ? '1' : '0'); } catch (e) {}
+  });
+});
+</script>
