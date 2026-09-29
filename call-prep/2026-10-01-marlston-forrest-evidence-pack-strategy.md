@@ -1,8 +1,8 @@
 # Call Prep: Marlston Forrest (Ryan Pitts): Evidence Pack + Strategy Paper install
 
 **Client:** Marlston Forrest (ryan.pitts@marlstonforrest.com.au), WA, GMT+8
-**Call:** Tuesday 29 Sep 2026, the follow-up booked at the end of the 22 Sep call. Check the invite for the time. Quote times in Ryan's time zone.
-**NxtLayr:** Tiara runs it alone. Chris has a car-dealership diagnostic at the same time (25 Sep sync).
+**Call:** Thursday 1 Oct 2026, 11:00–11:45 Perth time (from Google Calendar). Invite title: "Marlston Forrest x NxtLayr: Advice drafter feedback + Strategy Paper & Evidence Pack".
+**Invite status:** Chris has accepted. Ryan and Tiara haven't responded yet. Confirm with Ryan.
 **Prompts from Ryan:** Not received. We're presenting what we built from his sample Evidence Pack and Strategy Paper docs.
 
 ---
