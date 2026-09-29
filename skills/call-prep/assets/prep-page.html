@@ -1,0 +1,285 @@
+<title>{{Client short name}} Call Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: single reading column, briefing header, agenda as a minute-ruled timeline, workflow as a 3-stage pipeline */
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --fg: #1c2230;
+  --muted: #5b6475;
+  --line: #dde1e8;
+  --accent: #d9661f;
+  --accent-soft: #fbeadf;
+  --warn-bg: #fff4d6;
+  --warn-line: #e3b341;
+  --internal-bg: #eceef3;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171d; --surface: #1c2029; --fg: #e7e9ee; --muted: #9aa2b1; --line: #2d3340;
+    --accent: #f08a45; --accent-soft: #3a2518; --warn-bg: #33290f; --warn-line: #b88a1f; --internal-bg: #232834;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14171d; --surface: #1c2029; --fg: #e7e9ee; --muted: #9aa2b1; --line: #2d3340;
+  --accent: #f08a45; --accent-soft: #3a2518; --warn-bg: #33290f; --warn-line: #b88a1f; --internal-bg: #232834;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.55;
+  padding-inline: 16px; padding-block: 32px 64px;
+}
+.wrap { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.45rem; font-weight: 700; }
+h3 { font-size: 1.05rem; font-weight: 700; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+section { display: flex; flex-direction: column; gap: 16px; }
+.sec-head { display: flex; flex-direction: column; gap: 4px; }
+.lede { color: var(--muted); max-width: 62ch; }
+
+/* header */
+header { display: flex; flex-direction: column; gap: 14px; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.meta div { background: var(--surface); padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.meta dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.meta dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+
+/* callouts */
+.callout { border-left: 4px solid var(--warn-line); background: var(--warn-bg); padding: 14px 16px; border-radius: 0 8px 8px 0; display: flex; flex-direction: column; gap: 6px; }
+.callout.internal { border-left-color: var(--muted); background: var(--internal-bg); }
+.callout strong.tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* goals */
+ol.goals { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; }
+
+/* pipeline */
+.pipeline { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; grid-template-columns: 2.2rem 1fr; gap: 4px 12px; align-items: start; }
+.stage .n { grid-row: span 2; font-family: var(--font-mono); font-size: 0.8rem; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.stage.inputs .n { background: var(--internal-bg); color: var(--muted); }
+.stage.focus { border-color: var(--accent); }
+.stage p { color: var(--muted); font-size: 0.95rem; }
+.arrow { text-align: center; color: var(--muted); font-size: 0.9rem; line-height: 1; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: var(--accent); color: var(--surface); vertical-align: 2px; margin-left: 6px; }
+blockquote { margin: 0; padding: 10px 16px; border-left: 3px solid var(--accent); font-style: italic; color: var(--fg); background: var(--surface); border-radius: 0 8px 8px 0; }
+
+/* timeline table */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+td.date { font-family: var(--font-mono); font-size: 0.82rem; white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums; }
+tr.key td { background: var(--accent-soft); }
+
+/* agenda */
+.agenda { display: flex; flex-direction: column; border-left: 2px solid var(--line); margin-left: 6px; }
+.slot { position: relative; padding: 0 0 22px 22px; display: flex; flex-direction: column; gap: 6px; }
+.slot:last-child { padding-bottom: 0; }
+.slot::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.slot .time { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.slot ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+code { font-family: var(--font-mono); font-size: 0.85em; background: var(--internal-bg); padding: 1px 5px; border-radius: 4px; }
+.say { font-style: italic; }
+
+/* question groups */
+.qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.qcard ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 5px; font-size: 0.97rem; }
+
+/* dont-miss list */
+dl.dontmiss { margin: 0; display: grid; grid-template-columns: minmax(120px, 11rem) 1fr; gap: 0; border-top: 1px solid var(--line); }
+dl.dontmiss dt, dl.dontmiss dd { padding: 10px 0; border-bottom: 1px solid var(--line); margin: 0; }
+dl.dontmiss dt { font-weight: 600; padding-right: 14px; }
+@media (max-width: 560px) {
+  dl.dontmiss { grid-template-columns: 1fr; }
+  dl.dontmiss dt { border-bottom: 0; padding-bottom: 0; }
+}
+
+/* checklist */
+.checks { display: flex; flex-direction: column; gap: 8px; }
+.checks label { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; cursor: pointer; }
+.checks input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.checks input:checked + span { color: var(--muted); text-decoration: line-through; }
+.who { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-right: 6px; }
+
+footer { display: flex; flex-direction: column; gap: 8px; font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+footer ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+</style>
+<style>
+.owes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.status { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.status.live { border-color: var(--accent); color: var(--accent); }
+.overdue { color: var(--accent); font-weight: 600; }
+</style>
+<!--
+  CALL PREP TEMPLATE (call-prep skill)
+  - Replace every {{PLACEHOLDER}}. Delete a whole <section> only if it truly doesn't apply (for example, Install on a check-in call).
+  - Repeat rows, slots, cards and labels as needed. Keep class names so the styling holds.
+  - --accent: you may set it to the client's brand colour from the Baalda brief (e.g. Marlston #F68A1E), in both light and dark blocks, if it stays readable.
+  - Australian English. No fees or commercial terms. No real advice-client names.
+-->
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">NxtLayr.AI · Call prep · {{DAY DATE}}, {{TIME}} {{CLIENT TZ}}</span>
+  <h1>{{Client official name}}: {{call topic}}</h1>
+  <dl class="meta">
+    <div><dt>Client</dt><dd>{{Contact name(s)}}, {{Client}}</dd></div>
+    <div><dt>Email</dt><dd>{{contact email}}</dd></div>
+    <div><dt>When</dt><dd>{{time client TZ}} ({{time Manila}} Manila)</dd></div>
+    <div><dt>Invite status</dt><dd>{{who accepted / pending}}</dd></div>
+    <div><dt>NxtLayr side</dt><dd>{{Tiara solo / with Chris}}</dd></div>
+  </dl>
+</header>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Purpose</span><h2>What this call needs to do</h2></div>
+  <ol class="goals">
+    <li>{{goal}}</li>
+  </ol>
+  <!-- One callout per item that must be checked or finished before the call. Remove if none. -->
+  <div class="callout">
+    <strong class="tag">Check before the call</strong>
+    <p>{{thing to verify, with why}}</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Their process · {{source date}}</span><h2>{{How the client works / what they want}}</h2>
+  <p class="lede">{{one-line framing}}</p></div>
+  <!-- Use the pipeline for a real sequence; otherwise use a short list. -->
+  <div class="pipeline">
+    <div class="stage inputs"><span class="n">in</span><h3>{{inputs}}</h3><p>{{detail}}</p></div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="stage focus"><span class="n">1</span><h3>{{step}} <span class="pill">today</span></h3><p>{{detail}}</p></div>
+  </div>
+  <blockquote>"{{client quote}}"</blockquote>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Background</span><h2>What's happened so far</h2></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>What happened</th></tr></thead>
+      <tbody>
+        <tr><td class="date">{{date}}</td><td>{{event}}</td></tr>
+        <tr class="key"><td class="date">{{date}}</td><td><strong>{{key event}}</strong> {{detail}}</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Deliverable</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <!-- status: proposed | built | tested | live (add class "live" when live) -->
+        <tr><td>{{deliverable}}</td><td><span class="status">{{status}}</span></td><td>{{note}}</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Open items</span><h2>Who owes what</h2></div>
+  <div class="owes">
+    <div class="qcard"><h3>{{Client}} owes us</h3><ul>
+      <li>{{item}}, promised {{date}}</li>
+    </ul></div>
+    <div class="qcard"><h3>We owe {{Client}}</h3><ul>
+      <li>{{item}}, promised {{date}} <!-- wrap overdue items: <span class="overdue">overdue</span> --></li>
+    </ul></div>
+  </div>
+  <!-- Conflicts between sources: one callout each, naming both sources. Remove if none. -->
+  <div class="callout">
+    <strong class="tag">Conflict</strong>
+    <p>{{Baalda brief says X (date) · latest call says Y (date). Confirm on the call.}}</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Run of show · about {{N}} min</span><h2>Agenda</h2></div>
+  <div class="agenda">
+    <div class="slot">
+      <span class="time">{{0–3 min}}</span><h3>{{slot title}}</h3>
+      <ul>
+        <li>{{point}}</li>
+        <li class="say">"{{suggested wording}}"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Discovery</span><h2>Questions to ask</h2></div>
+  <div class="qgrid">
+    <div class="qcard"><h3>{{topic}}</h3><ul>
+      <li>{{question}}</li>
+    </ul></div>
+    <div class="qcard"><h3>Value baseline</h3><ul>
+      <li>{{casual question to measure time or cost saved, tied to the diagnostic figure}}</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- Only when delivering or installing something -->
+<section>
+  <div class="sec-head"><span class="eyebrow">Delivery</span><h2>{{Install / demo steps}}</h2></div>
+  <div class="agenda">
+    <div class="slot"><span class="time">{{step}}</span><h3>{{title}}</h3><ul><li>{{detail}}</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Watch-outs</span><h2>Things not to miss</h2></div>
+  <dl class="dontmiss">
+    <dt>{{label}}</dt><dd>{{detail, with source}}</dd>
+  </dl>
+</section>
+
+<section>
+  <div class="sec-head"><span class="eyebrow">Close</span><h2>Confirm before you hang up</h2></div>
+  <div class="checks">
+    <!-- ids must be unique per page: use a client-date prefix, e.g. mf1001-c1 -->
+    <label for="{{id}}"><input type="checkbox" id="{{id}}"><span><span class="who">{{Owner}}</span>{{item}}</span></label>
+    <label for="{{id2}}"><input type="checkbox" id="{{id2}}"><span><span class="who">Both</span>Book the next catch-up in {{N}} weeks, in the client's time zone.</span></label>
+    <label for="{{id3}}"><input type="checkbox" id="{{id3}}"><span><span class="who">Tiara</span>Make sure Fathom is recording.</span></label>
+  </div>
+  <div class="callout internal">
+    <strong class="tag">Internal only · not for the call</strong>
+    <p>{{relationship or engagement context}}</p>
+  </div>
+</section>
+
+<footer>
+  <span class="eyebrow">Sources checked</span>
+  <ul>
+    <li><a href="{{url}}">{{Fathom: client, date}}</a></li>
+    <li>{{Baalda: 30 Clients/Client/00 Client brief.md}}</li>
+  </ul>
+  <p>{{Not reachable: source, and why. Or: "All sources reached."}}</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.checks input').forEach(function (box) {
+  var key = 'callprep-' + box.id;
+  try { box.checked = localStorage.getItem(key) === '1'; } catch (e) {}
+  box.addEventListener('change', function () {
+    try { localStorage.setItem(key, box.checked ? '1' : '0'); } catch (e) {}
+  });
+});
+</script>
