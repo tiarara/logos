@@ -208,3 +208,76 @@ server or GitHub settings.
    roll back, and anything you couldn't do. Then tell me the exact repo name
    so I can connect it to Claude at https://claude.ai/connect-github.
 ```
+
+---
+
+## 5. Sentro video in the sentrohq.tech hero (after the GitHub Actions deploy is set up)
+
+**Paste into:** a session with the sentrohq.tech repo (on your Mac, or a cloud session with the repo connected)
+
+```
+Add the Sentro product video to the homepage hero on sentrohq.tech. Ship it as
+a pull request; the GitHub Actions deploy takes it live when I merge.
+
+1. MEDIA FILES
+   Download these three files into the site's public/static media folder
+   (e.g. public/media/), keeping the names:
+   https://raw.githubusercontent.com/tiarara/logos/claude/sentro-demo-video-y1p3yg/sentro-video/web/sentro-hero.webm
+   https://raw.githubusercontent.com/tiarara/logos/claude/sentro-demo-video-y1p3yg/sentro-video/web/sentro-hero.mp4
+   https://raw.githubusercontent.com/tiarara/logos/claude/sentro-demo-video-y1p3yg/sentro-video/web/sentro-hero-poster.jpg
+   They are 1280x720, silent, a 15s seamless loop, about 1 MB each video.
+
+2. MARKUP
+   In the homepage hero, put the video where the Bookings screen preview sits
+   now. If there is no preview, put it under the hero buttons. Keep the
+   headline, buttons and all copy unchanged. Adjust the paths to wherever the
+   files ended up and to the site's framework (plain HTML, React, Astro...).
+
+   <figure class="hero-video">
+     <video autoplay muted loop playsinline preload="metadata"
+            poster="/media/sentro-hero-poster.jpg"
+            aria-label="Sentro HQ answering a guest message, catching OTA bookings and showing the morning dashboard">
+       <source src="/media/sentro-hero.webm" type="video/webm">
+       <source src="/media/sentro-hero.mp4" type="video/mp4">
+     </video>
+     <figcaption>Sentro HQ, with sample figures</figcaption>
+   </figure>
+
+3. CSS (match the site's existing radius and shadow tokens if it has them)
+
+   .hero-video{margin:48px auto 0;max-width:1040px;width:100%}
+   .hero-video video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;
+     border-radius:16px;background:#111615;box-shadow:0 40px 90px -30px rgba(0,0,0,.6)}
+   .hero-video figcaption{margin-top:12px;text-align:center;font-size:.85rem;opacity:.7}
+
+4. REDUCED MOTION
+   Visitors who turn off motion get the poster with a play button:
+
+   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+     document.querySelectorAll('.hero-video video').forEach(v => {
+       v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+     });
+   }
+
+5. CHECK BEFORE THE PR
+   - Build passes.
+   - Run it locally and screenshot the hero at 1440px and 390px wide: video
+     plays muted and loops, poster shows before load, no horizontal scroll on
+     phone, hero text and buttons still above the fold on desktop.
+   - The poster and video don't push Largest Contentful Paint badly: the
+     poster should be the LCP element, not a blank box.
+
+6. PULL REQUEST
+   Branch: add-hero-video. Title: "Add Sentro product video to the hero".
+   Include the two screenshots in the PR description. Don't merge it
+   yourself.
+
+7. AFTER I MERGE
+   Once the deploy Action finishes, confirm on the live site that the video
+   plays on desktop Chrome and mobile Safari, and that /media/sentro-hero.webm
+   and /media/sentro-hero.mp4 return 200 with content types video/webm and
+   video/mp4. If the MIME types are wrong, fix the web server config in a
+   follow-up PR.
+
+Report the PR link, the files changed, and anything you couldn't check.
+```
