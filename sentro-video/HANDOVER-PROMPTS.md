@@ -134,3 +134,77 @@ then re-encode the web files in sentro-video/web/ with the same settings
 (1280 wide, H.264 crf 25 faststart, VP9 crf 36, poster at 11.6s), commit and
 push to the same branch.
 ```
+
+---
+
+## 4. GitHub Actions deploy for sentrohq.tech
+
+**Paste into:** the session on your Mac that deploys sentrohq.tech
+
+```
+Set up automatic deploys for sentrohq.tech (and app.sentrohq.tech, if it lives
+on the same VPS) using GitHub Actions, so that merging to main on GitHub
+deploys the site. Cloud Claude sessions will open pull requests against this
+repo; they must never hold server credentials themselves.
+
+Work in this order and stop to ask me before any step that changes the live
+server or GitHub settings.
+
+1. FIND OUT HOW IT DEPLOYS TODAY
+   - Where the site's code is on this Mac, and whether it is already a git
+     repo with a GitHub remote.
+   - On the VPS: where the site is served from, which web server (nginx,
+     Caddy...), whether there is a build step (npm build, static export...),
+     and whether a process needs restarting (pm2, systemd, docker compose).
+   - Write this up in a short DEPLOY.md in the repo before changing anything.
+
+2. PUT THE CODE ON GITHUB
+   - If it isn't there yet, create a PRIVATE repo under my account and push.
+   - Check .gitignore first: no .env files, keys, database dumps, node_modules
+     or build output get committed. Scan the history for secrets before the
+     first push and tell me if you find any.
+
+3. A DEDICATED DEPLOY KEY
+   - Generate a new ed25519 key pair just for GitHub Actions (no passphrase).
+     Do not reuse my personal key.
+   - Add its public key to the VPS for a non-root deploy user that can only
+     write to the site's folder (and run the one restart command via sudoers
+     if a restart is needed). Create that user if needed.
+   - Get the VPS host key with ssh-keyscan so the workflow can pin it.
+
+4. GITHUB SECRETS (repo Settings > Secrets and variables > Actions)
+   VPS_HOST, VPS_PORT, VPS_USER, VPS_SSH_KEY (the private key),
+   VPS_KNOWN_HOSTS (the ssh-keyscan output), DEPLOY_PATH.
+   Set them with `gh secret set`. Never print the private key or paste it
+   anywhere else, and delete the local copy of the private key afterwards.
+
+5. THE WORKFLOW (.github/workflows/deploy.yml)
+   - Triggers: push to main, plus workflow_dispatch for manual runs.
+   - concurrency group so two deploys never run at once.
+   - Build in the Action if there is a build step, then upload with rsync
+     over SSH using the pinned known_hosts (no StrictHostKeyChecking=no).
+   - Atomic releases: upload into DEPLOY_PATH/releases/<commit sha>, switch a
+     `current` symlink to it, keep the last 5 releases for rollback. Point the
+     web server at `current` (ask me before changing the web server config).
+   - Run the restart command if the site needs one.
+   - Health check: curl https://sentrohq.tech (and the app if included) and
+     fail the job if it isn't 200. On failure, switch `current` back to the
+     previous release.
+   - A second workflow or a workflow_dispatch input to roll back to a chosen
+     release.
+
+6. PROTECT MAIN
+   Turn on branch protection for main: pull request required, no direct
+   pushes, no force pushes. That way nothing reaches the live site unless I
+   merge it.
+
+7. TEST IT
+   Open a PR with a harmless change (e.g. a comment in the HTML), merge it,
+   watch the Action, and confirm the live site updated. Then test the
+   rollback once.
+
+8. REPORT
+   The repo URL, the workflow file, the secrets you set (names only), how to
+   roll back, and anything you couldn't do. Then tell me the exact repo name
+   so I can connect it to Claude at https://claude.ai/connect-github.
+```
